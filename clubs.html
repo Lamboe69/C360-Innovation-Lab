@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clubs — C360 Innovation Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="global.css">`n  <script src="theme.js"></script>
+  <style>
+    .cursor {
+      position: fixed; width: 10px; height: 10px;
+      background: var(--gold); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+      mix-blend-mode: screen;
+    }
+    .cursor-ring {
+      position: fixed; width: 38px; height: 38px;
+      border: 1.5px solid rgba(245,166,35,0.5); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: transform 0.18s ease, width 0.25s, height 0.25s, border-color 0.25s;
+    }
+    body:hover .cursor { opacity: 1; }
+
+    /* ── NAV AUTH GROUP ── */
+    .nav-auth-group { display: flex; align-items: center; gap: 10px; list-style: none; }
+    .nav-bell { position: relative; cursor: none; padding: 6px 8px; border-radius: 8px; transition: background 0.2s; }
+    .nav-bell:hover { background: var(--glass-b); }
+    .bell-icon { font-size: 1rem; }
+    .bell-badge { position: absolute; top: 2px; right: 2px; background: var(--flame); color: #fff; font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .bell-dropdown { display: none; position: absolute; top: calc(100% + 10px); right: 0; width: 300px; background: var(--navy); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 16px 48px rgba(0,0,0,0.5); z-index: 600; overflow: hidden; }
+    .bell-dropdown.open { display: block; }
+    .bell-dropdown-header { padding: 12px 16px; font-size: 0.75rem; font-weight: 700; color: var(--silver); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); }
+    .bell-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; transition: background 0.2s; }
+    .bell-item:hover { background: var(--glass); }
+    .bell-item-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); flex-shrink: 0; margin-top: 4px; }
+    .bell-item.unread .bell-item-dot { box-shadow: 0 0 6px var(--gold); }
+    .bell-item-title { font-size: 0.82rem; color: var(--text); margin-bottom: 3px; }
+    .bell-item-time { font-size: 0.72rem; color: var(--muted); }
+    .bell-view-all { display: block; text-align: center; padding: 11px; font-size: 0.78rem; font-weight: 600; color: var(--gold); border-top: 1px solid var(--border); transition: background 0.2s; }
+    .bell-view-all:hover { background: var(--glass); }
+    .nav-avatar-wrap { display: flex; align-items: center; gap: 7px; cursor: none; padding: 5px 10px; border-radius: 10px; border: 1px solid var(--border); transition: border-color 0.2s, background 0.2s; position: relative; }
+    .nav-avatar-wrap:hover, .nav-avatar-wrap.open { border-color: rgba(245,166,35,0.4); background: var(--glass); }
+    .nav-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--flame)); display: flex; align-items: center; justify-content: center; }
+    .avatar-initial { font-size: 0.75rem; font-weight: 700; color: #fff; }
+    .nav-avatar-name { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+    .avatar-chevron { font-size: 0.65rem; color: var(--muted); }
+    .avatar-dropdown { display: none; position: absolute; top: calc(100% + 10px); right: 0; width: 220px; background: var(--navy); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 16px 48px rgba(0,0,0,0.5); z-index: 600; overflow: hidden; }
+    .avatar-dropdown.open { display: block; }
+    .avatar-dropdown-header { display: flex; align-items: center; gap: 10px; padding: 14px 16px; }
+    .avatar-dropdown-initial { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--flame)); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; font-size: 0.85rem; flex-shrink: 0; }
+    .avatar-dropdown-name { font-size: 0.85rem; font-weight: 700; color: var(--cream); }
+    .avatar-dropdown-role { font-size: 0.72rem; color: var(--muted); text-transform: capitalize; margin-top: 2px; }
+    .avatar-dropdown-divider { height: 1px; background: var(--border); margin: 4px 0; }
+    .avatar-dropdown-item { display: flex; align-items: center; gap: 8px; padding: 10px 16px; font-size: 0.83rem; color: var(--text); transition: background 0.2s, color 0.2s; }
+    .avatar-dropdown-item:hover { background: var(--glass); color: var(--cream); }
+    .avatar-dropdown-logout { color: rgba(252,165,165,0.8); }
+    .avatar-dropdown-logout:hover { background: rgba(239,68,68,0.08); color: #f87171; }
+    .mobile-auth-block { border-top: 1px solid var(--border); padding-top: 12px; margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+    .mobile-auth-user { display: flex; align-items: center; gap: 10px; padding: 10px 14px; margin-bottom: 4px; }
+    .mobile-avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--flame)); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; font-size: 0.85rem; flex-shrink: 0; }
+    .mobile-auth-name { font-size: 0.88rem; font-weight: 700; color: var(--cream); }
+    .mobile-auth-role { font-size: 0.72rem; color: var(--muted); text-transform: capitalize; }
+    .mobile-auth-link { color: rgba(226,232,240,0.75); font-size: 0.95rem; font-weight: 500; padding: 11px 14px; border-radius: 8px; transition: background 0.2s; display: block; }
+    .mobile-auth-link:hover { background: var(--glass-b); }
+    .mobile-auth-logout { color: rgba(252,165,165,0.8); }
+    .mobile-auth-logout:hover { background: rgba(239,68,68,0.08); color: #f87171; }
+
+    /* -- HERO -- */
+    .clubs-hero {
+      min-height: 44vh;
+      padding: 100px 6% 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(245,166,35,0.07) 0%, transparent 70%), var(--ink);
+    }
+    .clubs-hero-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 80%);
+      animation: gridShift 20s linear infinite;
+    }
+    @keyframes gridShift { from{transform:translateY(0)} to{transform:translateY(60px)} }
+    .clubs-orb {
+      position: absolute; border-radius: 50%; pointer-events: none; filter: blur(90px);
+    }
+    .clubs-orb-1 {
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, rgba(245,166,35,0.1), transparent 70%);
+      top: -80px; right: -60px;
+      animation: floatOrb 10s ease-in-out infinite alternate;
+    }
+    .clubs-orb-2 {
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(255,90,31,0.08), transparent 70%);
+      bottom: -40px; left: -40px;
+      animation: floatOrb 13s ease-in-out infinite alternate;
+      animation-delay: -4s;
+    }
+    @keyframes floatOrb {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(20px,-30px) scale(1.05); }
+    }
+    .clubs-hero-content { position: relative; z-index: 2; max-width: 720px; }
+    .clubs-hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(245,166,35,0.1);
+      border: 1px solid rgba(245,166,35,0.25);
+      color: var(--gold);
+      font-family: var(--font-m); font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 6px 16px; border-radius: 100px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.15s both;
+    }
+    .badge-dot {
+      width: 7px; height: 7px; background: var(--gold);
+      border-radius: 50%; box-shadow: 0 0 8px var(--gold);
+      animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:0.4; transform:scale(0.8); }
+    }
+    .clubs-hero h1 {
+      font-family: var(--font-d);
+      font-size: clamp(2.6rem, 5.5vw, 4rem);
+      font-weight: 900; line-height: 1.08;
+      letter-spacing: -1.5px; color: var(--cream);
+      margin-bottom: 22px;
+      animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.3s both;
+    }
+    .clubs-hero h1 span {
+      background: linear-gradient(90deg, var(--gold) 0%, var(--flame) 60%, #ff3d00 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .clubs-hero p {
+      font-size: 1.05rem; color: var(--silver); line-height: 1.75;
+      font-weight: 300; max-width: 560px; margin: 0 auto 36px;
+      animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.5s both;
+    }
+    .clubs-hero-btns {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+      animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.65s both;
+    }
+    .btn-clubs-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 32px; border-radius: 10px;
+      font-family: var(--font-b); font-size: 0.95rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--gold), var(--flame));
+      color: #fff; border: none; cursor: none;
+      box-shadow: 0 6px 28px rgba(245,166,35,0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-clubs-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(245,166,35,0.5); }
+    .btn-clubs-outline {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 32px; border-radius: 10px;
+      font-family: var(--font-b); font-size: 0.95rem; font-weight: 600;
+      background: transparent; color: var(--text); cursor: none;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .btn-clubs-outline:hover { border-color: rgba(245,166,35,0.4); background: rgba(245,166,35,0.06); transform: translateY(-2px); }
+    .clubs-hero-breadcrumb {
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; margin-top: 32px;
+      font-family: var(--font-m); font-size: 0.68rem;
+      letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted);
+      animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.75s both;
+    }
+    .clubs-hero-breadcrumb a { color: var(--muted); transition: color 0.2s; }
+    .clubs-hero-breadcrumb a:hover { color: var(--gold); }
+    .clubs-hero-breadcrumb .sep { color: rgba(100,116,139,0.4); }
+    .clubs-hero-breadcrumb .current { color: var(--gold); }
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(28px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* -- FILTER BAR -- */
+    .clubs-filter {
+      padding: 0 6%;
+      background: var(--ink);
+      position: sticky;
+      top: 72px;
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+    }
+    .clubs-filter-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .filter-row-label {
+      font-family: var(--font-m);
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      min-width: 64px;
+      flex-shrink: 0;
+    }
+    .filter-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: var(--glass);
+      font-family: var(--font-b);
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--silver);
+      white-space: nowrap;
+      cursor: none;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .filter-btn:hover {
+      border-color: rgba(245,166,35,0.35);
+      color: var(--cream);
+      background: rgba(245,166,35,0.05);
+    }
+    .filter-btn.active {
+      border-color: var(--gold);
+      background: rgba(245,166,35,0.12);
+      color: var(--gold);
+      font-weight: 600;
+    }
+    .filter-results {
+      font-family: var(--font-m);
+      font-size: 0.65rem;
+      letter-spacing: 1px;
+      color: var(--muted);
+      padding: 6px 0 8px;
+    }
+    .filter-results span { color: var(--gold); font-weight: 700; }
+
+    /* -- STATS STRIP -- */
+    .clubs-stats {
+      padding: 60px 6%;
+      background: linear-gradient(135deg, rgba(245,166,35,0.06) 0%, rgba(255,90,31,0.04) 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .clubs-stats::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(245,166,35,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .clubs-stats-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 32px; position: relative; z-index: 1;
+    }
+    .clubs-stat { text-align: center; }
+    .clubs-stat-num {
+      font-family: var(--font-d);
+      font-size: clamp(2.4rem, 4vw, 3.4rem);
+      font-weight: 900; letter-spacing: -2px;
+      background: linear-gradient(135deg, var(--gold), var(--flame));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1; margin-bottom: 8px;
+    }
+    .clubs-stat-lbl {
+      font-size: 0.82rem; color: var(--muted);
+      font-weight: 400; line-height: 1.5;
+    }
+    .clubs-stat-bar {
+      width: 32px; height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--flame));
+      margin: 8px auto 0; border-radius: 2px;
+    }
+    @media (max-width: 768px) { .clubs-stats-inner { grid-template-columns: repeat(2, 1fr); } }
+
+    /* -- CLUBS GRID -- */
+    .clubs-grid-section {
+      padding: 80px 6% 100px;
+      background: var(--ink);
+    }
+    .clubs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .club-card-item {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      cursor: none;
+    }
+    .club-card-item:hover {
+      transform: translateY(-6px);
+      border-color: var(--border-h);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .club-card-thumb {
+      height: 140px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.8rem;
+      background: linear-gradient(135deg, rgba(245,166,35,0.08), rgba(255,90,31,0.06));
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .club-card-thumb::after {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), var(--flame), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .club-card-item:hover .club-card-thumb::after { opacity: 1; }
+    .club-card-body { padding: 22px 20px 18px; }
+    .club-card-badges {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;
+    }
+    .club-badge {
+      font-family: var(--font-m); font-size: 0.58rem;
+      font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 100px;
+      border: 1px solid var(--border); color: var(--muted);
+      background: rgba(255,255,255,0.03);
+    }
+    .club-badge.district { color: var(--gold); border-color: rgba(245,166,35,0.25); background: rgba(245,166,35,0.07); }
+    .club-card-name {
+      font-family: var(--font-d); font-size: 1.05rem; font-weight: 800;
+      color: var(--cream); line-height: 1.3; margin-bottom: 8px;
+    }
+    .club-card-desc {
+      font-size: 0.82rem; color: var(--silver);
+      line-height: 1.7; font-weight: 300; margin-bottom: 14px;
+    }
+    .club-card-meta {
+      display: flex; gap: 14px; margin-bottom: 16px;
+      font-family: var(--font-m); font-size: 0.62rem;
+      letter-spacing: 0.5px; color: var(--muted);
+    }
+    .club-card-meta span { display: flex; align-items: center; gap: 5px; }
+    .club-card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 14px; border-top: 1px solid var(--border);
+    }
+    .btn-view-details {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.8rem; font-weight: 600; color: var(--gold);
+      background: none; border: none; cursor: none; padding: 0;
+      transition: gap 0.2s;
+    }
+    .btn-view-details:hover { gap: 10px; }
+    .btn-join-club {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.78rem; font-weight: 600; color: #fff;
+      background: linear-gradient(135deg, var(--gold), var(--flame));
+      border: none; border-radius: 7px; padding: 7px 16px;
+      cursor: none; transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(245,166,35,0.25);
+    }
+    .btn-join-club:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(245,166,35,0.4); }
+    .clubs-no-results {
+      grid-column: 1 / -1; text-align: center;
+      padding: 60px 0; color: var(--muted); font-size: 0.95rem;
+      display: none;
+    }
+    @media (max-width: 1024px) { .clubs-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 580px)  { .clubs-grid { grid-template-columns: 1fr; } }
+
+    /* -- CLUB DETAIL PANEL -- */
+    .club-detail-panel {
+      display: none;
+      max-width: 1100px;
+      margin: 0 auto 32px;
+      background: var(--glass);
+      border: 1px solid var(--border-h);
+      border-radius: 24px;
+      overflow: hidden;
+      animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    .club-detail-panel.open { display: block; }
+    .club-detail-inner {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+    }
+    .club-detail-main {
+      padding: 36px 36px 36px;
+      border-right: 1px solid var(--border);
+    }
+    .club-detail-tag {
+      font-family: var(--font-m); font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 10px;
+    }
+    .club-detail-title {
+      font-family: var(--font-d); font-size: 1.5rem; font-weight: 900;
+      color: var(--cream); letter-spacing: -0.4px; line-height: 1.2;
+      margin-bottom: 14px;
+    }
+    .club-detail-desc {
+      font-size: 0.9rem; color: var(--silver);
+      line-height: 1.8; font-weight: 300; margin-bottom: 24px;
+    }
+    .club-detail-section-title {
+      font-family: var(--font-m); font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--cream); margin-bottom: 12px;
+    }
+    .club-detail-list {
+      list-style: none; display: flex; flex-direction: column;
+      gap: 9px; margin-bottom: 24px;
+    }
+    .club-detail-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 0.85rem; color: var(--silver); line-height: 1.6; font-weight: 300;
+    }
+    .club-detail-list li::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--gold); flex-shrink: 0; margin-top: 7px;
+    }
+    .club-detail-sidebar {
+      padding: 36px 28px;
+      display: flex; flex-direction: column; gap: 20px;
+      background: rgba(245,166,35,0.02);
+    }
+    .club-detail-info-label {
+      font-family: var(--font-m); font-size: 0.6rem;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 5px;
+    }
+    .club-detail-info-value {
+      font-size: 0.88rem; font-weight: 500; color: var(--cream);
+    }
+    .club-detail-divider { height: 1px; background: var(--border); }
+    .club-detail-actions {
+      display: flex; flex-direction: column; gap: 10px; margin-top: auto;
+    }
+    .btn-detail-join {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 20px; border-radius: 10px;
+      font-size: 0.88rem; font-weight: 700; color: #fff;
+      background: linear-gradient(135deg, var(--gold), var(--flame));
+      border: none; cursor: none;
+      box-shadow: 0 4px 20px rgba(245,166,35,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-detail-join:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(245,166,35,0.45); }
+    .btn-detail-contact {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 20px; border-radius: 10px;
+      font-size: 0.88rem; font-weight: 600; color: var(--text);
+      background: transparent; border: 1px solid var(--border); cursor: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-detail-contact:hover { border-color: rgba(245,166,35,0.4); background: rgba(245,166,35,0.05); }
+    .club-detail-auth-note {
+      font-size: 0.73rem; color: var(--muted); text-align: center; line-height: 1.5;
+    }
+    .club-detail-auth-note a { color: var(--gold); }
+    .btn-detail-close {
+      display: flex; align-items: center; gap: 6px;
+      background: none; border: none; color: var(--muted);
+      font-size: 0.78rem; font-family: var(--font-b);
+      cursor: none; padding: 0; margin-top: 4px; transition: color 0.2s;
+    }
+    .btn-detail-close:hover { color: var(--gold); }
+    @media (max-width: 860px) {
+      .club-detail-inner { grid-template-columns: 1fr; }
+      .club-detail-main { border-right: none; border-bottom: 1px solid var(--border); padding: 24px; }
+      .club-detail-sidebar { padding: 24px; }
+    }
+
+    /* -- DISTRICT MAP -- */
+    .map-section {
+      padding: 100px 6%;
+      background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(245,166,35,0.05) 0%, transparent 60%), var(--deep);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .map-header { text-align: center; margin-bottom: 56px; }
+    .map-header h2 {
+      font-family: var(--font-d); font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900; color: var(--cream); letter-spacing: -0.8px;
+      line-height: 1.12; margin-bottom: 14px;
+    }
+    .map-header p {
+      font-size: 0.95rem; color: var(--silver); font-weight: 300;
+      max-width: 460px; margin: 0 auto; line-height: 1.75;
+    }
+    .map-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 48px; align-items: center;
+    }
+    .map-visual {
+      position: relative;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px 32px;
+      min-height: 420px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .map-svg-wrap { position: relative; width: 100%; max-width: 340px; }
+    .map-svg-wrap svg { width: 100%; height: auto; }
+    /* Uganda outline */
+    .ug-shape {
+      fill: rgba(245,166,35,0.06);
+      stroke: rgba(245,166,35,0.2);
+      stroke-width: 1.5;
+    }
+    /* district dots */
+    .district-dot {
+      cursor: none;
+      transition: r 0.2s, filter 0.2s;
+    }
+    .district-dot circle {
+      fill: rgba(245,166,35,0.25);
+      stroke: var(--gold);
+      stroke-width: 1.5;
+      transition: fill 0.2s, r 0.2s;
+    }
+    .district-dot:hover circle, .district-dot.active circle {
+      fill: var(--gold);
+    }
+    .district-dot.active circle {
+      filter: drop-shadow(0 0 8px rgba(245,166,35,0.8));
+    }
+    .district-dot text {
+      fill: var(--silver); font-family: var(--font-m);
+      font-size: 7px; letter-spacing: 0.5px;
+      pointer-events: none;
+    }
+    .district-dot:hover text, .district-dot.active text { fill: var(--cream); }
+    /* pulse ring on active dot */
+    .district-dot.active .pulse-ring {
+      animation: dotPulse 1.8s ease-out infinite;
+    }
+    .pulse-ring {
+      fill: none; stroke: var(--gold); stroke-width: 1;
+      transform-origin: center;
+    }
+    @keyframes dotPulse {
+      0%   { r: 8; opacity: 0.8; }
+      100% { r: 20; opacity: 0; }
+    }
+    .map-legend {
+      display: flex; align-items: center; gap: 20px;
+      justify-content: center; margin-top: 20px;
+      font-family: var(--font-m); font-size: 0.62rem;
+      letter-spacing: 1px; text-transform: uppercase; color: var(--muted);
+    }
+    .map-legend-item { display: flex; align-items: center; gap: 7px; }
+    .legend-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      border: 1.5px solid var(--gold);
+    }
+    .legend-dot.active { background: var(--gold); box-shadow: 0 0 8px rgba(245,166,35,0.6); }
+    .map-districts {
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .map-district-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: none;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .map-district-card:hover, .map-district-card.active {
+      border-color: var(--border-h);
+      background: rgba(245,166,35,0.05);
+      transform: translateX(4px);
+    }
+    .map-district-card.active { border-color: var(--gold); }
+    .map-district-left { display: flex; align-items: center; gap: 12px; }
+    .map-district-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: rgba(245,166,35,0.3);
+      border: 1.5px solid var(--gold);
+      flex-shrink: 0; transition: background 0.2s;
+    }
+    .map-district-card.active .map-district-dot,
+    .map-district-card:hover .map-district-dot { background: var(--gold); }
+    .map-district-name {
+      font-size: 0.88rem; font-weight: 600; color: var(--cream);
+    }
+    .map-district-count {
+      font-family: var(--font-m); font-size: 0.65rem;
+      letter-spacing: 1px; color: var(--gold);
+      background: rgba(245,166,35,0.1);
+      border: 1px solid rgba(245,166,35,0.2);
+      padding: 3px 10px; border-radius: 100px;
+    }
+    @media (max-width: 900px) {
+      .map-inner { grid-template-columns: 1fr; }
+      .map-visual { min-height: 300px; }
+    }
+
+    /* -- START A CLUB CTA -- */
+    .start-club-cta {
+      padding: 110px 6%;
+      background: var(--ink);
+      position: relative;
+      overflow: hidden;
+    }
+    .start-club-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .start-club-left .section-tag { margin-bottom: 18px; }
+    .start-club-left h2 {
+      font-family: var(--font-d);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900; color: var(--cream);
+      letter-spacing: -0.8px; line-height: 1.12;
+      margin-bottom: 18px;
+    }
+    .start-club-left h2 span {
+      background: linear-gradient(90deg, var(--gold), var(--flame));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .start-club-left p {
+      font-size: 0.95rem; color: var(--silver);
+      line-height: 1.8; font-weight: 300; margin-bottom: 32px;
+    }
+    .btn-start-club {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 15px 36px; border-radius: 10px;
+      font-family: var(--font-b); font-size: 0.95rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--gold), var(--flame));
+      color: #fff; border: none; cursor: none;
+      box-shadow: 0 6px 30px rgba(245,166,35,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .btn-start-club::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .btn-start-club:hover::before { opacity: 1; }
+    .btn-start-club:hover { transform: translateY(-2px); box-shadow: 0 10px 44px rgba(245,166,35,0.55); }
+    .start-club-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .start-step {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+    .start-step-num {
+      width: 40px; height: 40px; flex-shrink: 0;
+      border-radius: 10px;
+      background: rgba(245,166,35,0.08);
+      border: 1px solid rgba(245,166,35,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-m); font-size: 0.75rem;
+      font-weight: 700; color: var(--gold);
+    }
+    .start-step-body h4 {
+      font-family: var(--font-d); font-size: 0.95rem;
+      font-weight: 800; color: var(--cream);
+      margin-bottom: 4px;
+    }
+    .start-step-body p {
+      font-size: 0.82rem; color: var(--silver);
+      line-height: 1.65; font-weight: 300;
+    }
+    @media (max-width: 860px) {
+      .start-club-inner { grid-template-columns: 1fr; gap: 48px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- CURSORS -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-mark">C360</div>
+    Innovation Lab
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="programs.html">Programs</a></li>
+    <li><a href="clubs.html" class="active">Clubs</a></li>
+    <li><a href="resources.html">Resources</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="login.html" class="btn-login" style="background:transparent!important;border:1px solid rgba(245,166,35,0.4)!important;color:var(--gold)!important;box-shadow:none!important;">Login</a></li>
+    <li><a href="register.html" class="btn-login">Register</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="programs.html">Programs</a>
+  <a href="clubs.html" class="active">Clubs</a>
+  <a href="resources.html">Resources</a>
+  <a href="contact.html">Contact</a>
+  <a href="login.html" class="btn-login" style="background:transparent;border:1px solid rgba(245,166,35,0.4);color:var(--gold);text-align:center;">Login</a>
+  <a href="register.html" class="btn-login">Register</a>
+</div>
+
+<!-- HERO -->
+<section class="clubs-hero">
+  <div class="clubs-hero-grid"></div>
+  <div class="clubs-orb clubs-orb-1"></div>
+  <div class="clubs-orb clubs-orb-2"></div>
+  <div class="clubs-hero-content">
+    <div class="clubs-hero-badge">
+      <div class="badge-dot"></div>
+      &#x1F1FA;&#x1F1EC; &nbsp;40+ Clubs &nbsp;&middot;&nbsp; 12 Districts
+    </div>
+    <h1>Find Your <span>Club</span><br>Across Uganda</h1>
+    <p>Browse every active C360 Innovation Club by district, institution, and level. Find your community, then join and start building.</p>
+    <div class="clubs-hero-btns">
+      <a href="#clubs-grid" class="btn-clubs-outline">Browse Clubs &#x2193;</a>
+      <a href="login.html" class="btn-clubs-primary">Start a Club &#x2192;</a>
+    </div>
+    <div class="clubs-hero-breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="sep">/</span>
+      <span class="current">Clubs</span>
+    </div>
+  </div>
+</section>
+
+<!-- FILTER BAR -->
+<div class="clubs-filter" id="clubs-filter">
+  <div class="clubs-filter-inner">
+    <div class="filter-row">
+      <span class="filter-row-label">District</span>
+      <button class="filter-btn active" data-filter="district" data-value="all">All</button>
+      <button class="filter-btn" data-filter="district" data-value="kampala">Kampala</button>
+      <button class="filter-btn" data-filter="district" data-value="entebbe">Entebbe</button>
+      <button class="filter-btn" data-filter="district" data-value="jinja">Jinja</button>
+      <button class="filter-btn" data-filter="district" data-value="gulu">Gulu</button>
+      <button class="filter-btn" data-filter="district" data-value="mbarara">Mbarara</button>
+      <button class="filter-btn" data-filter="district" data-value="mbale">Mbale</button>
+      <button class="filter-btn" data-filter="district" data-value="fort-portal">Fort Portal</button>
+    </div>
+    <div class="filter-row">
+      <span class="filter-row-label">Type</span>
+      <button class="filter-btn active" data-filter="type" data-value="all">All</button>
+      <button class="filter-btn" data-filter="type" data-value="school">School</button>
+      <button class="filter-btn" data-filter="type" data-value="university">University</button>
+      <button class="filter-btn" data-filter="type" data-value="community">Community</button>
+    </div>
+    <div class="filter-row">
+      <span class="filter-row-label">Level</span>
+      <button class="filter-btn active" data-filter="level" data-value="all">All</button>
+      <button class="filter-btn" data-filter="level" data-value="beginner">Beginner</button>
+      <button class="filter-btn" data-filter="level" data-value="intermediate">Intermediate</button>
+      <button class="filter-btn" data-filter="level" data-value="advanced">Advanced</button>
+    </div>
+    <div class="filter-results">Showing <span id="clubs-count">12</span> clubs</div>
+  </div>
+</div>
+
+<!-- STATS STRIP -->
+<section class="clubs-stats">
+  <div class="clubs-stats-inner">
+    <div class="clubs-stat">
+      <div class="clubs-stat-num">40+</div>
+      <div class="clubs-stat-lbl">Active Clubs<br>Running</div>
+      <div class="clubs-stat-bar"></div>
+    </div>
+    <div class="clubs-stat">
+      <div class="clubs-stat-num">12</div>
+      <div class="clubs-stat-lbl">Districts<br>Covered</div>
+      <div class="clubs-stat-bar"></div>
+    </div>
+    <div class="clubs-stat">
+      <div class="clubs-stat-num">500+</div>
+      <div class="clubs-stat-lbl">Total<br>Members</div>
+      <div class="clubs-stat-bar"></div>
+    </div>
+    <div class="clubs-stat">
+      <div class="clubs-stat-num">30+</div>
+      <div class="clubs-stat-lbl">Partner<br>Institutions</div>
+      <div class="clubs-stat-bar"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CLUBS GRID -->
+<section class="clubs-grid-section" id="clubs-grid">
+  <div class="clubs-grid" id="clubs-grid-inner">
+
+    <div class="club-card-item" data-district="kampala" data-type="university" data-level="intermediate">
+      <div class="club-card-thumb">&#x1F4A1;</div>
+      <div class="club-card-body">
+        <div class="club-card-badges">
+          <span class="club-badge district">Kampala</span>
+          <span class="club-badge">University</span>
+          <span class="club-badge">Intermediate</span>
+        </div>
+        <div class="club-card-name">Tech Innovators Club</div>
+        <p class="club-card-desc">Building real-world tech solutions using design thinking, coding, and rapid prototyping at Makerere University.</p>
+        <div class="club-card-meta">
+          <span>&#x1F465; 40 Members</span>
+          <span>&#x1F4C5; Est. 2020</span>
+        </div>
+        <div class="club-card-footer">
+          <button class="btn-view-details" onclick="toggleClubDetail('tech-innovators')">View Details &#x2193;</button>
+          <button class="btn-join-club" onclick="location.href='login.html'">Join Club &#x2192;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="club-card-item" data-district="entebbe" data-type="school" data-level="beginner">
+      <div class="club-card-thumb">&#x1F331;</div>
+      <div class="club-card-body">
+        <div class="club-card-badges">
+          <span class="club-badge district">Entebbe</span>
+          <span class="club-badge">School</span>
+          <span class="club-badge">Beginner</span>
+        </div>
+        <div class="club-card-name">Green Futures Club</div>
+        <p class="club-card-desc">Tackling climate and sustainability challenges through youth-led environmental innovation and community action.</p>
+        <div class="club-card-meta">
+          <span>&#x1F465; 28 Members</span>
+          <span>&#x1F4C5; Est. 2021</span>
+        </div>
+        <div class="club-card-footer">
+          <button class="btn-view-details" onclick="toggleClubDetail('green-futures')">View Details &#x2193;</button>
+          <button class="btn-join-club" onclick="location.href='login.html'">Join Club &#x2192;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="club-card-item" data-district="jinja" data-type="community" data-level="beginner">
+      <div class="club-card-thumb">&#x1F4B0;</div>
+      <div class="club-card-body">
+        <div class="club-card-badges">
+          <span class="club-badge district">Jinja</span>
+          <span class="club-badge">Community</span>
+          <span class="club-badge">Beginner</span>
+        </div>
+        <div class="club-card-name">Young Entrepreneurs Club</div>
+        <p class="club-card-desc">From business plans to pitching investors — developing the next generation of Ugandan entrepreneurs.</p>
+        <div class="club-card-meta">
+          <span>&#x1F465; 35 Members</span>
+          <span>&#x1F4C5; Est. 2021</span>
+        </div>
+        <div class="club-card-footer">
+          <button class="btn-view-details" onclick="toggleClubDetail('young-entrepreneurs')">View Details &#x2193;</button>
+          <button class="btn-join-club" onclick="location.href='login.html'">Join Club &#x2192;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="club-card-item" data-district="gulu" data-type="university" data-level="advanced">
+      <div class="club-card-thumb">&#x1F52C;</div>
+      <div class="club-card-body">
+        <div class="club-card-badges">
+          <span class="club-badge district">Gulu</span>
+          <span class="club-badge">University</span>
+          <span class="club-badge">Advanced</span>
+        </div>
+        <div class="club-card-name">Science &amp; Research Club</div>
+        <p class="club-card-desc">Conducting youth-led research projects and competing in national and regional innovation challenges.</p>
+        <div class="club-card-meta">
+          <span>&#x1F465; 22 Members</span>
+          <span>&#x1F4C5; Est. 2021</span>
+        </div>
+        <div class="club-card-footer">
+          <button class="btn-view-details" onclick="toggleClubDetail('science-research')">View Details &#x2193;</button>
+          <button class="btn-join-club" onclick="location.href='login.html'">Join Club &#x2192;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="club-card-item" data-district="mbarara" data-type="school" data-level="intermediate">
+      <div class="club-card-thumb">&#x1F3A8;</div>
+      <div class="club-card-body">
+        <div class="club-card-badges">
+          <span class="club-badge district">Mbarara</span>
+          <span class="club-badge">School</span>
+          <span class="club-badge">Intermediate</span>
+        </div>
+        <div class="club-card-name">Creative Arts Club</div>
+        <p class="club-card-desc">Merging creativity with technology — design, media, and storytelling for social impact across communities.</p>
+        <div class="club-card-meta">
+          <span>&#x1F465; 31 Members</span>
+          <span>&#x1F4C5; Est. 2022</span>
+        </div>
+        <div class="club-card-footer">
+          <button class="btn-view-details" onclick="toggleClubDetail('creative-arts')">View Details &#x2193;</button>
+          <button class="btn-join-club" onclick="location.href='login.html'">Join Club &#x2192;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="club-card-item" data-district="mbale" data-type="community" data-level="beginner">
+      <div class="club-card-thumb">&#x1F91D;</div>
+      <div class="club-card-body">
+        <div class="club-card-badges">
+          <span class="club-badge district">Mbale</span>
+          <span class="club-badge">Community</span>
+          <span class="club-badge">Beginner</span>
+        </div>
+        <div class="club-card-name">Community Leaders Club</div>
+        <p class="club-card-desc">Developing leadership skills and driving community development projects across Eastern Uganda.</p>
+        <div class="club-card-meta">
+          <span>&#x1F465; 19 Members</span>
+          <span>&#x1F4C5; Est. 2022</span>
+        </div>
+        <div class="club-card-footer">
+          <button class="btn-view-details" onclick="toggleClubDetail('community-leaders')">View Details &#x2193;</button>
+          <button class="btn-join-club" onclick="location.href='login.html'">Join Club &#x2192;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="club-card-item" data-district="kampala" data-type="university" data-level="advanced">
+      <div class="club-card-thumb">&#x1F4CA;</div>
+      <div class="club-card-body">
+        <div class="club-card-badges">
+          <span class="club-badge district">Kampala</span>
+          <span class="club-badge">University</span>
+          <span class="club-badge">Advanced</span>
+        </div>
+        <div class="club-card-name">FinTech &amp; Business Club</div>
+        <p class="club-card-desc">Exploring financial technology, business modelling, and investment strategies for Uganda's digital economy.</p>
+        <div class="club-card-meta">
+          <span>&#x1F465; 26 Members</span>
+          <span>&#x1F4C5; Est. 2022</span>
+        </div>
+        <div class="club-card-footer">
+          <button class="btn-view-details" onclick="toggleClubDetail('fintech-business')">View Details &#x2193;</button>
+          <button class="btn-join-club" onclick="location.href='login.html'">Join Club &#x2192;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="club-card-item" data-district="fort-portal" data-type="school" data-level="beginner">
+      <div class="club-card-thumb">&#x1F3D7;&#xFE0F;</div>
+      <div class="club-card-body">
+        <div class="club-card-badges">
+          <span class="club-badge district">Fort Portal</span>
+          <span class="club-badge">School</span>
+          <span class="club-badge">Beginner</span>
+        </div>
+        <div class="club-card-name">Builders &amp; Makers Club</div>
+        <p class="club-card-desc">Hands-on building, prototyping, and making — turning raw ideas into physical solutions using local materials.</p>
+        <div class="club-card-meta">
+          <span>&#x1F465; 17 Members</span>
+          <span>&#x1F4C5; Est. 2023</span>
+        </div>
+        <div class="club-card-footer">
+          <button class="btn-view-details" onclick="toggleClubDetail('builders-makers')">View Details &#x2193;</button>
+          <button class="btn-join-club" onclick="location.href='login.html'">Join Club &#x2192;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="club-card-item" data-district="gulu" data-type="community" data-level="intermediate">
+      <div class="club-card-thumb">&#x1F33E;</div>
+      <div class="club-card-body">
+        <div class="club-card-badges">
+          <span class="club-badge district">Gulu</span>
+          <span class="club-badge">Community</span>
+          <span class="club-badge">Intermediate</span>
+        </div>
+        <div class="club-card-name">AgriTech Innovators Club</div>
+        <p class="club-card-desc">Applying technology and innovation to solve agricultural challenges facing smallholder farmers in Northern Uganda.</p>
+        <div class="club-card-meta">
+          <span>&#x1F465; 24 Members</span>
+          <span>&#x1F4C5; Est. 2023</span>
+        </div>
+        <div class="club-card-footer">
+          <button class="btn-view-details" onclick="toggleClubDetail('agritech')">View Details &#x2193;</button>
+          <button class="btn-join-club" onclick="location.href='login.html'">Join Club &#x2192;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="club-card-item" data-district="mbarara" data-type="university" data-level="intermediate">
+      <div class="club-card-thumb">&#x1F4BB;</div>
+      <div class="club-card-body">
+        <div class="club-card-badges">
+          <span class="club-badge district">Mbarara</span>
+          <span class="club-badge">University</span>
+          <span class="club-badge">Intermediate</span>
+        </div>
+        <div class="club-card-name">Digital Skills Club</div>
+        <p class="club-card-desc">Building digital literacy, coding skills, and online entrepreneurship capabilities for youth in Western Uganda.</p>
+        <div class="club-card-meta">
+          <span>&#x1F465; 33 Members</span>
+          <span>&#x1F4C5; Est. 2023</span>
+        </div>
+        <div class="club-card-footer">
+          <button class="btn-view-details" onclick="toggleClubDetail('digital-skills')">View Details &#x2193;</button>
+          <button class="btn-join-club" onclick="location.href='login.html'">Join Club &#x2192;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="club-card-item" data-district="jinja" data-type="school" data-level="advanced">
+      <div class="club-card-thumb">&#x26A1;</div>
+      <div class="club-card-body">
+        <div class="club-card-badges">
+          <span class="club-badge district">Jinja</span>
+          <span class="club-badge">School</span>
+          <span class="club-badge">Advanced</span>
+        </div>
+        <div class="club-card-name">Energy &amp; Climate Club</div>
+        <p class="club-card-desc">Designing renewable energy solutions and climate adaptation strategies for communities along the Nile basin.</p>
+        <div class="club-card-meta">
+          <span>&#x1F465; 21 Members</span>
+          <span>&#x1F4C5; Est. 2023</span>
+        </div>
+        <div class="club-card-footer">
+          <button class="btn-view-details" onclick="toggleClubDetail('energy-climate')">View Details &#x2193;</button>
+          <button class="btn-join-club" onclick="location.href='login.html'">Join Club &#x2192;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="club-card-item" data-district="mbale" data-type="university" data-level="intermediate">
+      <div class="club-card-thumb">&#x1F4E1;</div>
+      <div class="club-card-body">
+        <div class="club-card-badges">
+          <span class="club-badge district">Mbale</span>
+          <span class="club-badge">University</span>
+          <span class="club-badge">Intermediate</span>
+        </div>
+        <div class="club-card-name">Health Innovation Club</div>
+        <p class="club-card-desc">Developing health-tech solutions and community health initiatives to improve access to care in Eastern Uganda.</p>
+        <div class="club-card-meta">
+          <span>&#x1F465; 29 Members</span>
+          <span>&#x1F4C5; Est. 2024</span>
+        </div>
+        <div class="club-card-footer">
+          <button class="btn-view-details" onclick="toggleClubDetail('health-innovation')">View Details &#x2193;</button>
+          <button class="btn-join-club" onclick="location.href='login.html'">Join Club &#x2192;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="clubs-no-results" id="clubs-no-results">No clubs found matching your filters. Try a different combination.</div>
+  </div>
+
+  <!-- CLUB DETAIL PANEL -->
+  <div class="club-detail-panel" id="club-detail-panel">
+    <div class="club-detail-inner">
+      <div class="club-detail-main">
+        <div class="club-detail-tag" id="cdp-tag"></div>
+        <div class="club-detail-title" id="cdp-title"></div>
+        <p class="club-detail-desc" id="cdp-desc"></p>
+        <div class="club-detail-section-title">Activities</div>
+        <ul class="club-detail-list" id="cdp-activities"></ul>
+        <div class="club-detail-section-title">Who Can Join</div>
+        <p class="club-detail-desc" id="cdp-who" style="margin-bottom:0"></p>
+      </div>
+      <div class="club-detail-sidebar">
+        <div>
+          <div class="club-detail-info-label">District</div>
+          <div class="club-detail-info-value" id="cdp-district"></div>
+        </div>
+        <div class="club-detail-divider"></div>
+        <div>
+          <div class="club-detail-info-label">Institution</div>
+          <div class="club-detail-info-value" id="cdp-institution"></div>
+        </div>
+        <div class="club-detail-divider"></div>
+        <div>
+          <div class="club-detail-info-label">Meeting Schedule</div>
+          <div class="club-detail-info-value" id="cdp-schedule"></div>
+        </div>
+        <div class="club-detail-divider"></div>
+        <div>
+          <div class="club-detail-info-label">Club Lead</div>
+          <div class="club-detail-info-value" id="cdp-lead"></div>
+        </div>
+        <div class="club-detail-actions">
+          <button class="btn-detail-join" onclick="location.href='login.html'">Join this Club &rarr;</button>
+          <button class="btn-detail-contact" onclick="location.href='login.html'">Contact Club Lead</button>
+          <p class="club-detail-auth-note">Account required to join. <a href="register.html">Register free &rarr;</a></p>
+          <button class="btn-detail-close" onclick="closeClubDetail()">&#x2715; Close Details</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- DISTRICT MAP -->
+<section class="map-section">
+  <div class="map-header">
+    <div class="section-tag">By District</div>
+    <h2>Clubs Across Uganda</h2>
+    <p>Click any district to filter clubs in that area. We're growing — new clubs launching every term.</p>
+  </div>
+  <div class="map-inner">
+
+    <!-- SVG MAP -->
+    <div class="map-visual">
+      <div class="map-svg-wrap">
+        <svg viewBox="0 0 300 340" xmlns="http://www.w3.org/2000/svg">
+          <!-- Uganda simplified outline -->
+          <path class="ug-shape" d="M80,20 L220,20 L260,60 L270,120 L250,180 L240,240 L200,300 L160,320 L120,310 L80,270 L50,210 L40,150 L50,90 Z"/>
+          <!-- Lake Victoria -->
+          <ellipse cx="210" cy="290" rx="40" ry="28" fill="rgba(100,160,255,0.08)" stroke="rgba(100,160,255,0.2)" stroke-width="1"/>
+          <text x="210" y="294" text-anchor="middle" fill="rgba(100,160,255,0.4)" font-size="6" font-family="monospace">L. Victoria</text>
+          <!-- Lake Albert -->
+          <ellipse cx="58" cy="130" rx="14" ry="28" fill="rgba(100,160,255,0.08)" stroke="rgba(100,160,255,0.15)" stroke-width="1"/>
+
+          <!-- District dots -->
+          <g class="district-dot active" id="dot-kampala" onclick="filterByDistrict('kampala')" data-district="kampala">
+            <circle class="pulse-ring" cx="175" cy="230" r="8"/>
+            <circle cx="175" cy="230" r="7"/>
+            <text x="175" y="246" text-anchor="middle">Kampala</text>
+          </g>
+          <g class="district-dot" id="dot-entebbe" onclick="filterByDistrict('entebbe')" data-district="entebbe">
+            <circle class="pulse-ring" cx="160" cy="258" r="8"/>
+            <circle cx="160" cy="258" r="6"/>
+            <text x="160" y="272" text-anchor="middle">Entebbe</text>
+          </g>
+          <g class="district-dot" id="dot-jinja" onclick="filterByDistrict('jinja')" data-district="jinja">
+            <circle class="pulse-ring" cx="210" cy="222" r="8"/>
+            <circle cx="210" cy="222" r="6"/>
+            <text x="210" y="236" text-anchor="middle">Jinja</text>
+          </g>
+          <g class="district-dot" id="dot-gulu" onclick="filterByDistrict('gulu')" data-district="gulu">
+            <circle class="pulse-ring" cx="150" cy="90" r="8"/>
+            <circle cx="150" cy="90" r="6"/>
+            <text x="150" y="104" text-anchor="middle">Gulu</text>
+          </g>
+          <g class="district-dot" id="dot-mbarara" onclick="filterByDistrict('mbarara')" data-district="mbarara">
+            <circle class="pulse-ring" cx="130" cy="270" r="8"/>
+            <circle cx="130" cy="270" r="6"/>
+            <text x="130" y="284" text-anchor="middle">Mbarara</text>
+          </g>
+          <g class="district-dot" id="dot-mbale" onclick="filterByDistrict('mbale')" data-district="mbale">
+            <circle class="pulse-ring" cx="230" cy="185" r="8"/>
+            <circle cx="230" cy="185" r="6"/>
+            <text x="230" y="199" text-anchor="middle">Mbale</text>
+          </g>
+          <g class="district-dot" id="dot-fort-portal" onclick="filterByDistrict('fort-portal')" data-district="fort-portal">
+            <circle class="pulse-ring" cx="90" cy="190" r="8"/>
+            <circle cx="90" cy="190" r="6"/>
+            <text x="90" y="204" text-anchor="middle">Fort Portal</text>
+          </g>
+        </svg>
+        <div class="map-legend">
+          <div class="map-legend-item"><div class="legend-dot active"></div> Has Clubs</div>
+          <div class="map-legend-item"><div class="legend-dot"></div> Coming Soon</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DISTRICT LIST -->
+    <div class="map-districts">
+      <div class="map-district-card active" id="dc-kampala" onclick="filterByDistrict('kampala')">
+        <div class="map-district-left">
+          <div class="map-district-dot"></div>
+          <div class="map-district-name">Kampala</div>
+        </div>
+        <span class="map-district-count">2 Clubs</span>
+      </div>
+      <div class="map-district-card" id="dc-entebbe" onclick="filterByDistrict('entebbe')">
+        <div class="map-district-left">
+          <div class="map-district-dot"></div>
+          <div class="map-district-name">Entebbe</div>
+        </div>
+        <span class="map-district-count">1 Club</span>
+      </div>
+      <div class="map-district-card" id="dc-jinja" onclick="filterByDistrict('jinja')">
+        <div class="map-district-left">
+          <div class="map-district-dot"></div>
+          <div class="map-district-name">Jinja</div>
+        </div>
+        <span class="map-district-count">2 Clubs</span>
+      </div>
+      <div class="map-district-card" id="dc-gulu" onclick="filterByDistrict('gulu')">
+        <div class="map-district-left">
+          <div class="map-district-dot"></div>
+          <div class="map-district-name">Gulu</div>
+        </div>
+        <span class="map-district-count">2 Clubs</span>
+      </div>
+      <div class="map-district-card" id="dc-mbarara" onclick="filterByDistrict('mbarara')">
+        <div class="map-district-left">
+          <div class="map-district-dot"></div>
+          <div class="map-district-name">Mbarara</div>
+        </div>
+        <span class="map-district-count">2 Clubs</span>
+      </div>
+      <div class="map-district-card" id="dc-mbale" onclick="filterByDistrict('mbale')">
+        <div class="map-district-left">
+          <div class="map-district-dot"></div>
+          <div class="map-district-name">Mbale</div>
+        </div>
+        <span class="map-district-count">2 Clubs</span>
+      </div>
+      <div class="map-district-card" id="dc-fort-portal" onclick="filterByDistrict('fort-portal')">
+        <div class="map-district-left">
+          <div class="map-district-dot"></div>
+          <div class="map-district-name">Fort Portal</div>
+        </div>
+        <span class="map-district-count">1 Club</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- START A CLUB CTA -->
+<section class="start-club-cta">
+  <div class="start-club-inner">
+    <div class="start-club-left">
+      <div class="section-tag">Start a Club</div>
+      <h2>Don't See<br><span>Your Area?</span></h2>
+      <p>C360 is growing fast — but we haven't reached everywhere yet. If there's no club in your school, university, or community, you can start one. We'll give you everything you need.</p>
+      <a href="login.html" class="btn-start-club">Start a Club &#x2192;</a>
+    </div>
+    <div class="start-club-steps">
+      <div class="start-step">
+        <div class="start-step-num">01</div>
+        <div class="start-step-body">
+          <h4>Create Your Account</h4>
+          <p>Register for free and complete your profile. Takes less than 2 minutes.</p>
+        </div>
+      </div>
+      <div class="start-step">
+        <div class="start-step-num">02</div>
+        <div class="start-step-body">
+          <h4>Submit a Club Proposal</h4>
+          <p>Tell us about your location, institution, and the type of club you want to start.</p>
+        </div>
+      </div>
+      <div class="start-step">
+        <div class="start-step-num">03</div>
+        <div class="start-step-body">
+          <h4>Get Matched with a Mentor</h4>
+          <p>We assign you a C360 mentor who guides you through the setup process.</p>
+        </div>
+      </div>
+      <div class="start-step">
+        <div class="start-step-num">04</div>
+        <div class="start-step-body">
+          <h4>Launch Your Club</h4>
+          <p>Get your club listed, recruit members, and start your first session with full C360 support.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="nav-logo">
+        <div class="logo-mark">C360</div>
+        Innovation Lab
+      </div>
+      <p>Empowering Uganda's next generation of innovators through clubs, mentorship, and enterprise development.</p>
+      <div class="footer-tagline"><span></span> Est. in Uganda, 2020 <span></span></div>
+      <div class="social-links">
+        <a href="#" class="social-link" aria-label="Facebook">&#x1F426;</a>
+        <a href="#" class="social-link" aria-label="X">&#x1D54F;</a>
+        <a href="#" class="social-link" aria-label="Instagram">&#x1F4F7;</a>
+        <a href="#" class="social-link" aria-label="LinkedIn">in</a>
+        <a href="#" class="social-link" aria-label="YouTube">&#x25B6;</a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="programs.html">Programs</a></li>
+        <li><a href="clubs.html">Clubs</a></li>
+        <li><a href="resources.html">Resources</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Account</h4>
+      <ul>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Use</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 C360 Innovation Lab. All rights reserved.</span>
+    <span style="color:rgba(100,116,139,0.45);font-family:var(--font-m);font-size:0.68rem;letter-spacing:1px;">UGANDA &middot; AFRICA &middot; INNOVATION</span>
+  </div>
+</footer>
+
+<script>
+  /* CUSTOM CURSOR */
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursor-ring');
+  let mx = -100, my = -100, rx = -100, ry = -100;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animCursor() {
+    if (cursor) { cursor.style.left = mx+'px'; cursor.style.top = my+'px'; }
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    if (ring) { ring.style.left = rx+'px'; ring.style.top = ry+'px'; }
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+
+  document.querySelectorAll('a,button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      if (cursor) { cursor.style.transform='translate(-50%,-50%) scale(2.5)'; }
+      if (ring)   { ring.style.transform='translate(-50%,-50%) scale(1.5)'; ring.style.borderColor='rgba(245,166,35,0.9)'; }
+    });
+    el.addEventListener('mouseleave', () => {
+      if (cursor) { cursor.style.transform='translate(-50%,-50%) scale(1)'; }
+      if (ring)   { ring.style.transform='translate(-50%,-50%) scale(1)'; ring.style.borderColor='rgba(245,166,35,0.5)'; }
+    });
+  });
+
+  /* MOBILE MENU */
+  function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
+
+  /* NAV SCROLL TINT */
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    if (nav) nav.style.background = window.scrollY > 60 ? 'rgba(7,9,15,0.92)' : 'rgba(7,9,15,0.7)';
+  });
+
+  /* CLUB DETAIL DATA */
+  const clubData = {
+    'tech-innovators':    { tag:'University · Kampala', title:'Tech Innovators Club', desc:'Build real-world tech solutions using design thinking, coding, and rapid prototyping. Members work in teams on live projects addressing real community challenges across Uganda.', activities:['Weekly coding and design thinking sessions','Monthly hackathons and build sprints','Guest talks from tech industry leaders','Participation in national innovation challenges','Demo days and project showcases'], who:'Open to university students aged 16–25 with interest in technology, coding, or digital innovation. No prior experience required.', district:'Kampala', institution:'Makerere University', schedule:'Every Saturday, 9am – 1pm', lead:'Brian Ssemakula — Head of Mentorship' },
+    'green-futures':      { tag:'School · Entebbe', title:'Green Futures Club', desc:'Tackle Uganda’s most pressing environmental challenges through youth-led innovation, community projects, and sustainability campaigns that create measurable local impact.', activities:['Environmental field research and data collection','Community clean-up and tree planting drives','Sustainability project design workshops','Climate awareness campaigns in schools','Participation in climate innovation challenges'], who:'Open to secondary school students aged 13–20 passionate about the environment, climate, or community development.', district:'Entebbe', institution:'Entebbe Secondary School', schedule:'Every Saturday, 9am – 12pm', lead:'Grace Atim — Community Lead' },
+    'young-entrepreneurs':{ tag:'Community · Jinja', title:'Young Entrepreneurs Club', desc:'From idea validation to investor pitching — this club walks you through every stage of building a business, with real mentors guiding you at each step of the journey.', activities:['Business model canvas workshops','Market research and customer interviews','Financial planning and budgeting sessions','Pitch practice and investor simulations','Mentorship sessions with local entrepreneurs'], who:'Open to youth aged 16–25 in the Jinja community with a business idea or entrepreneurial ambition.', district:'Jinja', institution:'Jinja Community Hub', schedule:'Every Saturday, 10am – 2pm', lead:'Moses Tumwine — Finance & Partnerships' },
+    'science-research':   { tag:'University · Gulu', title:'Science & Research Club', desc:'Conduct structured research projects, explore STEM disciplines, and compete in national and regional innovation challenges with support from academic mentors at Gulu University.', activities:['Structured research project design','Scientific writing and publication workshops','STEM experiments and lab sessions','National research competition preparation','Peer review and academic presentation practice'], who:'Open to university students aged 16–25 with curiosity in science, technology, engineering, or mathematics.', district:'Gulu', institution:'Gulu University', schedule:'Every Saturday, 9am – 1pm', lead:'Ronald Byaruhanga — Research Lead' },
+    'creative-arts':      { tag:'School · Mbarara', title:'Creative Arts Club', desc:'Merging creativity with technology — design, media, and storytelling for social impact. Members produce real campaigns, digital content, and creative projects for their communities.', activities:['Graphic design and digital art workshops','Video production and storytelling sessions','Social media campaign creation','Community mural and public art projects','Creative competitions and exhibitions'], who:'Open to secondary school students aged 13–20 with a passion for art, design, media, or creative expression.', district:'Mbarara', institution:'Mbarara High School', schedule:'Every Friday, 3pm – 6pm', lead:'Lydia Kemigisha — Creative Director' },
+    'community-leaders':  { tag:'Community · Mbale', title:'Community Leaders Club', desc:'Developing leadership skills and driving community development projects across Eastern Uganda. Members lead real initiatives that create visible change in their neighbourhoods.', activities:['Leadership and public speaking workshops','Community needs assessment projects','Local government engagement sessions','Youth-led development project planning','Mentorship from established community leaders'], who:'Open to youth aged 15–25 in the Mbale community with a desire to lead and create positive change.', district:'Mbale', institution:'Mbale Community Centre', schedule:'Every Saturday, 9am – 12pm', lead:'Grace Atim — Community Lead' },
+    'fintech-business':   { tag:'University · Kampala', title:'FinTech & Business Club', desc:'Exploring financial technology, business modelling, and investment strategies for Uganda’s digital economy. Members build real fintech prototypes and business cases.', activities:['FinTech product design workshops','Investment and valuation fundamentals','Business case development and pitching','Guest sessions with fintech founders','Participation in FinTech for Uganda Challenge'], who:'Open to university students aged 18–25 with interest in finance, technology, or entrepreneurship.', district:'Kampala', institution:'Makerere University Business School', schedule:'Every Saturday, 10am – 2pm', lead:'Moses Tumwine — Finance & Partnerships' },
+    'builders-makers':    { tag:'School · Fort Portal', title:'Builders & Makers Club', desc:'Hands-on building, prototyping, and making — turning raw ideas into physical solutions using local materials and simple tools. Every session ends with something built.', activities:['Prototyping with local and recycled materials','Basic electronics and circuits workshops','Design and build challenges','Community problem-solving projects','Showcase and demo days each term'], who:'Open to secondary school students aged 13–20 who love building, tinkering, and making things with their hands.', district:'Fort Portal', institution:'Fort Portal Secondary School', schedule:'Every Saturday, 9am – 1pm', lead:'David Ochieng — Executive Director' },
+    'agritech':           { tag:'Community · Gulu', title:'AgriTech Innovators Club', desc:'Applying technology and innovation to solve agricultural challenges facing smallholder farmers in Northern Uganda. Members design and test real agri-solutions in the field.', activities:['Farmer interviews and field research','Agri-tech solution design workshops','Soil and crop data collection projects','Prototype testing with local farmers','Participation in national agri-innovation challenges'], who:'Open to youth aged 16–25 in the Gulu community with interest in agriculture, technology, or rural development.', district:'Gulu', institution:'Gulu Community Innovation Hub', schedule:'Every Saturday, 8am – 12pm', lead:'Ronald Byaruhanga — Research Lead' },
+    'digital-skills':     { tag:'University · Mbarara', title:'Digital Skills Club', desc:'Building digital literacy, coding skills, and online entrepreneurship capabilities for youth in Western Uganda. Members leave with real digital skills they can use immediately.', activities:['Web development and coding bootcamps','Digital marketing and social media training','Online business setup workshops','Freelancing and remote work skills','Monthly digital skills showcase'], who:'Open to university students aged 16–25 in Mbarara with interest in digital skills, coding, or online business.', district:'Mbarara', institution:'Mbarara University of Science & Technology', schedule:'Every Saturday, 10am – 2pm', lead:'Fatuma Namutebi — Digital & Tech Lead' },
+    'energy-climate':     { tag:'School · Jinja', title:'Energy & Climate Club', desc:'Designing renewable energy solutions and climate adaptation strategies for communities along the Nile basin. Members build working prototypes and test them in real environments.', activities:['Renewable energy design workshops','Solar and wind prototype building','Climate data collection and analysis','Community energy needs assessments','Participation in climate innovation challenges'], who:'Open to secondary school students aged 14–20 in Jinja with interest in energy, climate, or environmental science.', district:'Jinja', institution:'Jinja College', schedule:'Every Friday, 3pm – 6pm', lead:'Ronald Byaruhanga — Research Lead' },
+    'health-innovation':  { tag:'University · Mbale', title:'Health Innovation Club', desc:'Developing health-tech solutions and community health initiatives to improve access to care in Eastern Uganda. Members design tools that real health workers and patients can use.', activities:['Health needs assessment in communities','Health-tech product design workshops','Community health awareness campaigns','Prototype testing with local health workers','Participation in health innovation challenges'], who:'Open to university students aged 18–25 in Mbale with interest in health, technology, or community development.', district:'Mbale', institution:'Mbale University', schedule:'Every Saturday, 9am – 1pm', lead:'Amara Nakato — Head of Programs' },
+  };
+
+  function toggleClubDetail(id) {
+    const panel = document.getElementById('club-detail-panel');
+    const data  = clubData[id];
+    if (!data) return;
+    if (panel.classList.contains('open') && panel.dataset.current === id) { closeClubDetail(); return; }
+    document.getElementById('cdp-tag').textContent         = data.tag;
+    document.getElementById('cdp-title').textContent       = data.title;
+    document.getElementById('cdp-desc').textContent        = data.desc;
+    document.getElementById('cdp-who').textContent         = data.who;
+    document.getElementById('cdp-district').textContent    = data.district;
+    document.getElementById('cdp-institution').textContent = data.institution;
+    document.getElementById('cdp-schedule').textContent    = data.schedule;
+    document.getElementById('cdp-lead').textContent        = data.lead;
+    document.getElementById('cdp-activities').innerHTML    = data.activities.map(a => `<li>${a}</li>`).join('');
+    panel.dataset.current = id;
+    panel.classList.add('open');
+    setTimeout(() => panel.scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
+  }
+
+  function closeClubDetail() {
+    const panel = document.getElementById('club-detail-panel');
+    panel.classList.remove('open');
+    delete panel.dataset.current;
+  }
+
+  /* MAP DISTRICT FILTER */
+  function filterByDistrict(district) {
+    activeFilters.district = district;
+    document.querySelectorAll('.filter-btn[data-filter="district"]').forEach(b => {
+      b.classList.toggle('active', b.dataset.value === district);
+    });
+    document.querySelectorAll('.district-dot').forEach(d => {
+      d.classList.toggle('active', d.dataset.district === district);
+    });
+    document.querySelectorAll('.map-district-card').forEach(d => {
+      d.classList.toggle('active', d.id === 'dc-' + district);
+    });
+    applyFilters();
+    document.getElementById('clubs-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* FILTER LOGIC */
+  const activeFilters = { district: 'all', type: 'all', level: 'all' };
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filterType = btn.dataset.filter;
+      const filterVal  = btn.dataset.value;
+      activeFilters[filterType] = filterVal;
+      document.querySelectorAll(`.filter-btn[data-filter="${filterType}"]`).forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilters();
+    });
+  });
+
+  function applyFilters() {
+    const cards = document.querySelectorAll('.club-card-item');
+    let visible = 0;
+    cards.forEach(card => {
+      const dMatch = activeFilters.district === 'all' || card.dataset.district === activeFilters.district;
+      const tMatch = activeFilters.type     === 'all' || card.dataset.type     === activeFilters.type;
+      const lMatch = activeFilters.level    === 'all' || card.dataset.level    === activeFilters.level;
+      const show = dMatch && tMatch && lMatch;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    const countEl = document.getElementById('clubs-count');
+    if (countEl) countEl.textContent = visible;
+    const noRes = document.getElementById('clubs-no-results');
+    if (noRes) noRes.style.display = visible === 0 ? 'block' : 'none';
+  }
+</script>
+<script src="auth.js"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register — C360 Innovation Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #07090f;
+      --deep:     #0d1120;
+      --gold:     #f5a623;
+      --flame:    #ff5a1f;
+      --cream:    #fdf6e3;
+      --silver:   #94a3b8;
+      --glass:    rgba(255,255,255,0.04);
+      --border:   rgba(255,255,255,0.08);
+      --border-h: rgba(245,166,35,0.4);
+      --text:     #e2e8f0;
+      --muted:    #64748b;
+      --error:    #f87171;
+      --font-d:   'Playfair Display', Georgia, serif;
+      --font-b:   'DM Sans', sans-serif;
+      --font-m:   'Space Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-b);
+      color: var(--text);
+      background: var(--ink);
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      cursor: none;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ── CURSOR ── */
+    .cursor {
+      position: fixed; width: 10px; height: 10px;
+      background: var(--gold); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform 0.1s, width 0.2s, height 0.2s;
+      mix-blend-mode: screen;
+    }
+    .cursor-ring {
+      position: fixed; width: 38px; height: 38px;
+      border: 1.5px solid rgba(245,166,35,0.5); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: transform 0.18s ease, border-color 0.25s;
+    }
+    @media (max-width: 640px) { body { cursor: auto; } .cursor, .cursor-ring { display: none; } }
+
+    /* ── NOISE ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.028; pointer-events: none; z-index: 9997;
+    }
+
+    /* ── HEADER ── */
+    .auth-header {
+      padding: 24px 6%;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: rgba(7,9,15,0.7);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+    .nav-logo {
+      font-family: var(--font-d);
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--cream);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-mark {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--gold), var(--flame));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-m);
+      font-size: 0.6rem; font-weight: 700; color: #fff;
+      box-shadow: 0 0 16px rgba(245,166,35,0.3);
+    }
+
+    /* ── LAYOUT ── */
+    .auth-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 6%;
+      position: relative;
+      overflow: hidden;
+    }
+    .auth-main::before, .auth-main::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(100px);
+    }
+    .auth-main::before {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(245,166,35,0.07), transparent 70%);
+      top: -100px; right: -100px;
+    }
+    .auth-main::after {
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(255,90,31,0.06), transparent 70%);
+      bottom: -80px; left: -80px;
+    }
+
+    /* ── CARD ── */
+    .auth-card {
+      width: 100%;
+      max-width: 520px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px 44px;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    .auth-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), var(--flame), transparent);
+      border-radius: 24px 24px 0 0;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .auth-card-tag {
+      font-family: var(--font-m);
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .auth-card h1 {
+      font-family: var(--font-d);
+      font-size: 1.9rem;
+      font-weight: 900;
+      color: var(--cream);
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+    .auth-card-sub {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 36px;
+      font-weight: 300;
+    }
+
+    /* ── FORM ── */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--silver);
+      letter-spacing: 0.3px;
+    }
+
+    input, select {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-family: var(--font-b);
+      font-size: 0.9rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      width: 100%;
+      cursor: none;
+    }
+    input::placeholder { color: var(--muted); }
+    input:focus, select:focus {
+      border-color: rgba(245,166,35,0.5);
+      background: rgba(245,166,35,0.04);
+    }
+    input.invalid { border-color: var(--error); }
+    select option { background: #0d1120; color: var(--text); }
+
+    /* ── ROLE PILLS ── */
+    .role-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .role-pill {
+      flex: 1;
+      min-width: 100px;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--glass);
+      color: var(--silver);
+      font-size: 0.83rem;
+      font-weight: 500;
+      text-align: center;
+      cursor: none;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      user-select: none;
+    }
+    .role-pill input[type="radio"] { display: none; }
+    .role-pill:has(input:checked),
+    .role-pill.selected {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(245,166,35,0.08);
+    }
+
+    /* ── TERMS ── */
+    .terms-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .terms-row input[type="checkbox"] {
+      width: 18px; height: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      accent-color: var(--gold);
+      cursor: none;
+    }
+    .terms-row label {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 400;
+      line-height: 1.6;
+      cursor: none;
+    }
+    .terms-row a { color: var(--gold); }
+    .terms-row a:hover { text-decoration: underline; }
+
+    /* ── SUBMIT ── */
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--gold), var(--flame));
+      color: #fff;
+      font-family: var(--font-b);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: none;
+      box-shadow: 0 6px 28px rgba(245,166,35,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(245,166,35,0.45); }
+    .btn-submit:disabled { opacity: 0.6; transform: none; }
+
+    .auth-switch {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .auth-switch a { color: var(--gold); font-weight: 600; }
+    .auth-switch a:hover { text-decoration: underline; }
+
+    /* ── CONFIRMATION SCREEN ── */
+    .confirm-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
+      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    .confirm-screen.show { display: flex; }
+    .confirm-icon {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: rgba(245,166,35,0.1);
+      border: 1px solid rgba(245,166,35,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+    .confirm-screen h2 {
+      font-family: var(--font-d);
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: var(--cream);
+      letter-spacing: -0.4px;
+    }
+    .confirm-screen p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 340px;
+      font-weight: 300;
+    }
+    .confirm-screen p strong { color: var(--silver); font-weight: 500; }
+    .btn-back {
+      margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font-family: var(--font-b);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-back:hover { border-color: var(--border-h); background: rgba(245,166,35,0.05); }
+
+    /* ── ERRORS ── */
+    .field-error { font-size: 0.75rem; color: var(--error); margin-top: -10px; margin-bottom: 4px; display: none; }
+    .field-error.show { display: block; }
+
+    @media (max-width: 560px) {
+      .auth-card { padding: 36px 24px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<header class="auth-header">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-mark">C360</div>
+    Innovation Lab
+  </a>
+</header>
+
+<main class="auth-main">
+  <div class="auth-card">
+
+    <!-- REGISTRATION FORM -->
+    <div id="register-form-wrap">
+      <div class="auth-card-tag">Get Started</div>
+      <h1>Create Account</h1>
+      <p class="auth-card-sub">Join Uganda's growing innovation community.</p>
+
+      <form id="register-form" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fullname">Full Name</label>
+            <input type="text" id="fullname" placeholder="e.g. Amara Nakato" autocomplete="name"/>
+            <span class="field-error" id="err-fullname">Please enter your full name.</span>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="you@example.com" autocomplete="email"/>
+            <span class="field-error" id="err-email">Please enter a valid email.</span>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Min. 8 characters" autocomplete="new-password"/>
+            <span class="field-error" id="err-password">Password must be at least 8 characters.</span>
+          </div>
+          <div class="form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" id="confirm-password" placeholder="Repeat password" autocomplete="new-password"/>
+            <span class="field-error" id="err-confirm">Passwords do not match.</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Role</label>
+          <div class="role-group" id="role-group">
+            <label class="role-pill selected">
+              <input type="radio" name="role" value="student" checked/> &#127891; Student
+            </label>
+            <label class="role-pill">
+              <input type="radio" name="role" value="club-leader"/> &#127941; Club Leader
+            </label>
+            <label class="role-pill">
+              <input type="radio" name="role" value="mentor"/> &#127919; Mentor
+            </label>
+          </div>
+          <span class="field-error" id="err-role">Please select a role.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="district">District / Institution Name</label>
+          <input type="text" id="district" placeholder="e.g. Kampala / Makerere University"/>
+          <span class="field-error" id="err-district">Please enter your district or institution.</span>
+        </div>
+
+        <div class="terms-row">
+          <input type="checkbox" id="terms"/>
+          <label for="terms">I agree to the <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a></label>
+        </div>
+        <span class="field-error" id="err-terms" style="margin-top:-16px;margin-bottom:16px;">You must agree to the terms.</span>
+
+        <button type="submit" class="btn-submit" id="submit-btn">Create Account</button>
+      </form>
+
+      <p class="auth-switch">Already have an account? <a href="login.html">Login here</a></p>
+    </div>
+
+    <!-- CONFIRMATION SCREEN -->
+    <div class="confirm-screen" id="confirm-screen">
+      <div class="confirm-icon">&#128140;</div>
+      <h2>Check Your Email</h2>
+      <p>We've sent a verification link to <strong id="confirm-email"></strong>. Click the link to activate your account.</p>
+      <p style="font-size:0.78rem;color:var(--muted);">Didn't receive it? Check your spam folder or wait a few minutes.</p>
+      <a href="index.html" class="btn-back">&#8592; Back to Homepage</a>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  /* cursor */
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursor-ring');
+  let mx = -100, my = -100, rx = -100, ry = -100;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  (function animCursor() {
+    if (cursor) { cursor.style.left = mx+'px'; cursor.style.top = my+'px'; }
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    if (ring) { ring.style.left = rx+'px'; ring.style.top = ry+'px'; }
+    requestAnimationFrame(animCursor);
+  })();
+  document.querySelectorAll('a,button,input,select,label').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      if (cursor) cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+      if (ring) { ring.style.transform = 'translate(-50%,-50%) scale(1.5)'; ring.style.borderColor = 'rgba(245,166,35,0.9)'; }
+    });
+    el.addEventListener('mouseleave', () => {
+      if (cursor) cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      if (ring) { ring.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.borderColor = 'rgba(245,166,35,0.5)'; }
+    });
+  });
+
+  /* role pills */
+  const roleGroup = document.getElementById('role-group');
+  roleGroup.querySelectorAll('.role-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      roleGroup.querySelectorAll('.role-pill').forEach(p => p.classList.remove('selected'));
+      pill.classList.add('selected');
+    });
+  });
+
+  /* form validation & submit */
+  document.getElementById('register-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    let valid = true;
+
+    const show = (id, condition) => {
+      document.getElementById(id).classList.toggle('show', condition);
+      if (condition) valid = false;
+    };
+
+    const fullname = document.getElementById('fullname').value.trim();
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const confirm  = document.getElementById('confirm-password').value;
+    const district = document.getElementById('district').value.trim();
+    const terms    = document.getElementById('terms').checked;
+
+    show('err-fullname', !fullname);
+    show('err-email',    !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+    show('err-password', password.length < 8);
+    show('err-confirm',  password !== confirm);
+    show('err-district', !district);
+    show('err-terms',    !terms);
+
+    if (!valid) return;
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Creating account\u2026';
+
+    /* save to localStorage so login.html can authenticate */
+    const users = JSON.parse(localStorage.getItem('c360_users') || '{}');
+    const role  = roleGroup.querySelector('.role-pill.selected input[type="radio"]')?.value || 'student';
+    users[email] = { name: fullname, password, role, district };
+    localStorage.setItem('c360_users', JSON.stringify(users));
+
+    setTimeout(() => {
+      document.getElementById('confirm-email').textContent = email;
+      document.getElementById('register-form-wrap').style.display = 'none';
+      document.getElementById('confirm-screen').classList.add('show');
+    }, 1200);
+  });
+</script>
+</body>
+</html>

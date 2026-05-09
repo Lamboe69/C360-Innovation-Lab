@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apply for Incubation — C360 Innovation Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="global.css">
+  <style>
+    :root { --sidebar-w: 250px; }
+    body { display: flex; flex-direction: column; min-height: 100vh; background: var(--navy); cursor: none; }
+
+    /* ── TOP NAV ── */
+    .topnav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      height: 72px; background: rgba(7,9,15,0.95);
+      backdrop-filter: blur(24px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px;
+      animation: navSlide 0.8s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    @keyframes navSlide { from{transform:translateY(-100%);opacity:0} to{transform:translateY(0);opacity:1} }
+    .topnav-left { display: flex; align-items: center; gap: 14px; }
+    .sidebar-toggle {
+      background: none; border: none; cursor: none;
+      display: flex; flex-direction: column; gap: 5px; padding: 6px;
+      border-radius: 8px; transition: background 0.2s;
+    }
+    .sidebar-toggle:hover { background: var(--glass-b); }
+    .sidebar-toggle span { display: block; width: 22px; height: 2px; background: var(--silver); border-radius: 2px; }
+    .topnav .nav-logo {
+      font-family: var(--font-d); font-size: 1.15rem; font-weight: 900;
+      color: var(--cream); white-space: nowrap;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .topnav-right { display: flex; align-items: center; gap: 12px; }
+    .topnav-bell {
+      position: relative; display: flex; align-items: center;
+      cursor: none; padding: 8px; border-radius: 10px; transition: background 0.2s;
+    }
+    .topnav-bell:hover { background: var(--glass-b); }
+    .topnav-bell-badge {
+      position: absolute; top: 4px; right: 4px;
+      min-width: 16px; height: 16px; padding: 0 4px;
+      background: var(--flame); color: #fff;
+      font-family: var(--font-m); font-size: 0.55rem; font-weight: 700;
+      border-radius: 100px; display: flex; align-items: center; justify-content: center;
+      border: 2px solid var(--ink);
+    }
+    .topnav-avatar-wrap {
+      display: flex; align-items: center; gap: 8px;
+      cursor: none; padding: 5px 12px 5px 5px;
+      border-radius: 100px; border: 1px solid var(--border);
+      background: var(--glass); transition: border-color 0.2s, background 0.2s;
+    }
+    .topnav-avatar-wrap:hover { border-color: rgba(245,166,35,0.4); background: var(--glass-b); }
+    .topnav-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--flame));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-m); font-size: 0.75rem; font-weight: 700; color: #fff;
+    }
+    .topnav-name { font-size: 0.85rem; font-weight: 600; color: var(--cream); }
+
+    /* ── LAYOUT ── */
+    .layout { display: flex; margin-top: 72px; flex: 1; }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w); flex-shrink: 0;
+      background: var(--deep); border-right: 1px solid var(--border);
+      min-height: calc(100vh - 72px);
+      position: fixed; top: 72px; left: 0; bottom: 0;
+      display: flex; flex-direction: column;
+      transition: transform 0.3s ease; z-index: 150; overflow-y: auto;
+    }
+    .sidebar.collapsed { transform: translateX(calc(-1 * var(--sidebar-w))); }
+    .sidebar-user {
+      padding: 22px 20px 18px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .sidebar-avatar {
+      width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--gold), var(--flame));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-m); font-size: 1rem; font-weight: 700; color: #fff;
+      border: 2px solid rgba(245,166,35,0.3);
+    }
+    .sidebar-uname { font-size: 0.88rem; font-weight: 700; color: var(--cream); font-family: var(--font-d); }
+    .sidebar-urole { font-size: 0.68rem; color: var(--muted); margin-top: 2px; font-family: var(--font-m); text-transform: capitalize; }
+    .sidebar-nav { padding: 12px 0; flex: 1; }
+    .nav-section-label {
+      font-family: var(--font-m); font-size: 0.62rem; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: rgba(245,166,35,0.35); padding: 14px 20px 5px;
+    }
+    .sidebar-link {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 20px; color: rgba(226,232,240,0.6);
+      font-size: 0.86rem; font-weight: 500;
+      transition: background 0.2s, color 0.2s;
+      cursor: none; border: none; background: none;
+      width: 100%; text-align: left; font-family: var(--font-b);
+      border-right: 3px solid transparent;
+    }
+    .sidebar-link:hover { background: var(--glass-b); color: var(--cream); }
+    .sidebar-link.active { background: rgba(245,166,35,0.1); color: var(--gold); font-weight: 700; border-right-color: var(--gold); }
+    .sidebar-link .s-icon { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; }
+    .sidebar-link.logout-link { color: rgba(252,165,165,0.7); }
+    .sidebar-link.logout-link:hover { background: rgba(239,68,68,0.08); color: #f87171; }
+    .sidebar-footer { padding: 14px 20px; border-top: 1px solid var(--border); font-family: var(--font-m); font-size: 0.65rem; color: rgba(245,166,35,0.25); letter-spacing: 1px; }
+
+    /* ── MAIN ── */
+    .main { margin-left: var(--sidebar-w); flex: 1; padding: 32px 28px; transition: margin-left 0.3s ease; min-width: 0; }
+    .main.expanded { margin-left: 0; }
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 140; }
+    .overlay.show { display: block; }
+
+    /* ── SHARED ── */
+    .section-card { background: var(--glass); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 20px; }
+    .section-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .section-card-header h2 { font-family: var(--font-d); font-size: 1rem; font-weight: 800; color: var(--cream); }
+    .status-badge { display: inline-block; padding: 3px 10px; border-radius: 100px; font-family: var(--font-m); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.5px; }
+    .status-badge.active   { background: rgba(16,185,129,0.12); color: #6ee7b7; }
+    .status-badge.inactive { background: rgba(100,116,139,0.12); color: var(--muted); }
+    .status-badge.pending  { background: rgba(245,166,35,0.12);  color: var(--gold); }
+    .members-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .members-table th { text-align: left; padding: 10px 14px; font-family: var(--font-m); font-size: 0.62rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); }
+    .members-table td { padding: 12px 14px; color: var(--silver); border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .members-table tr:last-child td { border-bottom: none; }
+    .members-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(calc(-1 * var(--sidebar-w))); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; padding: 20px 16px; }
+    }
+    @media (max-width: 480px) { .topnav { padding: 0 14px; } .topnav-name { display: none; } }
+
+    /* ── PAGE HEADER ── */
+    .inc-page-header { margin-bottom: 28px; }
+    .inc-page-header h1 {
+      font-family: var(--font-d); font-size: 1.8rem; font-weight: 900;
+      color: var(--cream); letter-spacing: -0.5px;
+    }
+    .inc-page-header p { font-size: 0.85rem; color: var(--muted); margin-top: 4px; font-family: var(--font-m); }
+
+    /* ── STEP PROGRESS BAR ── */
+    .step-bar {
+      display: flex; align-items: center; margin-bottom: 32px;
+    }
+    .step-item {
+      display: flex; flex-direction: column; align-items: center; flex: 1; position: relative;
+    }
+    .step-item:not(:last-child)::after {
+      content: ''; position: absolute; top: 16px; left: 50%; width: 100%;
+      height: 2px; background: var(--border); z-index: 0;
+      transition: background 0.3s;
+    }
+    .step-item.done:not(:last-child)::after { background: var(--gold); }
+    .step-circle {
+      width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border);
+      background: var(--deep); display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-m); font-size: 0.75rem; font-weight: 700;
+      color: var(--muted); position: relative; z-index: 1;
+      transition: border-color 0.3s, background 0.3s, color 0.3s;
+    }
+    .step-item.active .step-circle {
+      border-color: var(--gold); background: rgba(245,166,35,0.12); color: var(--gold);
+    }
+    .step-item.done .step-circle {
+      border-color: var(--gold); background: var(--gold); color: #fff;
+    }
+    .step-label {
+      font-family: var(--font-m); font-size: 0.62rem; font-weight: 600;
+      letter-spacing: 0.5px; color: var(--muted); margin-top: 7px;
+      text-align: center; white-space: nowrap;
+      transition: color 0.3s;
+    }
+    .step-item.active .step-label { color: var(--gold); }
+    .step-item.done .step-label   { color: var(--silver); }
+
+    /* ── FORM FIELDS ── */
+    .form-step { display: none; }
+    .form-step.active { display: block; }
+    .field { margin-bottom: 18px; }
+    .field label {
+      display: block; font-size: 0.82rem; font-weight: 600;
+      color: var(--silver); margin-bottom: 7px;
+    }
+    .field input, .field textarea, .field select {
+      width: 100%; padding: 11px 14px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 9px; color: var(--text); font-size: 0.88rem;
+      font-family: var(--font-b); outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field input:focus, .field textarea:focus, .field select:focus {
+      border-color: rgba(245,166,35,0.5); box-shadow: 0 0 0 3px rgba(245,166,35,0.08);
+    }
+    .field input.err, .field textarea.err { border-color: #ef4444; }
+    .field input::placeholder, .field textarea::placeholder { color: var(--muted); }
+    .err-msg { font-size: 0.73rem; color: #ef4444; margin-top: 4px; display: none; }
+    .err-msg.show { display: block; }
+    .field-hint { font-size: 0.73rem; color: var(--muted); margin-top: 4px; font-family: var(--font-m); }
+
+    /* ── TEAM MEMBER ROWS ── */
+    .team-row {
+      display: flex; gap: 10px; align-items: center; margin-bottom: 10px;
+    }
+    .team-row input { flex: 1; }
+    .btn-remove-member {
+      padding: 8px 12px; border-radius: 8px; cursor: none;
+      background: transparent; border: 1px solid rgba(239,68,68,0.2);
+      color: rgba(252,165,165,0.6); font-size: 0.8rem;
+      transition: border-color 0.2s, color 0.2s, background 0.2s; flex-shrink: 0;
+    }
+    .btn-remove-member:hover { border-color: rgba(239,68,68,0.5); color: #f87171; background: rgba(239,68,68,0.06); }
+    .btn-add-member {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border-radius: 8px; cursor: none;
+      background: transparent; border: 1px solid var(--border);
+      color: var(--silver); font-size: 0.8rem; font-family: var(--font-b);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-add-member:hover { border-color: rgba(245,166,35,0.4); color: var(--gold); }
+
+    /* ── FILE UPLOAD ── */
+    .file-drop {
+      border: 2px dashed var(--border); border-radius: 12px;
+      padding: 36px 24px; text-align: center;
+      transition: border-color 0.2s, background 0.2s; cursor: none;
+    }
+    .file-drop:hover, .file-drop.dragover {
+      border-color: rgba(245,166,35,0.4); background: rgba(245,166,35,0.04);
+    }
+    .file-drop-icon { font-size: 2rem; margin-bottom: 10px; }
+    .file-drop p { font-size: 0.83rem; color: var(--muted); margin-bottom: 12px; }
+    .file-drop input[type="file"] { display: none; }
+    .btn-browse {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 20px; border-radius: 8px; cursor: none;
+      background: var(--glass); border: 1px solid var(--border);
+      color: var(--silver); font-size: 0.82rem; font-family: var(--font-b);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-browse:hover { border-color: rgba(245,166,35,0.4); color: var(--gold); }
+    .file-list { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+    .file-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 12px; border-radius: 8px;
+      background: rgba(245,166,35,0.06); border: 1px solid rgba(245,166,35,0.15);
+      font-size: 0.8rem; color: var(--silver);
+    }
+    .file-item-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .file-item-remove { cursor: none; color: var(--muted); font-size: 0.75rem; transition: color 0.2s; }
+    .file-item-remove:hover { color: #f87171; }
+
+    /* ── FORM NAV BUTTONS ── */
+    .form-nav {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border);
+    }
+    .btn-action {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 22px; border-radius: 9px;
+      font-family: var(--font-b); font-size: 0.85rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--gold), var(--flame));
+      color: #fff; border: none; cursor: none;
+      box-shadow: 0 4px 16px rgba(245,166,35,0.25);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-action:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,166,35,0.4); }
+    .btn-action-outline {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 22px; border-radius: 9px;
+      font-family: var(--font-b); font-size: 0.85rem; font-weight: 600;
+      background: var(--glass); color: var(--silver);
+      border: 1px solid var(--border); cursor: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-action-outline:hover { border-color: rgba(245,166,35,0.4); color: var(--gold); }
+    .btn-action-outline:disabled { opacity: 0.3; pointer-events: none; }
+
+    /* ── PIPELINE TRACKER ── */
+    .pipeline-card {
+      background: linear-gradient(135deg, rgba(245,166,35,0.06) 0%, rgba(255,90,31,0.03) 100%);
+      border: 1px solid rgba(245,166,35,0.2); border-radius: 20px;
+      padding: 32px 36px; margin-bottom: 20px; position: relative; overflow: hidden;
+    }
+    .pipeline-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--flame), transparent);
+    }
+    .pipeline-title {
+      font-family: var(--font-d); font-size: 1rem; font-weight: 800;
+      color: var(--cream); margin-bottom: 6px;
+    }
+    .pipeline-sub {
+      font-size: 0.8rem; color: var(--muted); font-family: var(--font-m);
+      margin-bottom: 32px;
+    }
+    .pipeline-stages {
+      display: flex; align-items: flex-start; gap: 0;
+    }
+    .pipeline-stage {
+      display: flex; flex-direction: column; align-items: center;
+      flex: 1; position: relative;
+    }
+    .pipeline-stage:not(:last-child)::after {
+      content: ''; position: absolute; top: 20px; left: 50%; width: 100%;
+      height: 2px; background: var(--border); z-index: 0; transition: background 0.4s;
+    }
+    .pipeline-stage.done:not(:last-child)::after { background: var(--gold); }
+    .pipeline-stage.active:not(:last-child)::after { background: var(--border); }
+    .ps-circle {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 2px solid var(--border); background: var(--deep);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; position: relative; z-index: 1;
+      transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+    }
+    .pipeline-stage.done .ps-circle {
+      border-color: var(--gold); background: var(--gold);
+      box-shadow: 0 0 16px rgba(245,166,35,0.35);
+    }
+    .pipeline-stage.active .ps-circle {
+      border-color: var(--gold); background: rgba(245,166,35,0.12);
+      box-shadow: 0 0 20px rgba(245,166,35,0.25);
+      animation: pulsePipe 2s ease infinite;
+    }
+    @keyframes pulsePipe {
+      0%,100% { box-shadow: 0 0 12px rgba(245,166,35,0.25); }
+      50%      { box-shadow: 0 0 28px rgba(245,166,35,0.5); }
+    }
+    .ps-label {
+      font-family: var(--font-m); font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.5px; color: var(--muted); margin-top: 10px;
+      text-align: center; line-height: 1.4;
+      transition: color 0.3s;
+    }
+    .pipeline-stage.done .ps-label   { color: var(--silver); }
+    .pipeline-stage.active .ps-label { color: var(--gold); }
+    .ps-date {
+      font-family: var(--font-m); font-size: 0.6rem; color: var(--muted);
+      margin-top: 4px; text-align: center;
+    }
+    .pipeline-stage.active .ps-date { color: rgba(245,166,35,0.6); }
+    .pipeline-idea-name {
+      display: inline-block; margin-top: 28px;
+      font-family: var(--font-m); font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      color: var(--gold); background: rgba(245,166,35,0.08);
+      border: 1px solid rgba(245,166,35,0.2); padding: 5px 14px; border-radius: 100px;
+    }
+    @media (max-width: 560px) {
+      .pipeline-stages { flex-direction: column; gap: 0; align-items: flex-start; }
+      .pipeline-stage { flex-direction: row; gap: 14px; width: 100%; padding-bottom: 20px; }
+      .pipeline-stage:not(:last-child)::after {
+        top: 40px; left: 20px; width: 2px; height: 100%; transform: none;
+      }
+      .ps-label, .ps-date { text-align: left; }
+    }
+
+    /* ── ADMIN TABLE ── */
+    .btn-pipeline {
+      padding: 4px 12px; border-radius: 6px; cursor: none;
+      font-family: var(--font-b); font-size: 0.72rem; font-weight: 600;
+      background: transparent; border: 1px solid rgba(245,166,35,0.25);
+      color: var(--gold); transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-pipeline:hover { border-color: var(--gold); background: rgba(245,166,35,0.08); }
+    .btn-pipeline.decline { color: rgba(252,165,165,0.7); border-color: rgba(239,68,68,0.2); }
+    .btn-pipeline.decline:hover { border-color: rgba(239,68,68,0.5); background: rgba(239,68,68,0.06); color: #f87171; }
+    .pipe-badge {
+      display: inline-block; padding: 3px 10px; border-radius: 100px;
+      font-family: var(--font-m); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.5px; white-space: nowrap;
+    }
+    .pipe-badge.submitted    { background: rgba(99,179,237,0.1);  color: #63b3ed; border: 1px solid rgba(99,179,237,0.2); }
+    .pipe-badge.under-review { background: rgba(245,166,35,0.12); color: var(--gold); border: 1px solid rgba(245,166,35,0.25); }
+    .pipe-badge.shortlisted  { background: rgba(154,117,234,0.1); color: #c4b5fd; border: 1px solid rgba(154,117,234,0.2); }
+    .pipe-badge.approved     { background: rgba(16,185,129,0.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.25); }
+    .pipe-badge.declined     { background: rgba(100,116,139,0.12); color: var(--muted); border: 1px solid rgba(100,116,139,0.2); }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="topnav-left">
+    <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="index.html" class="nav-logo">
+      <div class="logo-mark">C360</div>
+      Innovation Lab
+    </a>
+  </div>
+  <div class="topnav-right">
+    <div class="topnav-bell" id="topnav-bell">
+      <span style="font-size:1.1rem;">🔔</span>
+      <span class="topnav-bell-badge" id="topnav-bell-badge">3</span>
+    </div>
+    <div class="topnav-avatar-wrap">
+      <div class="topnav-avatar" id="topnav-initial">U</div>
+      <span class="topnav-name" id="topnav-name">User</span>
+    </div>
+  </div>
+</nav>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" id="sidebar-initial">U</div>
+      <div>
+        <div class="sidebar-uname" id="sidebar-name">User</div>
+        <div class="sidebar-urole" id="sidebar-role">Member</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav"></nav>
+    <div class="sidebar-logout-wrap" id="sidebar-logout-wrap"></div>
+    <div class="sidebar-footer">© 2025 C360 Innovation Lab</div>
+  </aside>
+
+  <main class="main" id="main">
+    <div id="incubation-content"></div>
+  </main>
+</div>
+
+<!-- SECTIONS COMING NEXT -->
+
+<script>
+  /* ── AUTH GUARD ── */
+  if (!localStorage.getItem('c360_logged_in')) { window.location.href = 'login.html'; }
+
+  const userName    = localStorage.getItem('c360_username') || 'User';
+  const userRole    = localStorage.getItem('c360_role') || 'student';
+  const userInitial = userName.charAt(0).toUpperCase();
+
+  /* ── POPULATE SHELL ── */
+  document.getElementById('topnav-initial').textContent  = userInitial;
+  document.getElementById('topnav-name').textContent     = userName.split(' ')[0];
+  document.getElementById('sidebar-initial').textContent = userInitial;
+  document.getElementById('sidebar-name').textContent    = userName;
+  document.getElementById('sidebar-role').textContent    = userRole.replace('-', ' ');
+
+  /* ── CURSOR ── */
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursor-ring');
+  let mx = -100, my = -100, rx = -100, ry = -100;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  (function animCursor() {
+    if (cursor) { cursor.style.left = mx+'px'; cursor.style.top = my+'px'; }
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    if (ring) { ring.style.left = rx+'px'; ring.style.top = ry+'px'; }
+    requestAnimationFrame(animCursor);
+  })();
+  document.querySelectorAll('a,button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      if (cursor) cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+      if (ring) { ring.style.transform = 'translate(-50%,-50%) scale(1.5)'; ring.style.borderColor = 'rgba(245,166,35,0.9)'; }
+    });
+    el.addEventListener('mouseleave', () => {
+      if (cursor) cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      if (ring) { ring.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.borderColor = 'rgba(245,166,35,0.5)'; }
+    });
+  });
+
+  /* ── SIDEBAR TOGGLE ── */
+  const sidebar   = document.getElementById('sidebar');
+  const mainEl    = document.getElementById('main');
+  const overlay   = document.getElementById('overlay');
+  const isDesktop = () => window.innerWidth > 768;
+  function toggleSidebar() {
+    if (isDesktop()) { sidebar.classList.toggle('collapsed'); mainEl.classList.toggle('expanded'); }
+    else { sidebar.classList.toggle('open'); overlay.classList.toggle('show'); }
+  }
+  function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+  window.addEventListener('resize', () => { if (isDesktop()) { sidebar.classList.remove('open'); overlay.classList.remove('show'); } });
+  function setActive(el) {
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    el.classList.add('active');
+    if (!isDesktop()) closeSidebar();
+  }
+  function handleLogout() {
+    ['c360_logged_in','c360_username','c360_role','c360_email'].forEach(k => localStorage.removeItem(k));
+    window.location.href = 'index.html';
+  }
+  document.getElementById('topnav-bell').addEventListener('click', () => {
+    document.getElementById('topnav-bell-badge').style.display = 'none';
+  });
+
+  /* ── SIDEBAR LINKS ── */
+  const commonTop = `
+    <div class="nav-section-label">Main</div>
+    <button class="sidebar-link" onclick="setActive(this);window.location.href='dashboard.html'"><span class="s-icon">🏠</span> Dashboard</button>
+    <button class="sidebar-link" onclick="setActive(this);window.location.href='profile.html'"><span class="s-icon">👤</span> My Profile</button>
+    <button class="sidebar-link" onclick="setActive(this);window.location.href='my-club.html'"><span class="s-icon">🌱</span> My Club</button>
+    <div class="nav-section-label">Programs</div>
+    <button class="sidebar-link" onclick="setActive(this);window.location.href='competitions.html'"><span class="s-icon">🏆</span> Competitions</button>
+    <button class="sidebar-link active" onclick="setActive(this)"><span class="s-icon">🚀</span> Apply for Incubation</button>
+    <button class="sidebar-link" onclick="setActive(this);window.location.href='mentorship-sessions.html'"><span class="s-icon">🤝</span> Mentorship Sessions</button>
+    <div class="nav-section-label">Resources</div>
+    <button class="sidebar-link" onclick="setActive(this);window.location.href='resources.html'"><span class="s-icon">📚</span> Resources</button>
+    <button class="sidebar-link" onclick="setActive(this);window.location.href='notifications.html'"><span class="s-icon">🔔</span> Notifications</button>
+  `;
+  const logoutLink = `
+    <div class="nav-section-label">Account</div>
+    <button class="sidebar-link logout-link" onclick="handleLogout()"><span class="s-icon">🚪</span> Logout</button>
+  `;
+  const clubLeaderExtra = `
+    <div class="nav-section-label">Club Management</div>
+    <button class="sidebar-link" onclick="setActive(this);window.location.href='my-club.html'"><span class="s-icon">🛠️</span> Manage My Club</button>
+  `;
+  const adminExtra = `
+    <div class="nav-section-label">Administration</div>
+    <button class="sidebar-link" onclick="setActive(this)"><span class="s-icon">🌍</span> All Clubs</button>
+    <button class="sidebar-link" onclick="setActive(this)"><span class="s-icon">👥</span> User Management</button>
+    <button class="sidebar-link" onclick="setActive(this)"><span class="s-icon">📊</span> Analytics</button>
+    <button class="sidebar-link" onclick="setActive(this)"><span class="s-icon">📝</span> Content Management</button>
+  `;
+  const mentorExtra = `
+    <div class="nav-section-label">Mentor Tools</div>
+    <button class="sidebar-link" onclick="setActive(this)"><span class="s-icon">👥</span> My Mentees</button>
+    <button class="sidebar-link" onclick="setActive(this)"><span class="s-icon">📅</span> Scheduled Sessions</button>
+    <button class="sidebar-link" onclick="setActive(this)"><span class="s-icon">📤</span> Post Resources</button>
+  `;
+
+  const sidebarNav = document.getElementById('sidebar-nav');
+  if (userRole === 'club-leader') sidebarNav.innerHTML = commonTop + clubLeaderExtra;
+  else if (userRole === 'admin')  sidebarNav.innerHTML = commonTop + adminExtra;
+  else if (userRole === 'mentor') sidebarNav.innerHTML = commonTop + mentorExtra;
+  else                            sidebarNav.innerHTML = commonTop;
+  document.getElementById('sidebar-logout-wrap').innerHTML = logoutLink;
+
+  /* ── PAGE HEADER ── */
+  const now = new Date();
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const dateStr = days[now.getDay()] + ', ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+
+  document.getElementById('incubation-content').innerHTML = `
+    <div class="inc-page-header">
+      <div>
+        <h1>Apply for Incubation</h1>
+        <p>Turn your idea into a funded venture &mdash; ${dateStr}</p>
+      </div>
+    </div>
+  `;
+
+  /* ── SECTION B: 4-STEP FORM ── */
+  if (userRole === 'mentor') {
+    /* mentors cannot apply for incubation */
+    const notice = document.createElement('div');
+    notice.className = 'section-card';
+    notice.innerHTML = `
+      <div style="text-align:center;padding:32px 16px;">
+        <div style="font-size:2rem;margin-bottom:14px;">🤝</div>
+        <div style="font-family:var(--font-d);font-size:1rem;font-weight:800;color:var(--cream);margin-bottom:8px;">Not Available for Mentors</div>
+        <div style="font-size:0.85rem;color:var(--muted);font-family:var(--font-m);line-height:1.7;">
+          Incubation applications are open to students and club leaders only.<br>
+          As a mentor, you support applicants through the process.
+        </div>
+      </div>
+    `;
+    document.getElementById('incubation-content').appendChild(notice);
+  } else {
+  const formCard = document.createElement('div');
+  formCard.className = 'section-card';
+  formCard.innerHTML = `
+    <div class="section-card-header"><h2>New Application</h2></div>
+
+    <!-- PROGRESS BAR -->
+    <div class="step-bar" id="step-bar">
+      <div class="step-item active" id="si-1">
+        <div class="step-circle">1</div>
+        <div class="step-label">Your Idea</div>
+      </div>
+      <div class="step-item" id="si-2">
+        <div class="step-circle">2</div>
+        <div class="step-label">The Problem</div>
+      </div>
+      <div class="step-item" id="si-3">
+        <div class="step-circle">3</div>
+        <div class="step-label">Your Team</div>
+      </div>
+      <div class="step-item" id="si-4">
+        <div class="step-circle">4</div>
+        <div class="step-label">Documents</div>
+      </div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="form-step active" id="step-1">
+      <div class="field">
+        <label>Idea Name</label>
+        <input type="text" id="f-idea-name" placeholder="e.g. GreenTech Uganda"/>
+        <div class="err-msg" id="e-idea-name">Please enter your idea name.</div>
+      </div>
+      <div class="field">
+        <label>Idea Description</label>
+        <textarea id="f-idea-desc" rows="5" placeholder="Describe your idea in detail — what it is, how it works, and what makes it unique..."></textarea>
+        <div class="err-msg" id="e-idea-desc">Please describe your idea.</div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="form-step" id="step-2">
+      <div class="field">
+        <label>Problem Being Solved</label>
+        <textarea id="f-problem" rows="4" placeholder="What specific problem does your idea address?"></textarea>
+        <div class="err-msg" id="e-problem">Please describe the problem.</div>
+      </div>
+      <div class="field">
+        <label>Target Community</label>
+        <input type="text" id="f-community" placeholder="e.g. Smallholder farmers in Northern Uganda"/>
+        <div class="err-msg" id="e-community">Please specify your target community.</div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="form-step" id="step-3">
+      <div class="field">
+        <label>Team Members</label>
+        <div id="team-rows">
+          <div class="team-row">
+            <input type="text" placeholder="Full name &amp; role (e.g. Jane Doe — Lead Developer)"/>
+          </div>
+        </div>
+        <button class="btn-add-member" onclick="addTeamMember()" style="margin-top:8px;">+ Add Member</button>
+        <div class="err-msg" id="e-team">Please add at least one team member.</div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="form-step" id="step-4">
+      <div class="field">
+        <label>Supporting Documents</label>
+        <div class="file-drop" id="file-drop" onclick="document.getElementById('file-input').click()">
+          <div class="file-drop-icon">📎</div>
+          <p>Drag &amp; drop files here, or click to browse</p>
+          <button class="btn-browse" onclick="event.stopPropagation();document.getElementById('file-input').click()">Browse Files</button>
+          <input type="file" id="file-input" multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx"/>
+        </div>
+        <div class="field-hint">Accepted: PDF, Word, PowerPoint, Excel &nbsp;·&nbsp; Max 10 MB per file</div>
+        <div class="file-list" id="file-list"></div>
+      </div>
+    </div>
+
+    <!-- NAV BUTTONS -->
+    <div class="form-nav">
+      <button class="btn-action-outline" id="btn-back" onclick="stepNav(-1)" disabled>← Back</button>
+      <button class="btn-action" id="btn-next" onclick="stepNav(1)">Next →</button>
+    </div>
+  `;
+  document.getElementById('incubation-content').appendChild(formCard);
+
+  /* ── STEP LOGIC ── */
+  let currentStep = 1;
+  const totalSteps = 4;
+
+  function stepNav(dir) {
+    if (dir === 1 && !validateStep(currentStep)) return;
+    document.getElementById('step-' + currentStep).classList.remove('active');
+    const prev = document.getElementById('si-' + currentStep);
+    if (dir === 1) { prev.classList.remove('active'); prev.classList.add('done'); }
+    else           { prev.classList.remove('active'); }
+    currentStep += dir;
+    document.getElementById('step-' + currentStep).classList.add('active');
+    const curr = document.getElementById('si-' + currentStep);
+    curr.classList.remove('done'); curr.classList.add('active');
+    document.getElementById('btn-back').disabled = currentStep === 1;
+    const btnNext = document.getElementById('btn-next');
+    btnNext.textContent = currentStep === totalSteps ? 'Submit Application ✓' : 'Next →';
+    if (currentStep === totalSteps) {
+      btnNext.onclick = submitApplication;
+    } else {
+      btnNext.onclick = () => stepNav(1);
+    }
+  }
+
+  function validateStep(step) {
+    let ok = true;
+    function check(id, errId) {
+      const el = document.getElementById(id);
+      const val = el ? el.value.trim() : '';
+      const err = document.getElementById(errId);
+      const fail = !val;
+      if (el) el.classList.toggle('err', fail);
+      if (err) err.classList.toggle('show', fail);
+      if (fail) ok = false;
+    }
+    if (step === 1) { check('f-idea-name','e-idea-name'); check('f-idea-desc','e-idea-desc'); }
+    if (step === 2) { check('f-problem','e-problem'); check('f-community','e-community'); }
+    if (step === 3) {
+      const rows = document.querySelectorAll('#team-rows .team-row input');
+      const hasTeam = Array.from(rows).some(r => r.value.trim());
+      document.getElementById('e-team').classList.toggle('show', !hasTeam);
+      if (!hasTeam) ok = false;
+    }
+    return ok;
+  }
+
+  function addTeamMember() {
+    const row = document.createElement('div');
+    row.className = 'team-row';
+    row.innerHTML = `
+      <input type="text" placeholder="Full name &amp; role"/>
+      <button class="btn-remove-member" onclick="this.parentElement.remove()">✕</button>
+    `;
+    document.getElementById('team-rows').appendChild(row);
+  }
+
+  /* ── FILE UPLOAD ── */
+  const fileInput = document.getElementById('file-input');
+  const fileDrop  = document.getElementById('file-drop');
+  const fileList  = document.getElementById('file-list');
+  let uploadedFiles = [];
+
+  fileInput.addEventListener('change', () => addFiles(fileInput.files));
+  fileDrop.addEventListener('dragover', e => { e.preventDefault(); fileDrop.classList.add('dragover'); });
+  fileDrop.addEventListener('dragleave', () => fileDrop.classList.remove('dragover'));
+  fileDrop.addEventListener('drop', e => { e.preventDefault(); fileDrop.classList.remove('dragover'); addFiles(e.dataTransfer.files); });
+
+  function addFiles(files) {
+    Array.from(files).forEach(f => {
+      if (uploadedFiles.find(u => u.name === f.name)) return;
+      uploadedFiles.push(f);
+      const item = document.createElement('div');
+      item.className = 'file-item';
+      item.innerHTML = `<span>📄</span><span class="file-item-name">${f.name}</span><span class="file-item-remove" onclick="removeFile('${f.name}',this.parentElement)">✕</span>`;
+      fileList.appendChild(item);
+    });
+  }
+
+  function removeFile(name, el) {
+    uploadedFiles = uploadedFiles.filter(f => f.name !== name);
+    el.remove();
+  }
+
+  function submitApplication() {
+    document.getElementById('incubation-content').dataset.submitted = 'true';
+    formCard.style.display = 'none';
+    showPipeline();
+  }
+  } /* end mentor else block */
+
+  /* ── SECTION C: PIPELINE TRACKER ── */
+  function showPipeline() {
+    const ideaName = document.getElementById('f-idea-name')?.value.trim() || 'Your Application';
+    const today = new Date();
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const todayStr = today.getDate() + ' ' + months[today.getMonth()] + ' ' + today.getFullYear();
+
+    const stages = [
+      { icon: '📬', label: 'Submitted',    date: todayStr,    state: 'done'   },
+      { icon: '🔍', label: 'Under Review', date: 'Pending',   state: 'active' },
+      { icon: '⭐', label: 'Shortlisted',  date: '—',         state: ''       },
+      { icon: '✅', label: 'Approved',     date: '—',         state: ''       },
+    ];
+
+    const stagesHTML = stages.map(s => `
+      <div class="pipeline-stage ${s.state}">
+        <div class="ps-circle">${s.icon}</div>
+        <div class="ps-label">${s.label}</div>
+        <div class="ps-date">${s.date}</div>
+      </div>
+    `).join('');
+
+    const pipelineCard = document.createElement('div');
+    pipelineCard.className = 'pipeline-card';
+    pipelineCard.innerHTML = `
+      <div class="pipeline-title">Track My Application</div>
+      <div class="pipeline-sub">Your application has been submitted. We will review it and update your status below.</div>
+      <div class="pipeline-stages">${stagesHTML}</div>
+      <div class="pipeline-idea-name">🚀 ${ideaName}</div>
+    `;
+    document.getElementById('incubation-content').appendChild(pipelineCard);
+  }
+
+  /* ── SECTION D: ADMIN SUBMISSIONS TABLE ── */
+  if (userRole === 'admin') {
+    const stageOrder = ['submitted', 'under-review', 'shortlisted', 'approved', 'declined'];
+    const stageLabels = {
+      'submitted':    'Submitted',
+      'under-review': 'Under Review',
+      'shortlisted':  'Shortlisted',
+      'approved':     'Approved',
+      'declined':     'Declined'
+    };
+    const nextStage = {
+      'submitted':    'under-review',
+      'under-review': 'shortlisted',
+      'shortlisted':  'approved'
+    };
+
+    const applications = [
+      { id: 1, applicant: 'James Otieno',       venture: 'GreenTech Uganda',  district: 'Kampala', date: 'Today',    status: 'under-review' },
+      { id: 2, applicant: 'Grace Akello',        venture: 'FarmLink App',      district: 'Gulu',    date: 'Yesterday',status: 'under-review' },
+      { id: 3, applicant: 'Peter Ssemakula',     venture: 'EduBox Offline',    district: 'Wakiso',  date: '12 Jul',   status: 'approved'     },
+      { id: 4, applicant: 'Lydia Namukasa',      venture: 'CleanWater Kit',    district: 'Mbarara', date: '10 Jul',   status: 'shortlisted'  },
+      { id: 5, applicant: 'Ronald Byaruhanga',   venture: 'SolarBoda',         district: 'Jinja',   date: '8 Jul',    status: 'declined'     },
+      { id: 6, applicant: 'Amara Ssali',         venture: 'AgriSense IoT',     district: 'Mbale',   date: '5 Jul',    status: 'submitted'    },
+    ];
+
+    function renderAdminTable() {
+      const existing = document.getElementById('admin-submissions');
+      if (existing) existing.remove();
+
+      const rows = applications.map(a => {
+        const s = a.status;
+        const canAdvance = nextStage[s];
+        const advanceBtn = canAdvance
+          ? `<button class="btn-pipeline" onclick="advanceApp(${a.id})">→ ${stageLabels[nextStage[s]]}</button>`
+          : '';
+        const declineBtn = (s !== 'approved' && s !== 'declined')
+          ? `<button class="btn-pipeline decline" onclick="declineApp(${a.id})">Decline</button>`
+          : '';
+        return `
+          <tr id="app-row-${a.id}">
+            <td>${a.applicant}</td>
+            <td>${a.venture}</td>
+            <td>${a.district}</td>
+            <td>${a.date}</td>
+            <td><span class="pipe-badge ${s}">${stageLabels[s]}</span></td>
+            <td style="display:flex;gap:6px;flex-wrap:wrap;">${advanceBtn}${declineBtn}</td>
+          </tr>`;
+      }).join('');
+
+      const card = document.createElement('div');
+      card.id = 'admin-submissions';
+      card.className = 'section-card';
+      card.innerHTML = `
+        <div class="section-card-header">
+          <h2>🛡️ All Incubation Applications</h2>
+          <span style="font-size:0.72rem;color:var(--muted);font-family:var(--font-m);">${applications.length} total</span>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="members-table">
+            <thead>
+              <tr>
+                <th>Applicant</th><th>Venture</th><th>District</th>
+                <th>Submitted</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      `;
+      document.getElementById('incubation-content').appendChild(card);
+    }
+
+    function advanceApp(id) {
+      const app = applications.find(a => a.id === id);
+      if (app && nextStage[app.status]) { app.status = nextStage[app.status]; renderAdminTable(); }
+    }
+
+    function declineApp(id) {
+      const app = applications.find(a => a.id === id);
+      if (app) { app.status = 'declined'; renderAdminTable(); }
+    }
+
+    // hide the applicant form for admin — they only review
+    formCard.style.display = 'none';
+    renderAdminTable();
+  }
+</script>
+
+</body>
+</html>

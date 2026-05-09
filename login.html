@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — C360 Innovation Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #07090f;
+      --deep:     #0d1120;
+      --gold:     #f5a623;
+      --flame:    #ff5a1f;
+      --cream:    #fdf6e3;
+      --silver:   #94a3b8;
+      --glass:    rgba(255,255,255,0.04);
+      --border:   rgba(255,255,255,0.08);
+      --border-h: rgba(245,166,35,0.4);
+      --text:     #e2e8f0;
+      --muted:    #64748b;
+      --error:    #f87171;
+      --font-d:   'Playfair Display', Georgia, serif;
+      --font-b:   'DM Sans', sans-serif;
+      --font-m:   'Space Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-b);
+      color: var(--text);
+      background: var(--ink);
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      cursor: none;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ── CURSOR ── */
+    .cursor {
+      position: fixed; width: 10px; height: 10px;
+      background: var(--gold); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform 0.1s, width 0.2s, height 0.2s;
+      mix-blend-mode: screen;
+    }
+    .cursor-ring {
+      position: fixed; width: 38px; height: 38px;
+      border: 1.5px solid rgba(245,166,35,0.5); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: transform 0.18s ease, border-color 0.25s;
+    }
+    @media (max-width: 640px) { body { cursor: auto; } .cursor, .cursor-ring { display: none; } }
+
+    /* ── NOISE ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.028; pointer-events: none; z-index: 9997;
+    }
+
+    /* ── HEADER ── */
+    .auth-header {
+      padding: 24px 6%;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: rgba(7,9,15,0.7);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+    .nav-logo {
+      font-family: var(--font-d);
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--cream);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-mark {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--gold), var(--flame));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-m);
+      font-size: 0.6rem; font-weight: 700; color: #fff;
+      box-shadow: 0 0 16px rgba(245,166,35,0.3);
+    }
+
+    /* ── LAYOUT ── */
+    .auth-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 6%;
+      position: relative;
+      overflow: hidden;
+    }
+    .auth-main::before, .auth-main::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(100px);
+    }
+    .auth-main::before {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(245,166,35,0.07), transparent 70%);
+      top: -100px; right: -100px;
+    }
+    .auth-main::after {
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(255,90,31,0.06), transparent 70%);
+      bottom: -80px; left: -80px;
+    }
+
+    /* ── CARD ── */
+    .auth-card {
+      width: 100%;
+      max-width: 460px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px 44px;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    .auth-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), var(--flame), transparent);
+      border-radius: 24px 24px 0 0;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .auth-card-tag {
+      font-family: var(--font-m);
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .auth-card h1 {
+      font-family: var(--font-d);
+      font-size: 1.9rem;
+      font-weight: 900;
+      color: var(--cream);
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+    .auth-card-sub {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 36px;
+      font-weight: 300;
+    }
+
+    /* ── FORM ── */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 18px;
+    }
+
+    label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--silver);
+      letter-spacing: 0.3px;
+    }
+
+    input {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-family: var(--font-b);
+      font-size: 0.9rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      width: 100%;
+      cursor: none;
+    }
+    input::placeholder { color: var(--muted); }
+    input:focus {
+      border-color: rgba(245,166,35,0.5);
+      background: rgba(245,166,35,0.04);
+    }
+    input.invalid { border-color: var(--error); }
+
+    /* ── FORGOT ROW ── */
+    .forgot-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: -10px;
+      margin-bottom: 18px;
+    }
+    .forgot-row a {
+      font-size: 0.8rem;
+      color: var(--gold);
+      font-weight: 600;
+    }
+    .forgot-row a:hover { text-decoration: underline; }
+
+    /* ── ERROR ── */
+    .field-error { font-size: 0.75rem; color: var(--error); margin-top: -10px; margin-bottom: 4px; display: none; }
+    .field-error.show { display: block; }
+
+    .alert-error {
+      background: rgba(248,113,113,0.08);
+      border: 1px solid rgba(248,113,113,0.25);
+      color: var(--error);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .alert-error.show { display: block; }
+
+    /* ── SUBMIT ── */
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--gold), var(--flame));
+      color: #fff;
+      font-family: var(--font-b);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: none;
+      box-shadow: 0 6px 28px rgba(245,166,35,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(245,166,35,0.45); }
+    .btn-submit:disabled { opacity: 0.6; transform: none; }
+
+    .auth-switch {
+      text-align: center;
+      margin-top: 22px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .auth-switch a { color: var(--gold); font-weight: 600; }
+    .auth-switch a:hover { text-decoration: underline; }
+
+    @media (max-width: 560px) { .auth-card { padding: 36px 24px; } }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<header class="auth-header">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-mark">C360</div>
+    Innovation Lab
+  </a>
+</header>
+
+<main class="auth-main">
+  <div class="auth-card">
+    <div class="auth-card-tag">Welcome Back</div>
+    <h1>Login</h1>
+    <p class="auth-card-sub">Sign in to your C360 Innovation Lab account.</p>
+
+    <div class="alert-error" id="alert-error">Incorrect email or password. Please try again.</div>
+
+    <form id="login-form" novalidate>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="email"/>
+        <span class="field-error" id="err-email">Please enter a valid email address.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password"/>
+        <span class="field-error" id="err-password">Password must be at least 8 characters.</span>
+      </div>
+
+      <div class="forgot-row">
+        <a href="forgot-password.html">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submit-btn">Login</button>
+    </form>
+
+    <p class="auth-switch">Don't have an account? <a href="register.html">Register</a></p>
+  </div>
+</main>
+
+<script>
+  /* redirect already-logged-in users */
+  (function () {
+    if (localStorage.getItem('c360_logged_in')) {
+      const redir = new URLSearchParams(window.location.search).get('redirect');
+      window.location.href = redir || 'dashboard.html';
+    }
+  })();
+
+  /* cursor */
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursor-ring');
+  let mx = -100, my = -100, rx = -100, ry = -100;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  (function animCursor() {
+    if (cursor) { cursor.style.left = mx+'px'; cursor.style.top = my+'px'; }
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    if (ring) { ring.style.left = rx+'px'; ring.style.top = ry+'px'; }
+    requestAnimationFrame(animCursor);
+  })();
+  document.querySelectorAll('a,button,input').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      if (cursor) cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+      if (ring) { ring.style.transform = 'translate(-50%,-50%) scale(1.5)'; ring.style.borderColor = 'rgba(245,166,35,0.9)'; }
+    });
+    el.addEventListener('mouseleave', () => {
+      if (cursor) cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      if (ring) { ring.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.borderColor = 'rgba(245,166,35,0.5)'; }
+    });
+  });
+
+  /* helpers */
+  function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function getUsers() { try { return JSON.parse(localStorage.getItem('c360_users') || '{}'); } catch(e) { return {}; } }
+  function getRedirect() { return new URLSearchParams(window.location.search).get('redirect') || 'dashboard.html'; }
+
+  function showErr(inputId, errId, condition) {
+    document.getElementById(inputId).classList.toggle('invalid', condition);
+    document.getElementById(errId).classList.toggle('show', condition);
+    return !condition;
+  }
+
+  /* role → dashboard redirect map */
+  const roleRedirect = {
+    admin:       'dashboard.html',
+    mentor:      'dashboard.html',
+    partner:     'dashboard.html',
+    'club-leader': 'dashboard.html',
+    student:     'dashboard.html'
+  };
+
+  document.getElementById('login-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    document.getElementById('alert-error').classList.remove('show');
+
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    let ok = true;
+    ok = showErr('email',    'err-email',    !validEmail(email)) && ok;
+    ok = showErr('password', 'err-password', password.length < 8) && ok;
+    if (!ok) return;
+
+    const users = getUsers();
+    const user  = users[email];
+
+    if (!user || user.password !== password) {
+      document.getElementById('alert-error').classList.add('show');
+      return;
+    }
+
+    localStorage.setItem('c360_logged_in', 'true');
+    localStorage.setItem('c360_username',  user.name);
+    localStorage.setItem('c360_role',      user.role);
+    localStorage.setItem('c360_email',     email);
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Signing in…';
+
+    /* role-based redirect */
+    const dest = getRedirect();
+    setTimeout(() => { window.location.href = dest; }, 800);
+  });
+</script>
+</body>
+</html>

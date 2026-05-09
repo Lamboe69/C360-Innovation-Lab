@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>C360 Innovation Lab — Grants & Partnerships</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="global.css">
+  <style>
+    .page-hero{min-height:42vh;padding:140px 6% 80px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;background:radial-gradient(ellipse 80% 60% at 60% 40%,rgba(245,166,35,0.06) 0%,transparent 70%),radial-gradient(ellipse 60% 80% at 10% 80%,rgba(255,90,31,0.05) 0%,transparent 60%),var(--ink);}
+    .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,black 30%,transparent 80%);animation:gridShift 20s linear infinite;}
+    @keyframes gridShift{from{transform:translateY(0)}to{transform:translateY(60px)}}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.25);color:var(--gold);font-family:var(--font-m);font-size:0.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:28px;position:relative;z-index:2;animation:fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.2s both;}
+    .page-hero h1{font-family:var(--font-d);font-size:clamp(2rem,4.5vw,3.2rem);font-weight:900;color:var(--cream);letter-spacing:-1px;line-height:1.1;margin-bottom:20px;position:relative;z-index:2;animation:fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.35s both;}
+    .page-hero h1 span{background:linear-gradient(90deg,var(--gold) 0%,var(--flame) 60%,#ff3d00 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .page-hero p{max-width:600px;font-size:1rem;line-height:1.75;color:var(--silver);font-weight:300;position:relative;z-index:2;animation:fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.5s both;}
+    .section-label{text-align:center;color:var(--gold);font-family:var(--font-m);font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+    .section-title{text-align:center;font-family:var(--font-d);font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;color:var(--cream);margin-bottom:52px;letter-spacing:-0.5px;}
+
+    /* PARTNERS */
+    .partners{padding:100px 6%;}
+    .partners-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:960px;margin:0 auto;}
+    .partner-card{background:var(--glass);border:1px solid var(--border);border-radius:18px;padding:36px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;min-height:160px;transition:transform 0.35s cubic-bezier(0.16,1,0.3,1),border-color 0.3s,box-shadow 0.3s;cursor:none;}
+    .partner-card:hover{transform:translateY(-6px);border-color:var(--border-h);box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+    .partner-card .p-icon{font-size:2.2rem;}
+    .partner-card .p-name{font-family:var(--font-d);font-size:0.95rem;font-weight:800;color:var(--cream);}
+    .partner-card .p-type{font-family:var(--font-m);font-size:0.68rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gold);}
+
+    /* GRANTS */
+    .grants{padding:100px 6%;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(245,166,35,0.04) 0%,transparent 60%),var(--ink);}
+    .grants-list{display:flex;flex-direction:column;gap:20px;max-width:860px;margin:0 auto;}
+    .grant-card{background:var(--glass);border:1px solid var(--border);border-radius:18px;padding:32px;display:flex;align-items:flex-start;gap:24px;border-left:2px solid rgba(245,166,35,0.4);transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s;}
+    .grant-card:hover{transform:translateY(-4px);border-color:var(--border-h);box-shadow:0 16px 48px rgba(0,0,0,0.4);}
+    .grant-icon{width:56px;height:56px;border-radius:14px;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.15);display:flex;align-items:center;justify-content:center;font-size:1.7rem;flex-shrink:0;}
+    .grant-body{flex:1;}
+    .grant-body h3{font-family:var(--font-d);font-size:1.05rem;font-weight:800;color:var(--cream);margin-bottom:8px;}
+    .grant-body p{font-size:0.88rem;color:var(--silver);line-height:1.65;margin-bottom:14px;font-weight:300;}
+    .grant-meta{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+    .grant-badge{background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.2);color:var(--gold);font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:20px;font-family:var(--font-m);}
+    .card-link{display:inline-flex;align-items:center;gap:7px;font-size:0.83rem;font-weight:600;color:var(--gold);letter-spacing:0.3px;transition:gap 0.2s;}
+    .card-link:hover{gap:12px;}
+    .card-link-arrow{font-size:0.85rem;transition:transform 0.2s;}
+    .grant-card:hover .card-link-arrow{transform:translateX(3px);}
+
+    /* BECOME A PARTNER */
+    .become-partner{padding:100px 6%;}
+    .become-partner>.intro{text-align:center;color:var(--silver);font-size:0.97rem;margin-bottom:48px;font-weight:300;}
+    .form-wrap{max-width:600px;margin:0 auto;background:var(--glass);border:1px solid var(--border);border-radius:22px;padding:44px 40px;}
+    .row-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .field{margin-bottom:20px;}
+    .field label{display:block;font-size:0.82rem;font-weight:600;color:var(--silver);margin-bottom:7px;letter-spacing:0.3px;}
+    .field input,.field select,.field textarea{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:10px;font-size:0.93rem;color:var(--text);background:rgba(255,255,255,0.04);outline:none;transition:border-color 0.2s,box-shadow 0.2s;font-family:var(--font-b);appearance:none;resize:vertical;}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(245,166,35,0.5);box-shadow:0 0 0 3px rgba(245,166,35,0.1);}
+    .field input.error,.field select.error,.field textarea.error{border-color:#ef4444;}
+    .field input::placeholder,.field textarea::placeholder{color:var(--muted);}
+    .err-msg{font-size:0.75rem;color:#ef4444;margin-top:4px;display:none;}
+    .err-msg.show{display:block;}
+    .field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;}
+    .field select option{background:var(--navy);color:var(--text);}
+    .btn-submit{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold) 0%,var(--flame) 100%);color:#fff;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:none;transition:transform 0.2s,box-shadow 0.2s;margin-top:4px;font-family:var(--font-b);}
+    .btn-submit:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(245,166,35,0.4);}
+    .success-banner{display:none;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);color:#6ee7b7;border-radius:10px;padding:13px 16px;font-size:0.88rem;font-weight:600;text-align:center;margin-bottom:20px;}
+    .success-banner.show{display:block;}
+
+    /* WHY PARTNER */
+    .why-partner{padding:100px 6%;}
+    .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:960px;margin:0 auto 60px;}
+    .why-card{background:var(--glass);border:1px solid var(--border);border-radius:18px;padding:36px 28px;position:relative;overflow:hidden;transition:transform 0.35s cubic-bezier(0.16,1,0.3,1),border-color 0.3s;cursor:none;}
+    .why-card:hover{transform:translateY(-6px);border-color:var(--border-h);box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+    .why-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),var(--flame),transparent);opacity:0;transition:opacity 0.35s;}
+    .why-card:hover::after{opacity:1;}
+    .why-icon{font-size:1.8rem;margin-bottom:16px;}
+    .why-card h4{font-family:var(--font-d);font-size:1rem;font-weight:800;color:var(--cream);margin-bottom:10px;}
+    .why-card p{font-size:0.85rem;color:var(--silver);line-height:1.7;font-weight:300;}
+    .impact-strip{max-width:960px;margin:0 auto;background:var(--glass);border:1px solid var(--border);border-radius:18px;padding:40px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center;}
+    .impact-item .impact-num{font-family:var(--font-d);font-size:2rem;font-weight:900;background:linear-gradient(90deg,var(--gold),var(--flame));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .impact-item .impact-lbl{font-size:0.8rem;color:var(--silver);font-weight:300;margin-top:4px;line-height:1.5;}
+
+    @media(max-width:768px){.partners-grid{grid-template-columns:1fr 1fr;}.grant-card{flex-direction:column;gap:16px;}.row-2{grid-template-columns:1fr;}.form-wrap{padding:28px 20px;}.why-grid{grid-template-columns:1fr 1fr;}.impact-strip{grid-template-columns:1fr 1fr;}}
+    @media(max-width:480px){.why-grid{grid-template-columns:1fr;}.impact-strip{grid-template-columns:1fr 1fr;}}
+  </style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+<nav>
+  <a href="index.html" class="nav-logo"><div class="logo-mark">C360</div>Innovation Lab</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="programs.html">Programs</a></li>
+    <li><a href="clubs.html">Clubs</a></li>
+    <li><a href="mentorship.html">Mentorship</a></li>
+    <li><a href="incubation.html">Incubation</a></li>
+    <li><a href="research.html">Research</a></li>
+    <li><a href="financial-literacy.html">Financial Literacy</a></li>
+    <li><a href="partnerships.html" class="active">Partnerships</a></li>
+    <li><a href="login.html" id="auth-btn" class="btn-login">Join Now</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="programs.html">Programs</a>
+  <a href="clubs.html">Clubs</a>
+  <a href="mentorship.html">Mentorship</a>
+  <a href="incubation.html">Incubation</a>
+  <a href="research.html">Research</a>
+  <a href="financial-literacy.html">Financial Literacy</a>
+  <a href="partnerships.html">Partnerships</a>
+  <a href="login.html" id="auth-btn-mobile" class="btn-login">Join Now</a>
+</div>
+
+<section class="page-hero">
+  <div class="hero-grid"></div>
+  <div class="hero-badge">🤝 &nbsp;Partnerships</div>
+  <h1>Grants &amp; <span>Partnerships</span></h1>
+  <p>C360 mobilizes resources, grants, and partnerships to sustain and scale programs benefiting young people and communities across Uganda.</p>
+</section>
+
+<section class="partners">
+  <div class="section-label">Who We Work With</div>
+  <div class="section-title">Current Partners</div>
+  <div class="partners-grid">
+    <div class="partner-card reveal reveal-delay-1"><div class="p-icon">🌐</div><div class="p-name">Global Youth Fund</div><div class="p-type">Financial Partner</div></div>
+    <div class="partner-card reveal reveal-delay-2"><div class="p-icon">💻</div><div class="p-name">TechBridge Africa</div><div class="p-type">Technical Partner</div></div>
+    <div class="partner-card reveal reveal-delay-3"><div class="p-icon">🏫</div><div class="p-name">Makerere University</div><div class="p-type">Academic Partner</div></div>
+    <div class="partner-card reveal reveal-delay-4"><div class="p-icon">🌍</div><div class="p-name">Uganda Dev Trust</div><div class="p-type">Advisory Partner</div></div>
+  </div>
+</section>
+
+<section class="grants" id="grants">
+  <div class="section-label">Funding Available</div>
+  <div class="section-title">Grant Opportunities</div>
+  <div class="grants-list">
+    <div class="grant-card reveal"><div class="grant-icon">💰</div><div class="grant-body"><h3>Youth Innovation Seed Grant</h3><p>A startup grant of up to UGX 5,000,000 for young innovators with a viable idea or early-stage project. Funds can be used for prototyping, materials, and initial operations.</p><div class="grant-meta"><span class="grant-badge">👤 Ages 15–25</span><span class="grant-badge">📅 Rolling Applications</span><span class="grant-badge">💰 Up to UGX 5M</span></div><a href="login.html" class="card-link">Apply Now <span class="card-link-arrow">→</span></a></div></div>
+    <div class="grant-card reveal"><div class="grant-icon">🏫</div><div class="grant-body"><h3>School Club Development Grant</h3><p>Supports primary and secondary schools in establishing or strengthening C360 Innovation Clubs. Covers training materials, equipment, and club leader stipends for one academic year.</p><div class="grant-meta"><span class="grant-badge">🏫 Schools Only</span><span class="grant-badge">📅 Deadline: 31 Aug 2025</span><span class="grant-badge">💰 Up to UGX 8M</span></div><a href="login.html" class="card-link">Apply Now <span class="card-link-arrow">→</span></a></div></div>
+    <div class="grant-card reveal"><div class="grant-icon">🌟</div><div class="grant-body"><h3>Community Enterprise Grant</h3><p>Designed for community-based groups and cooperatives looking to launch or scale a social enterprise. Includes both funding and a 3-month business mentorship package.</p><div class="grant-meta"><span class="grant-badge">🏘️ Community Groups</span><span class="grant-badge">📅 Deadline: 30 Sep 2025</span><span class="grant-badge">💰 Up to UGX 12M</span></div><a href="login.html" class="card-link">Apply Now <span class="card-link-arrow">→</span></a></div></div>
+  </div>
+</section>
+
+<section class="why-partner" id="why-partner">
+  <div class="section-label">Why Work With C360</div>
+  <div class="section-title">Your Partnership Creates Real Impact</div>
+  <div class="why-grid">
+    <div class="why-card reveal reveal-delay-1"><div class="why-icon">🎯</div><h4>Direct Youth Reach</h4><p>Your brand and mission reach 500+ active young innovators across Uganda — in schools, communities, and online platforms.</p></div>
+    <div class="why-card reveal reveal-delay-2"><div class="why-icon">📊</div><h4>Measurable Outcomes</h4><p>We provide partners with transparent impact reports — tracking youth trained, enterprises launched, and communities served.</p></div>
+    <div class="why-card reveal reveal-delay-3"><div class="why-icon">🤝</div><h4>Co-Design Programs</h4><p>Partners can co-create programs, sponsor cohorts, or fund specific initiatives aligned with their CSR or development goals.</p></div>
+    <div class="why-card reveal reveal-delay-1"><div class="why-icon">🎓</div><h4>Talent Pipeline</h4><p>Access a pipeline of skilled, motivated young talent for internships, fellowships, and entry-level roles in your organization.</p></div>
+    <div class="why-card reveal reveal-delay-2"><div class="why-icon">🌍</div><h4>Pan-African Network</h4><p>Join a growing network of organizations committed to youth development and innovation across East and Central Africa.</p></div>
+    <div class="why-card reveal reveal-delay-3"><div class="why-icon">💡</div><h4>Innovation Access</h4><p>Get early access to youth-built solutions and startups emerging from our incubation program — potential partners or investees.</p></div>
+  </div>
+  <div class="impact-strip reveal">
+    <div class="impact-item"><div class="impact-num">500+</div><div class="impact-lbl">Youth Reached Annually</div></div>
+    <div class="impact-item"><div class="impact-num">40+</div><div class="impact-lbl">Active Innovation Clubs</div></div>
+    <div class="impact-item"><div class="impact-num">12+</div><div class="impact-lbl">Current Partners</div></div>
+    <div class="impact-item"><div class="impact-num">3</div><div class="impact-lbl">Grant Cycles Per Year</div></div>
+  </div>
+</section>
+
+<section class="become-partner" id="become-partner">
+  <div class="section-label">Work With Us</div>
+  <div class="section-title">Become a Partner</div>
+  <p class="intro">Interested in supporting Uganda's youth innovation ecosystem? Let's connect and explore how we can work together.</p>
+  <div class="form-wrap reveal">
+    <div id="form-success" class="success-banner">Thank you! Our partnerships team will be in touch soon.</div>
+    <form id="partner-form" novalidate onsubmit="handlePartnerForm(event)">
+      <div class="row-2">
+        <div class="field"><label for="p-org">Organization Name</label><input type="text" id="p-org" placeholder="Acme Foundation"/><div class="err-msg" id="p-org-err">Organization name is required.</div></div>
+        <div class="field"><label for="p-contact">Contact Person</label><input type="text" id="p-contact" placeholder="Jane Doe"/><div class="err-msg" id="p-contact-err">Contact person is required.</div></div>
+      </div>
+      <div class="field"><label for="p-email">Email Address</label><input type="email" id="p-email" placeholder="you@organization.com"/><div class="err-msg" id="p-email-err">Enter a valid email address.</div></div>
+      <div class="field"><label for="p-type">Type of Partnership</label><select id="p-type"><option value="">— Select partnership type —</option><option value="financial">Financial</option><option value="technical">Technical</option><option value="inkind">In-Kind</option><option value="advisory">Advisory</option></select><div class="err-msg" id="p-type-err">Please select a partnership type.</div></div>
+      <div class="field"><label for="p-message">Message</label><textarea id="p-message" rows="4" placeholder="Tell us about your organization and how you'd like to partner with C360..."></textarea><div class="err-msg" id="p-message-err">Please include a message.</div></div>
+      <button type="submit" class="btn-submit">Submit</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand"><div class="nav-logo"><div class="logo-mark">C360</div>Innovation Lab</div><p>Empowering Uganda's next generation of innovators through clubs, mentorship, and enterprise development.</p><div class="footer-tagline"><span></span> Est. in Uganda, 2020 <span></span></div></div>
+    <div class="footer-links"><h4>Platform</h4><ul><li><a href="programs.html">Programs</a></li><li><a href="mentorship.html">Mentorship</a></li><li><a href="incubation.html">Incubation</a></li><li><a href="research.html">Research</a></li><li><a href="financial-literacy.html">Financial Literacy</a></li></ul></div>
+    <div class="footer-links"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="partnerships.html">Partnerships</a></li><li><a href="contact.html">Contact Us</a></li><li><a href="login.html">Login / Register</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 C360 Innovation Lab. All rights reserved.</span><span style="color:rgba(100,116,139,0.45);font-family:var(--font-m);font-size:0.68rem;letter-spacing:1px;">UGANDA · AFRICA · INNOVATION</span></div>
+</footer>
+
+<script>
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+  let mx=-100,my=-100,rx=-100,ry=-100;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  (function animCursor(){if(cursor){cursor.style.left=mx+'px';cursor.style.top=my+'px';}rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;if(ring){ring.style.left=rx+'px';ring.style.top=ry+'px';}requestAnimationFrame(animCursor);})();
+  document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>{if(cursor)cursor.style.transform='translate(-50%,-50%) scale(2.5)';if(ring){ring.style.transform='translate(-50%,-50%) scale(1.5)';ring.style.borderColor='rgba(245,166,35,0.9)';}});el.addEventListener('mouseleave',()=>{if(cursor)cursor.style.transform='translate(-50%,-50%) scale(1)';if(ring){ring.style.transform='translate(-50%,-50%) scale(1)';ring.style.borderColor='rgba(245,166,35,0.5)';}});});
+  const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});},{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  function toggleMenu(){document.getElementById('mobile-menu').classList.toggle('open');}
+  function setErr(id,eid,show){document.getElementById(id).classList.toggle('error',show);document.getElementById(eid).classList.toggle('show',show);return!show;}
+  function validEmail(v){return/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);}
+  function handlePartnerForm(e){e.preventDefault();const o=document.getElementById('p-org').value.trim(),c=document.getElementById('p-contact').value.trim(),em=document.getElementById('p-email').value.trim(),t=document.getElementById('p-type').value,m=document.getElementById('p-message').value.trim();let ok=true;ok=setErr('p-org','p-org-err',!o)&&ok;ok=setErr('p-contact','p-contact-err',!c)&&ok;ok=setErr('p-email','p-email-err',!validEmail(em))&&ok;ok=setErr('p-type','p-type-err',!t)&&ok;ok=setErr('p-message','p-message-err',!m)&&ok;if(ok){document.getElementById('form-success').classList.add('show');document.getElementById('partner-form').reset();setTimeout(()=>document.getElementById('form-success').classList.remove('show'),4000);}}
+  (function(){const li=localStorage.getItem('c360_logged_in'),b=document.getElementById('auth-btn'),bm=document.getElementById('auth-btn-mobile');if(li){[b,bm].forEach(el=>{if(el){el.textContent='Dashboard';el.href='dashboard.html';}});const l=document.createElement('li');l.innerHTML='<a href="#" id="logout-btn" style="color:rgba(226,232,240,0.65);font-size:0.82rem;font-weight:500;padding:7px 11px;border-radius:7px;">Logout</a>';document.querySelector('.nav-links')?.appendChild(l);document.getElementById('logout-btn')?.addEventListener('click',e=>{e.preventDefault();localStorage.removeItem('c360_logged_in');localStorage.removeItem('c360_username');window.location.href='login.html';});}})();
+  window.addEventListener('scroll',()=>{const n=document.querySelector('nav');if(n)n.style.background=window.scrollY>60?'rgba(7,9,15,0.92)':'rgba(7,9,15,0.7)';});
+</script>
+<script src="auth.js></script>`n</body>
+</html>

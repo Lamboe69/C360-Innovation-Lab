@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact — C360 Innovation Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="global.css">`n  <script src="theme.js"></script>
+  <style>
+    /* ── NAV AUTH GROUP ── */
+    .nav-auth-group { display: flex; align-items: center; gap: 10px; list-style: none; }
+    .nav-bell { position: relative; cursor: none; padding: 6px 8px; border-radius: 8px; transition: background 0.2s; }
+    .nav-bell:hover { background: var(--glass-b); }
+    .bell-icon { font-size: 1rem; }
+    .bell-badge { position: absolute; top: 2px; right: 2px; background: var(--flame); color: #fff; font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .bell-dropdown { display: none; position: absolute; top: calc(100% + 10px); right: 0; width: 300px; background: var(--navy); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 16px 48px rgba(0,0,0,0.5); z-index: 600; overflow: hidden; }
+    .bell-dropdown.open { display: block; }
+    .bell-dropdown-header { padding: 12px 16px; font-size: 0.75rem; font-weight: 700; color: var(--silver); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); }
+    .bell-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; transition: background 0.2s; }
+    .bell-item:hover { background: var(--glass); }
+    .bell-item-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); flex-shrink: 0; margin-top: 4px; }
+    .bell-item.unread .bell-item-dot { box-shadow: 0 0 6px var(--gold); }
+    .bell-item-title { font-size: 0.82rem; color: var(--text); margin-bottom: 3px; }
+    .bell-item-time { font-size: 0.72rem; color: var(--muted); }
+    .bell-view-all { display: block; text-align: center; padding: 11px; font-size: 0.78rem; font-weight: 600; color: var(--gold); border-top: 1px solid var(--border); transition: background 0.2s; }
+    .bell-view-all:hover { background: var(--glass); }
+    .nav-avatar-wrap { display: flex; align-items: center; gap: 7px; cursor: none; padding: 5px 10px; border-radius: 10px; border: 1px solid var(--border); transition: border-color 0.2s, background 0.2s; position: relative; }
+    .nav-avatar-wrap:hover, .nav-avatar-wrap.open { border-color: rgba(245,166,35,0.4); background: var(--glass); }
+    .nav-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--flame)); display: flex; align-items: center; justify-content: center; }
+    .avatar-initial { font-size: 0.75rem; font-weight: 700; color: #fff; }
+    .nav-avatar-name { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+    .avatar-chevron { font-size: 0.65rem; color: var(--muted); }
+    .avatar-dropdown { display: none; position: absolute; top: calc(100% + 10px); right: 0; width: 220px; background: var(--navy); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 16px 48px rgba(0,0,0,0.5); z-index: 600; overflow: hidden; }
+    .avatar-dropdown.open { display: block; }
+    .avatar-dropdown-header { display: flex; align-items: center; gap: 10px; padding: 14px 16px; }
+    .avatar-dropdown-initial { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--flame)); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; font-size: 0.85rem; flex-shrink: 0; }
+    .avatar-dropdown-name { font-size: 0.85rem; font-weight: 700; color: var(--cream); }
+    .avatar-dropdown-role { font-size: 0.72rem; color: var(--muted); text-transform: capitalize; margin-top: 2px; }
+    .avatar-dropdown-divider { height: 1px; background: var(--border); margin: 4px 0; }
+    .avatar-dropdown-item { display: flex; align-items: center; gap: 8px; padding: 10px 16px; font-size: 0.83rem; color: var(--text); transition: background 0.2s, color 0.2s; }
+    .avatar-dropdown-item:hover { background: var(--glass); color: var(--cream); }
+    .avatar-dropdown-logout { color: rgba(252,165,165,0.8); }
+    .avatar-dropdown-logout:hover { background: rgba(239,68,68,0.08); color: #f87171; }
+    .mobile-auth-block { border-top: 1px solid var(--border); padding-top: 12px; margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+    .mobile-auth-user { display: flex; align-items: center; gap: 10px; padding: 10px 14px; margin-bottom: 4px; }
+    .mobile-avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--flame)); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; font-size: 0.85rem; flex-shrink: 0; }
+    .mobile-auth-name { font-size: 0.88rem; font-weight: 700; color: var(--cream); }
+    .mobile-auth-role { font-size: 0.72rem; color: var(--muted); text-transform: capitalize; }
+    .mobile-auth-link { color: rgba(226,232,240,0.75); font-size: 0.95rem; font-weight: 500; padding: 11px 14px; border-radius: 8px; transition: background 0.2s; display: block; }
+    .mobile-auth-link:hover { background: var(--glass-b); }
+    .mobile-auth-logout { color: rgba(252,165,165,0.8); }
+    .mobile-auth-logout:hover { background: rgba(239,68,68,0.08); color: #f87171; }
+
+    /* -- HERO -- */
+    .contact-hero {
+      min-height: 50vh;
+      padding: 140px 6% 90px;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative; overflow: hidden;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(245,166,35,0.07) 0%, transparent 70%), var(--ink);
+    }
+    .contact-hero-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 80%);
+      animation: gridShift 20s linear infinite;
+    }
+    @keyframes gridShift { from{transform:translateY(0)} to{transform:translateY(60px)} }
+    .contact-orb {
+      position: absolute; border-radius: 50%; pointer-events: none; filter: blur(90px);
+    }
+    .contact-orb-1 {
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, rgba(245,166,35,0.09), transparent 70%);
+      top: -60px; right: -40px;
+      animation: floatOrb 10s ease-in-out infinite alternate;
+    }
+    .contact-orb-2 {
+      width: 280px; height: 280px;
+      background: radial-gradient(circle, rgba(255,90,31,0.07), transparent 70%);
+      bottom: -30px; left: -30px;
+      animation: floatOrb 13s ease-in-out infinite alternate;
+      animation-delay: -4s;
+    }
+    @keyframes floatOrb {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(20px,-30px) scale(1.05); }
+    }
+    .contact-hero-content { position: relative; z-index: 2; max-width: 680px; }
+    .contact-hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(245,166,35,0.1); border: 1px solid rgba(245,166,35,0.25);
+      color: var(--gold); font-family: var(--font-m); font-size: 0.7rem;
+      font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 6px 16px; border-radius: 100px; margin-bottom: 28px;
+      animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.15s both;
+    }
+    .badge-dot {
+      width: 7px; height: 7px; background: var(--gold);
+      border-radius: 50%; box-shadow: 0 0 8px var(--gold);
+      animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:0.4; transform:scale(0.8); }
+    }
+    .contact-hero h1 {
+      font-family: var(--font-d);
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      font-weight: 900; line-height: 1.08; letter-spacing: -1.5px;
+      color: var(--cream); margin-bottom: 22px;
+      animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.3s both;
+    }
+    .contact-hero h1 span {
+      background: linear-gradient(90deg, var(--gold) 0%, var(--flame) 60%, #ff3d00 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .contact-hero p {
+      font-size: 1.05rem; color: var(--silver); line-height: 1.75;
+      font-weight: 300; max-width: 520px; margin: 0 auto 36px;
+      animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.5s both;
+    }
+    .contact-hero-breadcrumb {
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; margin-top: 8px;
+      font-family: var(--font-m); font-size: 0.68rem;
+      letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted);
+      animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.65s both;
+    }
+    .contact-hero-breadcrumb a { color: var(--muted); transition: color 0.2s; }
+    .contact-hero-breadcrumb a:hover { color: var(--gold); }
+    .contact-hero-breadcrumb .sep { color: rgba(100,116,139,0.4); }
+    .contact-hero-breadcrumb .current { color: var(--gold); }
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(28px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* -- CONTACT LAYOUT -- */
+    .contact-section { padding: 100px 6%; background: var(--ink); }
+    .contact-inner {
+      max-width: 1060px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1.6fr;
+      gap: 52px; align-items: start;
+    }
+    .contact-info h2 {
+      font-family: var(--font-d); font-size: 1.5rem; font-weight: 900;
+      color: var(--cream); margin-bottom: 14px; letter-spacing: -0.3px;
+    }
+    .contact-info > p {
+      font-size: 0.9rem; color: var(--silver); line-height: 1.8;
+      font-weight: 300; margin-bottom: 36px;
+    }
+    .info-items { display: flex; flex-direction: column; gap: 20px; margin-bottom: 36px; }
+    .info-item { display: flex; align-items: flex-start; gap: 16px; }
+    .info-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(245,166,35,0.08); border: 1px solid rgba(245,166,35,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .info-label {
+      font-family: var(--font-m); font-size: 0.68rem; font-weight: 700;
+      color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px;
+    }
+    .info-val { font-size: 0.88rem; color: var(--silver); font-weight: 400; line-height: 1.5; }
+    .social-row { display: flex; gap: 10px; }
+    .social-btn {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--glass); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; transition: border-color 0.2s, background 0.2s, transform 0.2s; cursor: none;
+    }
+    .social-btn:hover { border-color: rgba(245,166,35,0.4); background: rgba(245,166,35,0.08); transform: translateY(-2px); }
+    .contact-form-wrap {
+      background: linear-gradient(160deg, rgba(245,166,35,0.05) 0%, rgba(255,90,31,0.03) 100%);
+      border: 1px solid rgba(245,166,35,0.18); border-radius: 24px;
+      padding: 44px 40px; position: relative; overflow: hidden;
+    }
+    .contact-form-wrap::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold), var(--flame), transparent);
+    }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field { margin-bottom: 20px; }
+    .field label {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 0.75rem; font-weight: 700; color: var(--gold);
+      margin-bottom: 8px; letter-spacing: 0.8px; text-transform: uppercase; font-family: var(--font-m);
+    }
+    .field input, .field select, .field textarea {
+      width: 100%; padding: 13px 16px;
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+      font-size: 0.92rem; color: var(--text);
+      background: rgba(255,255,255,0.05); outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+      font-family: var(--font-b); appearance: none; resize: vertical;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: rgba(245,166,35,0.55);
+      box-shadow: 0 0 0 4px rgba(245,166,35,0.1);
+      background: rgba(245,166,35,0.04);
+    }
+    .field input::placeholder, .field textarea::placeholder { color: rgba(100,116,139,0.6); }
+    .field input.error, .field select.error, .field textarea.error { border-color: rgba(239,68,68,0.6); }
+    .err-msg { font-size: 0.73rem; color: #fca5a5; margin-top: 5px; display: none; }
+    .err-msg.show { display: block; }
+    .field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23f5a623' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px;
+    }
+    .field select option { background: #111827; color: var(--text); }
+    .btn-send {
+      width: 100%; padding: 15px;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--flame) 100%);
+      color: #fff; border: none; border-radius: 12px;
+      font-size: 1rem; font-weight: 700; cursor: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: var(--font-b); letter-spacing: 0.3px; margin-top: 4px;
+    }
+    .btn-send:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(245,166,35,0.45); }
+    .success-banner {
+      display: none;
+      background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(16,185,129,0.06));
+      border: 1px solid rgba(16,185,129,0.3); color: #6ee7b7;
+      border-radius: 12px; padding: 14px 18px;
+      font-size: 0.88rem; font-weight: 600; text-align: center; margin-bottom: 24px;
+    }
+    .success-banner.show { display: block; }
+    @media (max-width: 768px) {
+      .contact-inner { grid-template-columns: 1fr; gap: 36px; }
+      .contact-form-wrap { padding: 32px 24px; }
+      .row-2 { grid-template-columns: 1fr; }
+    }
+
+    /* -- AUDIENCE CARDS -- */
+    .audiences { padding: 0 6% 100px; background: var(--ink); }
+    .aud-inner {
+      max-width: 1060px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .aud-card {
+      background: var(--glass); border: 1px solid var(--border);
+      border-radius: 18px; padding: 36px 28px; text-align: center;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .aud-card:hover { transform: translateY(-5px); border-color: rgba(245,166,35,0.35); }
+    .aud-icon { font-size: 2rem; margin-bottom: 16px; }
+    .aud-card h3 {
+      font-family: var(--font-d); font-size: 1.05rem; font-weight: 800;
+      color: var(--cream); margin-bottom: 10px;
+    }
+    .aud-card p { font-size: 0.85rem; color: var(--silver); line-height: 1.7; font-weight: 300; }
+    @media (max-width: 768px) { .aud-inner { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .aud-inner { grid-template-columns: 1fr; } }
+
+    /* -- PARTNERSHIP FORM -- */
+    .partner-section { padding: 0 6% 100px; background: var(--ink); }
+    .partner-inner {
+      max-width: 1060px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1.6fr;
+      gap: 52px; align-items: start;
+    }
+    .partner-left h2 {
+      font-family: var(--font-d); font-size: 1.8rem; font-weight: 900;
+      color: var(--cream); letter-spacing: -0.5px; line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .partner-left > p {
+      font-size: 0.88rem; color: var(--silver); line-height: 1.8;
+      font-weight: 300; margin-bottom: 32px;
+    }
+    .partner-perks { display: flex; flex-direction: column; gap: 20px; }
+    .partner-perk { display: flex; align-items: flex-start; gap: 14px; }
+    .perk-icon {
+      width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
+      background: rgba(245,166,35,0.08); border: 1px solid rgba(245,166,35,0.15);
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    }
+    .perk-title {
+      font-family: var(--font-m); font-size: 0.72rem; font-weight: 700;
+      color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px;
+    }
+    .perk-desc { font-size: 0.83rem; color: var(--silver); font-weight: 300; line-height: 1.6; }
+    .partner-form-wrap {
+      background: linear-gradient(160deg, rgba(245,166,35,0.05) 0%, rgba(255,90,31,0.03) 100%);
+      border: 1px solid rgba(245,166,35,0.18); border-radius: 24px;
+      padding: 44px 40px; position: relative; overflow: hidden;
+    }
+    .partner-form-wrap::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold), var(--flame), transparent);
+    }
+    @media (max-width: 768px) {
+      .partner-inner { grid-template-columns: 1fr; gap: 36px; }
+      .partner-form-wrap { padding: 32px 24px; }
+    }
+
+    /* -- OFFICE LOCATION -- */
+    .location-section { padding: 0 6% 100px; background: var(--ink); }
+    .location-inner { max-width: 1060px; margin: 0 auto; }
+    .location-header { margin-bottom: 40px; }
+    .location-header h2 {
+      font-family: var(--font-d); font-size: 1.8rem; font-weight: 900;
+      color: var(--cream); letter-spacing: -0.5px; margin-top: 8px;
+    }
+    .location-grid {
+      display: grid; grid-template-columns: 1.4fr 1fr;
+      gap: 32px; align-items: start;
+    }
+    .location-map {
+      border-radius: 20px; overflow: hidden;
+      border: 1px solid var(--border); height: 420px;
+      filter: grayscale(30%) contrast(1.05);
+    }
+    .location-details { display: flex; flex-direction: column; gap: 16px; }
+    .location-card {
+      background: var(--glass); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px 22px;
+      transition: border-color 0.2s;
+    }
+    .location-card:hover { border-color: rgba(245,166,35,0.3); }
+    .location-card-top { display: flex; align-items: flex-start; gap: 14px; }
+    .location-icon {
+      width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+      background: rgba(245,166,35,0.08); border: 1px solid rgba(245,166,35,0.15);
+      display: flex; align-items: center; justify-content: center; font-size: 1rem;
+    }
+    .location-label {
+      font-family: var(--font-m); font-size: 0.65rem; font-weight: 700;
+      color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;
+    }
+    .location-val { font-size: 0.85rem; color: var(--silver); font-weight: 400; line-height: 1.6; }
+    .btn-directions {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 13px 24px; border-radius: 10px; margin-top: 4px;
+      font-family: var(--font-b); font-size: 0.9rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--gold), var(--flame));
+      color: #fff; border: none;
+      box-shadow: 0 6px 24px rgba(245,166,35,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-directions:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(245,166,35,0.45); }
+    @media (max-width: 768px) {
+      .location-grid { grid-template-columns: 1fr; }
+      .location-map { height: 280px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- CURSORS -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-mark">C360</div>
+    Innovation Lab
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="programs.html">Programs</a></li>
+    <li><a href="clubs.html">Clubs</a></li>
+    <li><a href="resources.html">Resources</a></li>
+    <li><a href="contact.html" class="active">Contact</a></li>
+    <li><a href="login.html" class="btn-login" style="background:transparent!important;border:1px solid rgba(245,166,35,0.4)!important;color:var(--gold)!important;box-shadow:none!important;">Login</a></li>
+    <li><a href="register.html" class="btn-login">Register</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="programs.html">Programs</a>
+  <a href="clubs.html">Clubs</a>
+  <a href="resources.html">Resources</a>
+  <a href="contact.html" class="active">Contact</a>
+  <a href="login.html" class="btn-login" style="background:transparent;border:1px solid rgba(245,166,35,0.4);color:var(--gold);text-align:center;">Login</a>
+  <a href="register.html" class="btn-login">Register</a>
+</div>
+
+<!-- HERO -->
+<section class="contact-hero">
+  <div class="contact-hero-grid"></div>
+  <div class="contact-orb contact-orb-1"></div>
+  <div class="contact-orb contact-orb-2"></div>
+  <div class="contact-hero-content">
+    <div class="contact-hero-badge">
+      <div class="badge-dot"></div>
+      📬 &nbsp;Get in Touch
+    </div>
+    <h1>We'd Love to<br><span>Hear From You</span></h1>
+    <p>Whether you're a young innovator, a potential partner, or a journalist — reach out and we'll get back to you within 2 business days.</p>
+    <div class="contact-hero-breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="sep">/</span>
+      <span class="current">Contact</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT LAYOUT -->
+<section class="contact-section">
+  <div class="contact-inner">
+
+    <!-- INFO SIDE -->
+    <div class="contact-info reveal">
+      <h2>Let's Connect</h2>
+      <p>Have a question about our programs, want to partner with us, or just want to learn more about what C360 does? We're here.</p>
+      <div class="info-items">
+        <div class="info-item">
+          <div class="info-icon">📍</div>
+          <div class="info-body">
+            <div class="info-label">Office</div>
+            <div class="info-val">Plot 14, Kampala Road<br>Kampala, Uganda</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">📧</div>
+          <div class="info-body">
+            <div class="info-label">Email</div>
+            <div class="info-val">hello@c360innovationlab.org</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">📞</div>
+          <div class="info-body">
+            <div class="info-label">Phone</div>
+            <div class="info-val">+256 700 360 360</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">🕐</div>
+          <div class="info-body">
+            <div class="info-label">Office Hours</div>
+            <div class="info-val">Monday – Friday<br>8:00 AM – 5:00 PM EAT</div>
+          </div>
+        </div>
+      </div>
+      <div class="social-row">
+        <a href="#" class="social-btn" title="X / Twitter">𝕏</a>
+        <a href="#" class="social-btn" title="LinkedIn">in</a>
+        <a href="#" class="social-btn" title="Instagram">📸</a>
+        <a href="#" class="social-btn" title="Facebook">f</a>
+        <a href="#" class="social-btn" title="YouTube">▶</a>
+      </div>
+    </div>
+
+    <!-- FORM SIDE -->
+    <div class="contact-form-wrap reveal">
+      <div id="contact-success" class="success-banner">✅ Message sent! We'll get back to you within 2 business days.</div>
+      <form id="contact-form" novalidate onsubmit="handleContact(event)">
+        <div class="row-2">
+          <div class="field">
+            <label>👤 Full Name</label>
+            <input type="text" id="c-name" placeholder="Jane Doe"/>
+            <div class="err-msg" id="c-name-err">Full name is required.</div>
+          </div>
+          <div class="field">
+            <label>✉️ Email</label>
+            <input type="email" id="c-email" placeholder="you@example.com"/>
+            <div class="err-msg" id="c-email-err">Enter a valid email address.</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>🏢 Organisation (optional)</label>
+          <input type="text" id="c-org" placeholder="Your school, company, or organisation"/>
+        </div>
+        <div class="field">
+          <label>💬 Reason for Contact</label>
+          <select id="c-reason">
+            <option value="">— Select a reason —</option>
+            <option value="join">I want to join C360</option>
+            <option value="partner">Partnership enquiry</option>
+            <option value="mentor">I want to become a mentor</option>
+            <option value="grant">Grant / funding question</option>
+            <option value="media">Media / press enquiry</option>
+            <option value="other">Other</option>
+          </select>
+          <div class="err-msg" id="c-reason-err">Please select a reason.</div>
+        </div>
+        <div class="field">
+          <label>📝 Message</label>
+          <textarea id="c-message" rows="5" placeholder="Tell us what's on your mind..."></textarea>
+          <div class="err-msg" id="c-message-err">Please include a message.</div>
+        </div>
+        <button type="submit" class="btn-send">Send Message →</button>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<!-- AUDIENCE CARDS -->
+<section class="audiences">
+  <div class="aud-inner">
+    <div class="aud-card reveal reveal-delay-1">
+      <div class="aud-icon">🎓</div>
+      <h3>Young Innovators</h3>
+      <p>Want to join a club, find a mentor, or apply for incubation? Start by creating a free account or reaching out directly.</p>
+    </div>
+    <div class="aud-card reveal reveal-delay-2">
+      <div class="aud-icon">🤝</div>
+      <h3>Organizations &amp; Funders</h3>
+      <p>Interested in partnering with C360 or funding our programs? Our partnerships team would love to explore how we can work together.</p>
+    </div>
+    <div class="aud-card reveal reveal-delay-3">
+      <div class="aud-icon">📰</div>
+      <h3>Media &amp; Press</h3>
+      <p>Writing about youth innovation in Uganda? We're happy to provide interviews, data, and stories from our community.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERSHIP INQUIRY FORM -->
+<section class="partner-section">
+  <div class="partner-inner">
+    <div class="partner-left reveal">
+      <div class="section-tag">Work With Us</div>
+      <h2>Partner With<br>C360 Innovation Lab</h2>
+      <p>We work with schools, corporates, NGOs, government bodies, and international organisations to scale youth innovation across Uganda. Fill in the form and our partnerships team will be in touch within 3 business days.</p>
+      <div class="partner-perks">
+        <div class="partner-perk">
+          <div class="perk-icon">🌍</div>
+          <div class="perk-text">
+            <div class="perk-title">National Reach</div>
+            <div class="perk-desc">Access to 500+ youth members and 40+ clubs across Uganda.</div>
+          </div>
+        </div>
+        <div class="partner-perk">
+          <div class="perk-icon">📊</div>
+          <div class="perk-text">
+            <div class="perk-title">Impact Reporting</div>
+            <div class="perk-desc">Regular reports on program outcomes and partner visibility.</div>
+          </div>
+        </div>
+        <div class="partner-perk">
+          <div class="perk-icon">🤝</div>
+          <div class="perk-text">
+            <div class="perk-title">Co-Creation</div>
+            <div class="perk-desc">Design programs and initiatives together with our team.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="partner-form-wrap reveal">
+      <div id="partner-success" class="success-banner">✅ Inquiry received! Our partnerships team will be in touch within 3 business days.</div>
+      <form id="partner-form" novalidate onsubmit="handlePartner(event)">
+        <div class="row-2">
+          <div class="field">
+            <label>🏢 Organisation Name</label>
+            <input type="text" id="p-org" placeholder="Your organisation"/>
+            <div class="err-msg" id="p-org-err">Organisation name is required.</div>
+          </div>
+          <div class="field">
+            <label>👤 Contact Person</label>
+            <input type="text" id="p-name" placeholder="Full name"/>
+            <div class="err-msg" id="p-name-err">Contact name is required.</div>
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label>✉️ Email</label>
+            <input type="email" id="p-email" placeholder="you@organisation.org"/>
+            <div class="err-msg" id="p-email-err">Enter a valid email address.</div>
+          </div>
+          <div class="field">
+            <label>🌐 Website (optional)</label>
+            <input type="text" id="p-web" placeholder="https://yourorg.org"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>🤝 Type of Partnership</label>
+          <select id="p-type">
+            <option value="">— Select partnership type —</option>
+            <option value="funding">Funding &amp; Grants</option>
+            <option value="program">Program Co-Design</option>
+            <option value="mentorship">Mentorship &amp; Expertise</option>
+            <option value="research">Research Collaboration</option>
+            <option value="corporate">Corporate Social Responsibility</option>
+            <option value="government">Government &amp; Policy</option>
+            <option value="other">Other</option>
+          </select>
+          <div class="err-msg" id="p-type-err">Please select a partnership type.</div>
+        </div>
+        <div class="field">
+          <label>📝 Tell Us More</label>
+          <textarea id="p-message" rows="5" placeholder="Describe your organisation and how you'd like to work with C360..."></textarea>
+          <div class="err-msg" id="p-message-err">Please include a message.</div>
+        </div>
+        <button type="submit" class="btn-send">Submit Inquiry →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- OFFICE LOCATION -->
+<section class="location-section">
+  <div class="location-inner">
+    <div class="location-header reveal">
+      <div class="section-tag">Find Us</div>
+      <h2>Our Office Location</h2>
+    </div>
+    <div class="location-grid">
+      <div class="location-map reveal">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7574!2d32.5811!3d0.3136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x177dbb0f4e0f7b1b%3A0x0!2sKampala%20Road%2C%20Kampala%2C%20Uganda!5e0!3m2!1sen!2sug!4v1700000000000"
+          width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade" title="C360 Innovation Lab Office Location">
+        </iframe>
+      </div>
+      <div class="location-details reveal">
+        <div class="location-card">
+          <div class="location-card-top">
+            <div class="location-icon">📍</div>
+            <div>
+              <div class="location-label">Physical Address</div>
+              <div class="location-val">Plot 14, Kampala Road<br>Kampala, Uganda</div>
+            </div>
+          </div>
+        </div>
+        <div class="location-card">
+          <div class="location-card-top">
+            <div class="location-icon">🏛️</div>
+            <div>
+              <div class="location-label">Nearest Landmark</div>
+              <div class="location-val">Opposite Uganda Museum,<br>near Nakasero Market</div>
+            </div>
+          </div>
+        </div>
+        <div class="location-card">
+          <div class="location-card-top">
+            <div class="location-icon">🚌</div>
+            <div>
+              <div class="location-label">Getting Here</div>
+              <div class="location-val">Accessible by boda-boda, taxi,<br>and private vehicle. Parking available.</div>
+            </div>
+          </div>
+        </div>
+        <div class="location-card">
+          <div class="location-card-top">
+            <div class="location-icon">🕐</div>
+            <div>
+              <div class="location-label">Office Hours</div>
+              <div class="location-val">Monday – Friday<br>8:00 AM – 5:00 PM EAT</div>
+            </div>
+          </div>
+        </div>
+        <a href="https://maps.google.com/?q=Kampala+Road,+Kampala,+Uganda" target="_blank" class="btn-directions">Get Directions →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="nav-logo">
+        <div class="logo-mark">C360</div>
+        Innovation Lab
+      </div>
+      <p>Empowering Uganda's next generation of innovators through clubs, mentorship, and enterprise development.</p>
+      <div class="footer-tagline"><span></span> Est. in Uganda, 2020 <span></span></div>
+      <div class="social-links">
+        <a href="#" class="social-link" aria-label="Facebook">&#x1F426;</a>
+        <a href="#" class="social-link" aria-label="X / Twitter">𝕏</a>
+        <a href="#" class="social-link" aria-label="Instagram">&#x1F4F7;</a>
+        <a href="#" class="social-link" aria-label="LinkedIn">in</a>
+        <a href="#" class="social-link" aria-label="YouTube">&#x25B6;</a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="programs.html">Programs</a></li>
+        <li><a href="clubs.html">Clubs</a></li>
+        <li><a href="resources.html">Resources</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Account</h4>
+      <ul>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Use</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 C360 Innovation Lab. All rights reserved.</span>
+    <span style="color:rgba(100,116,139,0.45); font-family:var(--font-m); font-size:0.68rem; letter-spacing:1px;">UGANDA &middot; AFRICA &middot; INNOVATION</span>
+  </div>
+</footer>
+
+<script>
+  /* CUSTOM CURSOR */
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursor-ring');
+  let mx = -100, my = -100, rx = -100, ry = -100;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animCursor() {
+    if (cursor) { cursor.style.left = mx+'px'; cursor.style.top = my+'px'; }
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    if (ring) { ring.style.left = rx+'px'; ring.style.top = ry+'px'; }
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+
+  document.querySelectorAll('a,button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      if (cursor) cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+      if (ring)   { ring.style.transform = 'translate(-50%,-50%) scale(1.5)'; ring.style.borderColor = 'rgba(245,166,35,0.9)'; }
+    });
+    el.addEventListener('mouseleave', () => {
+      if (cursor) cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      if (ring)   { ring.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.borderColor = 'rgba(245,166,35,0.5)'; }
+    });
+  });
+
+  /* MOBILE MENU */
+  function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
+
+  /* NAV SCROLL TINT */
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    if (nav) nav.style.background = window.scrollY > 60 ? 'rgba(7,9,15,0.92)' : 'rgba(7,9,15,0.7)';
+  });
+
+  /* SCROLL REVEAL */
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => io.observe(el));
+
+  /* CONTACT FORM */
+  function setErr(id, eid, show) { document.getElementById(id).classList.toggle('error', show); document.getElementById(eid).classList.toggle('show', show); return !show; }
+  function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function handleContact(e) {
+    e.preventDefault();
+    const n  = document.getElementById('c-name').value.trim();
+    const em = document.getElementById('c-email').value.trim();
+    const r  = document.getElementById('c-reason').value;
+    const m  = document.getElementById('c-message').value.trim();
+    let ok = true;
+    ok = setErr('c-name',    'c-name-err',    !n)            && ok;
+    ok = setErr('c-email',   'c-email-err',   !validEmail(em)) && ok;
+    ok = setErr('c-reason',  'c-reason-err',  !r)            && ok;
+    ok = setErr('c-message', 'c-message-err', !m)            && ok;
+    if (ok) {
+      document.getElementById('contact-success').classList.add('show');
+      document.getElementById('contact-form').reset();
+      setTimeout(() => document.getElementById('contact-success').classList.remove('show'), 5000);
+    }
+  }
+
+  /* PARTNERSHIP FORM */
+  function handlePartner(e) {
+    e.preventDefault();
+    const org  = document.getElementById('p-org').value.trim();
+    const name = document.getElementById('p-name').value.trim();
+    const em   = document.getElementById('p-email').value.trim();
+    const type = document.getElementById('p-type').value;
+    const msg  = document.getElementById('p-message').value.trim();
+    let ok = true;
+    ok = setErr('p-org',     'p-org-err',     !org)            && ok;
+    ok = setErr('p-name',    'p-name-err',    !name)           && ok;
+    ok = setErr('p-email',   'p-email-err',   !validEmail(em)) && ok;
+    ok = setErr('p-type',    'p-type-err',    !type)           && ok;
+    ok = setErr('p-message', 'p-message-err', !msg)            && ok;
+    if (ok) {
+      document.getElementById('partner-success').classList.add('show');
+      document.getElementById('partner-form').reset();
+      setTimeout(() => document.getElementById('partner-success').classList.remove('show'), 5000);
+    }
+  }
+</script>
+<script src="auth.js"></script>
+
+</body>
+</html>
+
