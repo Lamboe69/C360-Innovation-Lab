@@ -1,14 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import CustomCursor from './CustomCursor.jsx';
-
-const profilePhoto = 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&q=80';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import DashboardLayout, { useToast } from './DashboardLayout.jsx';
 
 const sources = [
-  ['Design Thinking Notes', 'PDF', '12 highlights'],
-  ['Digital Skills Bootcamp', 'Course', '6 modules'],
-  ['Pitch Deck Checklist', 'Guide', '8 key ideas'],
-  ['Mentorship Session Recap', 'Transcript', '14 insights'],
+  { title: 'Design Thinking Notes', type: 'PDF', meta: '12 highlights' },
+  { title: 'Digital Skills Bootcamp', type: 'Course', meta: '6 modules' },
+  { title: 'Pitch Deck Checklist', type: 'Guide', meta: '8 key ideas' },
+  { title: 'Mentorship Session Recap', type: 'Transcript', meta: '14 insights' },
 ];
 
 const suggestedQuestions = [
@@ -27,177 +25,69 @@ const notes = [
 
 export default function LearnPage() {
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
-  const [notificationOpen, setNotificationOpen] = useState(false);
-  const [activeSource, setActiveSource] = useState(sources[0][0]);
+  const addToast = useToast();
+  const [activeSource, setActiveSource] = useState(sources[0].title);
   const [activeAction, setActiveAction] = useState(studyActions[0]);
   const [lastQuestion, setLastQuestion] = useState('What should I study next?');
   const [prompt, setPrompt] = useState('');
-  const menuRef = useRef(null);
-
-  const userName = localStorage.getItem('c360_username') || 'User';
-  const userEmail = localStorage.getItem('c360_email') || 'member@c360.org';
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     document.title = 'Learn - C360 Innovation Lab';
-    if (!localStorage.getItem('c360_logged_in')) navigate('/login', { replace: true });
-    setSidebarCollapsed(false);
-  }, [navigate]);
-
-  useEffect(() => {
-    function closeMenus(event) {
-      if (menuRef.current?.contains(event.target)) return;
-      setProfileOpen(false);
-      setNotificationOpen(false);
-    }
-
-    document.addEventListener('mousedown', closeMenus);
-    return () => document.removeEventListener('mousedown', closeMenus);
+    const timer = setTimeout(() => setLoading(false), 400);
+    return () => clearTimeout(timer);
   }, []);
-
-  function toggleSidebar() {
-    if (window.innerWidth > 768) {
-      setSidebarCollapsed(current => !current);
-      return;
-    }
-    setSidebarOpen(current => !current);
-  }
-
-  function handleLogout() {
-    localStorage.removeItem('c360_logged_in');
-    localStorage.removeItem('c360_username');
-    localStorage.removeItem('c360_email');
-    localStorage.removeItem('c360_role');
-    navigate('/login');
-  }
 
   function submitPrompt(event) {
     event.preventDefault();
     if (!prompt.trim()) return;
     setLastQuestion(prompt.trim());
     setPrompt('');
+    addToast('Question submitted');
   }
 
   return (
-    <div className="dashboard-shell">
-      <CustomCursor />
-
-      <nav className="dashboard-topbar">
-        <div className="dashboard-topbar-left">
-          <button type="button" className="dashboard-sidebar-toggle" onClick={toggleSidebar} aria-label="Toggle sidebar">
-            <span />
-            <span />
-            <span />
-          </button>
-          <Link to="/dashboard" className="nav-logo">
-            <div className="logo-mark">C360</div>
-            Innovation Lab
-          </Link>
-        </div>
-        <div className="dashboard-topbar-right" ref={menuRef}>
-          <button
-            type="button"
-            className="dashboard-notification-button"
-            onClick={() => {
-              setNotificationOpen(current => !current);
-              setProfileOpen(false);
-            }}
-            aria-label="Notifications"
-            aria-expanded={notificationOpen}
-            aria-haspopup="menu"
-          >
-            <span>3</span>
-          </button>
-          <button
-            type="button"
-            className="dashboard-profile-button"
-            onClick={() => {
-              setProfileOpen(current => !current);
-              setNotificationOpen(false);
-            }}
-            aria-expanded={profileOpen}
-            aria-haspopup="menu"
-          >
-            <img className="dashboard-profile-avatar" src={profilePhoto} alt={`${userName}'s profile`} />
-          </button>
-
-          {notificationOpen && (
-            <div className="dashboard-notification-menu" role="menu">
-              <div className="dashboard-dropdown-header">
-                <div>
-                  <strong>Notifications</strong>
-                  <small>3 unread updates</small>
+    <DashboardLayout activePage="learn">
+      {loading ? (
+        <section className="learn-workspace" aria-label="Learning workspace skeleton">
+          <aside className="learn-panel learn-sources-panel">
+            <div className="learn-panel-header">
+              <div className="skeleton" style={{ height: 20, width: '60%' }} />
+            </div>
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="learn-source-card" style={{ border: 'none' }}>
+                <div className="skeleton" style={{ width: 32, height: 32, borderRadius: 8 }} />
+                <div style={{ flex: 1 }}>
+                  <div className="skeleton" style={{ height: 14, width: '70%', marginBottom: 4 }} />
+                  <div className="skeleton" style={{ height: 11, width: '40%' }} />
                 </div>
               </div>
-              <div className="dashboard-dropdown-list">
-                {['New source suggestion available', 'Your learning recap is ready', 'Mentor note added'].map(item => (
-                  <button key={item} type="button" role="menuitem">
-                    <span />
-                    <div>
-                      <strong>{item}</strong>
-                      <small>Today</small>
-                    </div>
-                  </button>
-                ))}
-              </div>
+            ))}
+          </aside>
+          <section className="learn-chat-panel">
+            <div className="learn-hero-card" style={{ border: 'none' }}>
+              <div className="skeleton" style={{ height: 28, width: '80%', marginBottom: 12 }} />
+              <div className="skeleton" style={{ height: 14, width: '60%', marginBottom: 4 }} />
+              <div className="skeleton" style={{ height: 14, width: '50%' }} />
             </div>
-          )}
-
-          {profileOpen && (
-            <div className="dashboard-profile-menu" role="menu">
-              <div className="dashboard-profile-menu-head">
-                <img className="dashboard-profile-menu-avatar" src={profilePhoto} alt="" />
-                <div>
-                  <strong>{userName}</strong>
-                  <small>{userEmail}</small>
-                </div>
-              </div>
-              <div className="dashboard-profile-menu-list">
-                <button type="button" role="menuitem">My Profile</button>
-                <button type="button" role="menuitem">Account Settings</button>
-              </div>
-              <button type="button" className="dashboard-profile-logout" onClick={handleLogout} role="menuitem">
-                Sign out
-              </button>
+            <div className="learn-selected-source" style={{ border: 'none' }}>
+              <div className="skeleton" style={{ height: 16, width: '40%' }} />
             </div>
-          )}
-        </div>
-      </nav>
-
-      <button
-        type="button"
-        className={`dashboard-overlay${sidebarOpen ? ' show' : ''}`}
-        onClick={() => setSidebarOpen(false)}
-        aria-label="Close sidebar"
-      />
-
-      <aside className={`dashboard-sidebar${sidebarOpen ? ' open' : ''}${sidebarCollapsed ? ' collapsed' : ''}`}>
-        <nav className="c360-dashboard-side-menu" aria-label="Dashboard navigation">
-          <div className="c360-dashboard-side-list">
-            <Link to="/dashboard" className="c360-dashboard-side-link">
-              <span className="c360-dashboard-side-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" focusable="false">
-                  <path d="M4 11.2 12 4l8 7.2V20a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-8.8Z" />
-                </svg>
-              </span>
-              <span>Dashboard</span>
-            </Link>
-            <Link to="/learn" className="c360-dashboard-side-link active">
-              <span className="c360-dashboard-side-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" focusable="false">
-                  <path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H20v17H7.5A2.5 2.5 0 0 0 5 21.5v-17Zm2.5-.5A.5.5 0 0 0 7 4.5v13.55c.17-.03.33-.05.5-.05H18V4H7.5Z" />
-                </svg>
-              </span>
-              <span>Learn</span>
-            </Link>
-          </div>
-        </nav>
-        <div className="dashboard-sidebar-footer">© 2025 C360 Innovation Lab</div>
-      </aside>
-
-      <main className={`dashboard-main learn-main${sidebarCollapsed ? ' expanded' : ''}`}>
+            <div className="skeleton" style={{ height: 100, width: '100%', borderRadius: 12, marginTop: 16 }} />
+          </section>
+          <aside className="learn-panel learn-studio-panel">
+            <div className="learn-panel-header">
+              <div className="skeleton" style={{ height: 20, width: '50%' }} />
+            </div>
+            {[1, 2, 3].map(i => (
+              <div key={i} className="learn-studio-card" style={{ border: 'none' }}>
+                <div className="skeleton" style={{ height: 16, width: '50%', marginBottom: 6 }} />
+                <div className="skeleton" style={{ height: 12, width: '80%' }} />
+              </div>
+            ))}
+          </aside>
+        </section>
+      ) : (
         <section className="learn-workspace" aria-label="Learning workspace">
           <aside className="learn-panel learn-sources-panel">
             <div className="learn-panel-header">
@@ -205,14 +95,14 @@ export default function LearnPage() {
                 <span>Sources</span>
                 <small>{sources.length} connected materials</small>
               </div>
-              <button type="button">Add</button>
+              <button type="button" onClick={() => addToast('Upload feature coming soon')}>Add</button>
             </div>
             <div className="learn-upload-dropzone">
               <strong>Add source</strong>
               <p>Upload notes, links, PDFs, or transcripts.</p>
             </div>
             <div className="learn-source-list">
-              {sources.map(([title, type, meta]) => (
+              {sources.map(({ title, type, meta }) => (
                 <button
                   key={title}
                   type="button"
@@ -285,6 +175,7 @@ export default function LearnPage() {
                 value={prompt}
                 onChange={event => setPrompt(event.target.value)}
                 placeholder="Ask about your sources..."
+                aria-label="Ask about your sources"
               />
               <button type="submit">Ask</button>
             </form>
@@ -296,7 +187,7 @@ export default function LearnPage() {
                 <span>Studio</span>
                 <small>Create from selected source</small>
               </div>
-              <button type="button">Create</button>
+              <button type="button" onClick={() => addToast('Create feature coming soon')}>Create</button>
             </div>
             <button type="button" className={`learn-studio-card${activeAction === 'Make a study plan' ? ' active' : ''}`} onClick={() => setActiveAction('Make a study plan')}>
               <strong>Study Guide</strong>
@@ -316,7 +207,7 @@ export default function LearnPage() {
             </div>
           </aside>
         </section>
-      </main>
-    </div>
+      )}
+    </DashboardLayout>
   );
 }

@@ -36,7 +36,7 @@ export default function CustomCursor() {
       if (cursorRef.current) cursorRef.current.style.transform = 'translate(-28%,-18%) scale(1.18)';
       if (ringRef.current) {
         ringRef.current.style.transform = 'translate(-50%,-50%) scale(1.5)';
-        ringRef.current.style.borderColor = 'rgba(245,166,35,0.9)';
+        ringRef.current.style.borderColor = 'rgba(59,130,246,0.9)';
       }
     }
 
@@ -44,23 +44,29 @@ export default function CustomCursor() {
       if (cursorRef.current) cursorRef.current.style.transform = 'translate(-28%,-18%) scale(1)';
       if (ringRef.current) {
         ringRef.current.style.transform = 'translate(-50%,-50%) scale(1)';
-        ringRef.current.style.borderColor = 'rgba(245,166,35,0.5)';
+        ringRef.current.style.borderColor = 'rgba(96,165,250,0.5)';
       }
     }
 
     document.addEventListener('mousemove', handleMouseMove);
-    document.querySelectorAll('a,button,input,label').forEach(element => {
-      element.addEventListener('mouseenter', handlePointerEnter);
-      element.addEventListener('mouseleave', handlePointerLeave);
-    });
+
+    function handleDocEnter(event) {
+      const el = event.target.closest('a,button,input,label');
+      if (el) handlePointerEnter();
+    }
+    function handleDocLeave(event) {
+      const el = event.target.closest('a,button,input,label');
+      if (el) handlePointerLeave();
+    }
+
+    document.addEventListener('mouseover', handleDocEnter, true);
+    document.addEventListener('mouseout', handleDocLeave, true);
     frameId = requestAnimationFrame(animate);
 
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
-      document.querySelectorAll('a,button,input,label').forEach(element => {
-        element.removeEventListener('mouseenter', handlePointerEnter);
-        element.removeEventListener('mouseleave', handlePointerLeave);
-      });
+      document.removeEventListener('mouseover', handleDocEnter, true);
+      document.removeEventListener('mouseout', handleDocLeave, true);
       cancelAnimationFrame(frameId);
     };
   }, []);

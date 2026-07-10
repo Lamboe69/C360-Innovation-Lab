@@ -1,14 +1,6 @@
 import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-
-const menuItems = [
-  { to: '/', label: 'Home' },
-  { to: '/about', label: 'About' },
-  { to: '/programs', label: 'Programs' },
-  { to: '/clubs', label: 'Clubs' },
-  { to: '/resources', label: 'Resources' },
-  { to: '/contact', label: 'Contact' },
-];
+import { navItems } from '../data/navItems.js';
 
 export default function AuthTopBar({ mode }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,10 +17,10 @@ export default function AuthTopBar({ mode }) {
         </Link>
 
         <ul className="nav-links">
-          {menuItems.map(item => (
-            <li key={item.to}>
-              <NavLink to={item.to} className={({ isActive }) => (isActive ? 'active' : undefined)}>
-                {item.label}
+          {navItems.map(([label, to]) => (
+            <li key={to}>
+              <NavLink to={to} className={({ isActive }) => (isActive ? 'active' : undefined)}>
+                {label}
               </NavLink>
             </li>
           ))}
@@ -47,9 +39,9 @@ export default function AuthTopBar({ mode }) {
       </nav>
 
       <div className={`mobile-menu auth-mobile-menu${isOpen ? ' open' : ''}`}>
-        {menuItems.map(item => (
-          <NavLink key={item.to} to={item.to} onClick={() => setIsOpen(false)}>
-            {item.label}
+        {navItems.map(([label, to]) => (
+          <NavLink key={to} to={to} onClick={() => setIsOpen(false)}>
+            {label}
           </NavLink>
         ))}
         <Link to={authLink.to} className={mode === 'login' ? 'btn-auth-register' : 'btn-auth-login'} onClick={() => setIsOpen(false)}>

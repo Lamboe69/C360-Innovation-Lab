@@ -1,289 +1,291 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import CustomCursor from './CustomCursor.jsx';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import DashboardLayout, { useToast } from './DashboardLayout.jsx';
 
 const stats = [
-  ['Club Joined', '1', 'Active'],
-  ['Badges Earned', '3', '1 new'],
-  ['Programs Completed', '2', 'On track'],
-  ['Mentorship Sessions', '5', 'Next: Tomorrow'],
+  { label: 'Club Joined', value: '1', status: 'Active', icon: '1F3F4' },
+  { label: 'Badges Earned', value: '3', status: '1 new', icon: '1F3C5' },
+  { label: 'Programs Completed', value: '2', status: 'On track', icon: '1F4DA' },
+  { label: 'Mentorship Sessions', value: '5', status: 'Next: Tomorrow', icon: '1F464' },
 ];
 
 const events = [
-  ['18', 'Jul', 'Innovation Bootcamp 2025', 'Workshop'],
-  ['05', 'Aug', 'Digital Solutions Hackathon', 'Competition'],
-  ['22', 'Aug', 'Entrepreneurship Masterclass', 'Webinar'],
+  { day: '25', month: 'Jul', title: 'Innovation Bootcamp 2026', type: 'Workshop', color: 'var(--blue-light)' },
+  { day: '12', month: 'Aug', title: 'Digital Solutions Hackathon', type: 'Competition', color: 'var(--blue)' },
+  { day: '30', month: 'Sep', title: 'Entrepreneurship Masterclass', type: 'Webinar', color: 'var(--blue-dark)' },
 ];
 
 const notifications = [
-  ['New grant opportunity added', '2 hours ago'],
-  ['Mentorship session confirmed', 'Yesterday'],
-  ['Digital Solutions Hackathon deadline in 3 days', '2 days ago'],
-  ['Club meeting rescheduled to Friday', '3 days ago'],
+  { title: 'New grant opportunity added', time: '2 hours ago' },
+  { title: 'Mentorship session confirmed', time: 'Yesterday' },
+  { title: 'Digital Solutions Hackathon deadline in 3 days', time: '2 days ago' },
+  { title: 'Club meeting rescheduled to Friday', time: '3 days ago' },
 ];
 
 const learningTracks = [
-  ['Digital Skills Bootcamp', 75, 'Next lesson: Building your online portfolio'],
-  ['Design Thinking Intensive', 40, 'Next lesson: Prototype testing with users'],
-  ['Financial Literacy Basics', 90, 'Next lesson: Budgeting for growth'],
+  { title: 'Digital Skills Bootcamp', progress: 75, nextLesson: 'Building your online portfolio', description: 'Web, product, and digital problem-solving skills.', lessons: 12, estimatedHours: 18, image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80' },
+  { title: 'Design Thinking Intensive', progress: 40, nextLesson: 'Prototype testing with users', description: 'User research, problem framing, rapid prototyping.', lessons: 8, estimatedHours: 12, image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80' },
+  { title: 'Financial Literacy Basics', progress: 90, nextLesson: 'Budgeting for growth', description: 'Budgeting, saving, and investment fundamentals.', lessons: 10, estimatedHours: 8, image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&w=600&q=80' },
 ];
 
-const profilePhoto = 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&q=80';
+const quickActions = [
+  { label: 'Join a Club', route: '/clubs', icon: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </svg>
+  )},
+  { label: 'Book Mentorship', route: '/mentorship-sessions', icon: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </svg>
+  )},
+  { label: 'Browse Programs', route: '/learn', icon: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+    </svg>
+  )},
+  { label: 'View Badges', route: '/profile', icon: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="8" r="7" /><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+    </svg>
+  )},
+];
 
 export default function DashboardPage() {
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
-  const [notificationOpen, setNotificationOpen] = useState(false);
+  const addToast = useToast();
+  const [activeStat, setActiveStat] = useState(stats[0].label);
+  const [activeLearning, setActiveLearning] = useState(learningTracks[0].title);
   const [notificationsRead, setNotificationsRead] = useState(false);
-  const [activeStat, setActiveStat] = useState(stats[0][0]);
-  const [activeLearning, setActiveLearning] = useState(learningTracks[0][0]);
-  const profileMenuRef = useRef(null);
+  const [loading, setLoading] = useState(true);
 
-  const userName = localStorage.getItem('c360_username') || 'User';
-  const userEmail = localStorage.getItem('c360_email') || 'member@c360.org';
   useEffect(() => {
     document.title = 'Dashboard - C360 Innovation Lab';
-    if (!localStorage.getItem('c360_logged_in')) navigate('/login', { replace: true });
-    setSidebarCollapsed(false);
-  }, [navigate]);
-
-  useEffect(() => {
-    function closeTopbarMenus(event) {
-      if (profileMenuRef.current?.contains(event.target)) return;
-      setProfileOpen(false);
-      setNotificationOpen(false);
-    }
-
-    document.addEventListener('mousedown', closeTopbarMenus);
-    return () => document.removeEventListener('mousedown', closeTopbarMenus);
+    const timer = setTimeout(() => setLoading(false), 400);
+    return () => clearTimeout(timer);
   }, []);
 
-  function toggleSidebar() {
-    if (window.innerWidth > 768) {
-      setSidebarCollapsed(current => !current);
-      return;
-    }
+  const userName = localStorage.getItem('c360_username') || 'User';
+  const selectedTrack = learningTracks.find(t => t.title === activeLearning) || learningTracks[0];
 
-    setSidebarOpen(current => !current);
-  }
-
-  function handleLogout() {
-    localStorage.removeItem('c360_logged_in');
-    localStorage.removeItem('c360_username');
-    localStorage.removeItem('c360_email');
-    localStorage.removeItem('c360_role');
-    navigate('/login');
+  function getGreeting() {
+    const h = new Date().getHours();
+    if (h < 12) return 'Good morning';
+    if (h < 18) return 'Good afternoon';
+    return 'Good evening';
   }
 
   return (
-    <div className="dashboard-shell">
-      <CustomCursor />
-
-      <nav className="dashboard-topbar">
-        <div className="dashboard-topbar-left">
-          <button type="button" className="dashboard-sidebar-toggle" onClick={toggleSidebar} aria-label="Toggle sidebar">
-            <span />
-            <span />
-            <span />
-          </button>
-          <Link to="/dashboard" className="nav-logo">
-            <div className="logo-mark">C360</div>
-            Innovation Lab
-          </Link>
-        </div>
-        <div className="dashboard-topbar-right" ref={profileMenuRef}>
-          <button
-            type="button"
-            className="dashboard-notification-button"
-            onClick={() => {
-              setNotificationOpen(current => !current);
-              setProfileOpen(false);
-            }}
-            aria-label="Notifications"
-            aria-expanded={notificationOpen}
-            aria-haspopup="menu"
-          >
-            {!notificationsRead && <span>{notifications.length}</span>}
-          </button>
-          <button
-            type="button"
-            className="dashboard-profile-button"
-            onClick={() => {
-              setProfileOpen(current => !current);
-              setNotificationOpen(false);
-            }}
-            aria-expanded={profileOpen}
-            aria-haspopup="menu"
-          >
-            <img className="dashboard-profile-avatar" src={profilePhoto} alt={`${userName}'s profile`} />
-          </button>
-
-          {notificationOpen && (
-            <div className="dashboard-notification-menu" role="menu">
-              <div className="dashboard-dropdown-header">
-                <div>
-                  <strong>Notifications</strong>
-                  <small>{notificationsRead ? 'No unread updates' : `${notifications.length} unread updates`}</small>
-                </div>
-                <button type="button" onClick={() => setNotificationsRead(true)}>Mark read</button>
+    <DashboardLayout
+      activePage="dashboard"
+      notifications={notifications.map(n => [n.title, n.time])}
+      onNotificationsRead={() => setNotificationsRead(true)}
+    >
+      {loading ? (
+        <>
+          <section className="dashboard-stats-grid" aria-label="Dashboard stats">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="dashboard-stat-card" style={{ border: 'none' }}>
+                <div className="skeleton" style={{ height: 14, width: '60%', marginBottom: 8 }} />
+                <div className="skeleton" style={{ height: 28, width: '30%', marginBottom: 6 }} />
+                <div className="skeleton" style={{ height: 12, width: '40%' }} />
               </div>
-              <div className="dashboard-dropdown-list">
-                {notifications.map(([title, time]) => (
-                  <button key={title} type="button" role="menuitem" className={notificationsRead ? 'read' : undefined}>
-                    <span />
-                    <div>
-                      <strong>{title}</strong>
-                      <small>{time}</small>
+            ))}
+          </section>
+          <section className="dashboard-card-grid">
+            {[1, 2].map(card => (
+              <article key={card} className="dashboard-card">
+                <div className="dashboard-card-header">
+                  <div className="skeleton" style={{ height: 22, width: '45%' }} />
+                </div>
+                {[1, 2, 3].map(row => (
+                  <div key={row} className="dashboard-event-item" style={{ border: 'none' }}>
+                    <div className="skeleton" style={{ width: 50, height: 50, borderRadius: 10 }} />
+                    <div style={{ flex: 1 }}>
+                      <div className="skeleton" style={{ height: 16, width: '70%', marginBottom: 6 }} />
+                      <div className="skeleton" style={{ height: 12, width: '40%' }} />
                     </div>
-                  </button>
+                  </div>
                 ))}
-              </div>
-            </div>
-          )}
-
-          {profileOpen && (
-            <div className="dashboard-profile-menu" role="menu">
-              <div className="dashboard-profile-menu-head">
-                <img className="dashboard-profile-menu-avatar" src={profilePhoto} alt="" />
-                <div>
-                  <strong>{userName}</strong>
-                  <small>{userEmail}</small>
-                </div>
-              </div>
-              <div className="dashboard-profile-menu-list">
-                <button type="button" role="menuitem">My Profile</button>
-                <button type="button" role="menuitem">Account Settings</button>
-                <button type="button" role="menuitem">Notifications</button>
-              </div>
-              <button type="button" className="dashboard-profile-logout" onClick={handleLogout} role="menuitem">
-                Sign out
-              </button>
-            </div>
-          )}
-        </div>
-      </nav>
-
-      <button
-        type="button"
-        className={`dashboard-overlay${sidebarOpen ? ' show' : ''}`}
-        onClick={() => setSidebarOpen(false)}
-        aria-label="Close sidebar"
-      />
-
-      <aside className={`dashboard-sidebar${sidebarOpen ? ' open' : ''}${sidebarCollapsed ? ' collapsed' : ''}`}>
-        <nav className="c360-dashboard-side-menu" aria-label="Dashboard navigation">
-          <div className="c360-dashboard-side-list">
-            <Link to="/dashboard" className="c360-dashboard-side-link active">
-              <span className="c360-dashboard-side-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" focusable="false">
-                  <path d="M4 11.2 12 4l8 7.2V20a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-8.8Z" />
-                </svg>
-              </span>
-              <span>Dashboard</span>
-            </Link>
-            <Link to="/learn" className="c360-dashboard-side-link">
-              <span className="c360-dashboard-side-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" focusable="false">
-                  <path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H20v17H7.5A2.5 2.5 0 0 0 5 21.5v-17Zm2.5-.5A.5.5 0 0 0 7 4.5v13.55c.17-.03.33-.05.5-.05H18V4H7.5Z" />
-                </svg>
-              </span>
-              <span>Learn</span>
-            </Link>
-          </div>
-        </nav>
-        <div className="dashboard-sidebar-footer">© 2025 C360 Innovation Lab</div>
-      </aside>
-
-      <main className={`dashboard-main${sidebarCollapsed ? ' expanded' : ''}`}>
-        <section className="dashboard-stats-grid" aria-label="Dashboard stats">
-          {stats.map(([label, value, status]) => (
-            <button
-              key={label}
-              type="button"
-              className={`dashboard-stat-card${activeStat === label ? ' active' : ''}`}
-              onClick={() => setActiveStat(label)}
-            >
-              <span>{label}</span>
-              <strong>{value}</strong>
-              <small>{status}</small>
-            </button>
-          ))}
-        </section>
-
-        <section className="dashboard-card-grid">
-          <article className="dashboard-card">
+              </article>
+            ))}
+          </section>
+          <section className="dashboard-card dashboard-learning-card">
             <div className="dashboard-card-header">
-              <h2>Upcoming Events</h2>
-              <Link to="/learn">View all</Link>
+              <div className="skeleton" style={{ height: 22, width: '40%' }} />
             </div>
-            <div className="dashboard-event-list">
-              {events.map(([day, month, title, type]) => (
-                <div key={title} className="dashboard-event-item">
-                  <div className="dashboard-event-date">
-                    <strong>{day}</strong>
-                    <span>{month}</span>
-                  </div>
-                  <div>
-                    <h3>{title}</h3>
-                    <p>{type}</p>
-                  </div>
-                </div>
-              ))}
+            {[1, 2, 3].map(i => (
+              <div key={i} style={{ padding: '14px 0', borderBottom: i < 3 ? '1px solid var(--border)' : 'none' }}>
+                <div className="skeleton" style={{ height: 16, width: '60%', marginBottom: 6 }} />
+                <div className="skeleton" style={{ height: 12, width: '80%', marginBottom: 10 }} />
+                <div className="skeleton" style={{ height: 6, width: '100%', borderRadius: 3 }} />
+              </div>
+            ))}
+          </section>
+        </>
+      ) : (
+        <>
+          <div className="dashboard-page-header">
+            <div>
+              <div className="dashboard-kicker">{getGreeting()}</div>
+              <h1>Welcome back, {userName.split(' ')[0]}</h1>
+              <p>Here's what's happening with your learning journey today.</p>
             </div>
-          </article>
-
-          <article className="dashboard-card">
-            <div className="dashboard-card-header">
-              <h2>Recent Notifications</h2>
-              <button type="button" onClick={() => setNotificationsRead(true)}>Mark all read</button>
-            </div>
-            <div className="dashboard-notification-list">
-              {notifications.map(([title, time]) => (
-                <div key={title} className={`dashboard-notification-item${notificationsRead ? ' read' : ''}`}>
-                  <span />
-                  <div>
-                    <h3>{title}</h3>
-                    <p>{time}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </article>
-        </section>
-
-        <section className="dashboard-card dashboard-learning-card">
-          <div className="dashboard-card-header">
-            <h2>Continue Learning</h2>
-            <Link to="/learn">All programs</Link>
           </div>
-          <div className="dashboard-learning-grid">
-            {learningTracks.map(([title, progress, nextLesson]) => (
+
+          <section className="dashboard-quick-actions" aria-label="Quick actions">
+            {quickActions.map(action => (
               <button
-                key={title}
+                key={action.label}
                 type="button"
-                className={`dashboard-learning-item${activeLearning === title ? ' active' : ''}`}
-                onClick={() => setActiveLearning(title)}
+                className="dashboard-quick-action"
+                onClick={() => {
+                  navigate(action.route);
+                  addToast(`Opening ${action.label.toLowerCase()}...`);
+                }}
               >
-                <div className="dashboard-learning-top">
-                  <span>{title}</span>
-                  <strong>{progress}%</strong>
-                </div>
-                <p>{nextLesson}</p>
-                <div className="dashboard-progress-track">
-                  <span style={{ width: `${progress}%` }} />
-                </div>
+                <span className="dashboard-quick-action-icon">{action.icon}</span>
+                <span>{action.label}</span>
               </button>
             ))}
-          </div>
-          <div className="dashboard-learning-detail">
-            <span>Selected Track</span>
-            <strong>{activeLearning}</strong>
-            <p>Keep going from your latest checkpoint. Your next activity is ready when you are.</p>
-          </div>
-        </section>
-      </main>
-    </div>
+          </section>
+
+          <section className="dashboard-stats-grid" aria-label="Dashboard stats">
+            {stats.map(({ label, value, status }) => (
+              <button
+                key={label}
+                type="button"
+                className={`dashboard-stat-card${activeStat === label ? ' active' : ''}`}
+                onClick={() => setActiveStat(label)}
+              >
+                <span>{label}</span>
+                <strong>{value}</strong>
+                <small>{status}</small>
+              </button>
+            ))}
+          </section>
+
+          <section className="dashboard-card-grid">
+            <article className="dashboard-card">
+              <div className="dashboard-card-header">
+                <h2>Upcoming Events</h2>
+                <button type="button" onClick={() => { navigate('/learn'); addToast('Viewing all programs'); }}>View all</button>
+              </div>
+              <div className="dashboard-event-list">
+                {events.length === 0 ? (
+                  <div className="dashboard-empty-state">
+                    <span>No upcoming events</span>
+                    <p>Check back later for new events.</p>
+                  </div>
+                ) : (
+                  events.map(({ day, month, title, type, color }) => (
+                    <button
+                      key={title}
+                      type="button"
+                      className="dashboard-event-item"
+                      onClick={() => addToast(`Event details: ${title}`)}
+                    >
+                      <div className="dashboard-event-date" style={{ borderColor: color }}>
+                        <strong>{day}</strong>
+                        <span>{month}</span>
+                      </div>
+                      <div>
+                        <h3>{title}</h3>
+                        <p>{type}</p>
+                      </div>
+                    </button>
+                  ))
+                )}
+              </div>
+            </article>
+
+            <article className="dashboard-card">
+              <div className="dashboard-card-header">
+                <h2>Recent Notifications</h2>
+                {!notificationsRead && (
+                  <button type="button" onClick={() => setNotificationsRead(true)}>Mark all read</button>
+                )}
+              </div>
+              <div className="dashboard-notification-list">
+                {notifications.length === 0 ? (
+                  <div className="dashboard-empty-state">
+                    <span>No notifications</span>
+                    <p>You're all caught up!</p>
+                  </div>
+                ) : (
+                  notifications.map(({ title, time }) => (
+                    <button
+                      key={title}
+                      type="button"
+                      className={`dashboard-notification-item${notificationsRead ? ' read' : ''}`}
+                      onClick={() => addToast(`Opened: ${title}`)}
+                    >
+                      <span />
+                      <div>
+                        <h3>{title}</h3>
+                        <p>{time}</p>
+                      </div>
+                    </button>
+                  ))
+                )}
+              </div>
+            </article>
+          </section>
+
+          <section className="dashboard-card dashboard-learning-card">
+            <div className="dashboard-card-header">
+              <h2>Continue Learning</h2>
+              <button type="button" onClick={() => navigate('/learn')}>All programs</button>
+            </div>
+            <div className="dashboard-learning-grid">
+              {learningTracks.map(({ title, progress, nextLesson }) => (
+                <button
+                  key={title}
+                  type="button"
+                  className={`dashboard-learning-item${activeLearning === title ? ' active' : ''}`}
+                  onClick={() => setActiveLearning(title)}
+                >
+                  <div className="dashboard-learning-top">
+                    <span>{title}</span>
+                    <strong>{progress}%</strong>
+                  </div>
+                  <p>{nextLesson}</p>
+                  <div
+                    className="dashboard-progress-track"
+                    role="progressbar"
+                    aria-valuenow={progress}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-label={`${title} progress: ${progress}%`}
+                  >
+                    <span style={{ width: `${progress}%` }} />
+                  </div>
+                </button>
+              ))}
+            </div>
+            <div className="dashboard-learning-detail">
+              {selectedTrack.image && <img src={selectedTrack.image} alt="" className="dashboard-learning-img" loading="lazy" />}
+              <span>Selected Track</span>
+              <strong>{selectedTrack.title}</strong>
+              <p>{selectedTrack.description}</p>
+              <div className="dashboard-learning-detail-meta">
+                <span>{selectedTrack.lessons} lessons</span>
+                <span>&bull;</span>
+                <span>~{selectedTrack.estimatedHours} hours</span>
+                <span>&bull;</span>
+                <span>{selectedTrack.progress}% complete</span>
+              </div>
+              <button
+                type="button"
+                className="dashboard-learning-resume"
+                onClick={() => navigate('/learn')}
+              >
+                Resume Learning
+              </button>
+            </div>
+          </section>
+        </>
+      )}
+    </DashboardLayout>
   );
 }
