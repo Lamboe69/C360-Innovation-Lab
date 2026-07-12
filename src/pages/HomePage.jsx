@@ -1,11 +1,80 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import CustomCursor from '../components/CustomCursor.jsx';
 import Footer from '../components/Footer.jsx';
-import { navItems } from '../data/navItems.js';
+import SiteNav from '../components/SiteNav.jsx';
 import './homePage.css';
 
 const marqueeItems = ['Innovation', 'Mentorship', 'Enterprise', 'Research', 'Financial Literacy', 'Future Builders', 'Incubation', 'Leadership', 'Community', 'Competitions'];
+
+const HERO_INTERVAL_MS = 4000;
+
+const heroCarousel = [
+  {
+    src: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=2400&q=85',
+    alt: 'Young people collaborating in a modern learning space',
+    title: 'Build Together',
+    line: 'Where young minds meet, make, and move ideas forward.',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=2400&q=85',
+    alt: 'Team working together around a shared workspace',
+    title: 'Learn By Doing',
+    line: 'Hands-on projects that turn curiosity into real capability.',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=2400&q=85',
+    alt: 'Innovators gathered for a community workshop',
+    title: 'Community First',
+    line: 'Clubs, mentors, and peers shaping the next wave of innovators.',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=2400&q=85',
+    alt: 'Mentors and learners in a focused discussion',
+    title: 'Guided Ambition',
+    line: 'Mentorship that sharpens skills and opens clearer pathways.',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=2400&q=85',
+    alt: 'Creative session with notes and prototypes',
+    title: 'Prototype The Future',
+    line: 'From sticky notes to working systems — launch what matters.',
+  },
+];
+
+const gallerySlides = [
+  {
+    src: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80',
+    alt: 'Young innovators collaborating around a laptop',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=900&q=80',
+    alt: 'Team workshop with sticky notes and sketches',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=900&q=80',
+    alt: 'Students presenting ideas in a bright studio',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=900&q=80',
+    alt: 'Mentor guiding young builders',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=900&q=80',
+    alt: 'Group of smiling young people outdoors',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=900&q=80',
+    alt: 'Hands building a technology prototype',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=900&q=80',
+    alt: 'Young entrepreneurs pitching a venture',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80',
+    alt: 'Learners studying together on digital devices',
+  },
+];
 
 const stories = [
   ['https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=600&q=80', 'Food Systems · Rural Hub', 'Smart Irrigation System Built by a 17-Year-Old', 'Amara used design thinking from her C360 club to build a low-cost irrigation sensor that now helps 12 local farmers.'],
@@ -39,8 +108,19 @@ const stats = [
 ];
 
 export default function HomePage() {
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [heroIndex, setHeroIndex] = useState(0);
+  const [heroDir, setHeroDir] = useState(1);
+  const touchStartX = useRef(null);
+  const activeSlide = heroCarousel[heroIndex];
+
+  const goToSlide = (nextIndex, direction = 1) => {
+    setHeroDir(direction);
+    setHeroIndex((nextIndex + heroCarousel.length) % heroCarousel.length);
+  };
+
+  const goNext = () => goToSlide(heroIndex + 1, 1);
+  const goPrev = () => goToSlide(heroIndex - 1, -1);
 
   useEffect(() => {
     document.title = 'C360 Innovation Lab — Home';
@@ -69,226 +149,246 @@ export default function HomePage() {
     };
   }, []);
 
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setHeroDir(1);
+      setHeroIndex(current => (current + 1) % heroCarousel.length);
+    }, HERO_INTERVAL_MS);
+    return () => window.clearInterval(timer);
+  }, [heroIndex]);
+
+  useEffect(() => {
+    function onKey(event) {
+      if (event.key === 'ArrowRight') {
+        setHeroDir(1);
+        setHeroIndex(current => (current + 1) % heroCarousel.length);
+      }
+      if (event.key === 'ArrowLeft') {
+        setHeroDir(-1);
+        setHeroIndex(current => (current - 1 + heroCarousel.length) % heroCarousel.length);
+      }
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
   return (
     <div className="home-page-shell">
-      <CustomCursor />
       <a href="#main-content" className="skip-link">Skip to content</a>
 
-      <nav>
-        <Link to="/" className="nav-logo">
-          <div className="logo-mark">C360</div>
-          Innovation Lab
-        </Link>
-        <ul className="nav-links">
-          {navItems.map(([label, path]) => (
-            <li key={path}><Link to={path} className={path === '/' ? 'active' : undefined}>{label}</Link></li>
-          ))}
-          {isLoggedIn ? (
-            <li><Link to="/dashboard" className="btn-auth-register">Dashboard</Link></li>
-          ) : (
-            <>
-              <li><Link to="/login" className="btn-auth-login">Login</Link></li>
-              <li><Link to="/register" className="btn-auth-register">Register</Link></li>
-            </>
-          )}
-        </ul>
-        <button className="hamburger" onClick={() => setMobileOpen(current => !current)} aria-label="Toggle menu" type="button">
-          <span />
-          <span />
-          <span />
-        </button>
-      </nav>
-
-      <div className={`mobile-menu${mobileOpen ? ' open' : ''}`}>
-        {navItems.map(([label, path]) => <Link key={path} to={path} onClick={() => setMobileOpen(false)}>{label}</Link>)}
-        {isLoggedIn ? (
-          <Link to="/dashboard" className="btn-auth-register" onClick={() => setMobileOpen(false)}>Dashboard</Link>
-        ) : (
-          <>
-            <Link to="/login" className="btn-auth-login" onClick={() => setMobileOpen(false)}>Login</Link>
-            <Link to="/register" className="btn-auth-register" onClick={() => setMobileOpen(false)}>Register</Link>
-          </>
-        )}
-      </div>
+      <SiteNav />
 
       <main id="main-content">
-      <section className="hero parallax-section">
-        <div className="hero-grid" />
-        <div className="orb orb-1 parallax-slow" data-speed="0.3" />
-        <div className="orb orb-2 parallax-slow" data-speed="0.5" />
-        <div className="orb orb-3 parallax-slow" data-speed="0.2" />
-        <div className="hero-ring" />
+      <section
+        className={`hero parallax-section hero-dir-${heroDir > 0 ? 'next' : 'prev'}`}
+        aria-label="Featured moments"
+        aria-roledescription="carousel"
+        onTouchStart={(event) => {
+          touchStartX.current = event.changedTouches[0].clientX;
+        }}
+        onTouchEnd={(event) => {
+          if (touchStartX.current == null) return;
+          const delta = event.changedTouches[0].clientX - touchStartX.current;
+          touchStartX.current = null;
+          if (Math.abs(delta) < 48) return;
+          if (delta < 0) goNext();
+          else goPrev();
+        }}
+      >
+        <div className="hero-carousel">
+          {heroCarousel.map((slide, index) => (
+            <figure
+              key={slide.src}
+              className={`hero-carousel-slide${index === heroIndex ? ' is-active' : ''}${index === ((heroIndex - 1 + heroCarousel.length) % heroCarousel.length) ? ' is-prev' : ''}`}
+              aria-hidden={index !== heroIndex}
+            >
+              <img
+                src={slide.src}
+                alt={slide.alt}
+                loading={index === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+            </figure>
+          ))}
 
-        <div className="hero-content">
-          <div className="hero-badge">
-            <div className="badge-dot" />
-            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=80&q=80" alt="" className="badge-icon" /> &nbsp;Global Platform &nbsp;·&nbsp; Est. 2020
-          </div>
-          <h1>
-            Empowering
-            <span className="line-2 gradient-text">The World's Next</span>
-            <span className="line-3 gradient-text">Generation of Innovators.</span>
-          </h1>
-          <p className="hero-desc">We nurture young talent through innovation clubs, expert mentorship, and enterprise development, building the entrepreneurs and leaders of tomorrow across communities worldwide.</p>
-          <div className="hero-btns">
-            {isLoggedIn ? (
-              <>
-                <Link to="/dashboard" className="btn-hero-primary">Go to Dashboard <span className="btn-arrow">→</span></Link>
-                <Link to="/learn" className="btn-hero-outline">Continue Learning</Link>
-              </>
-            ) : (
-              <>
-                <Link to="/register" className="btn-hero-primary">Join a Club <span className="btn-arrow">→</span></Link>
-                <Link to="/programs" className="btn-hero-outline">Learn More</Link>
-              </>
-            )}
+          <div className="hero-carousel-shade" aria-hidden="true" />
+          <div className="hero-carousel-grain" aria-hidden="true" />
+          <div className="hero-carousel-frame" aria-hidden="true" />
+
+          <div className="hero-carousel-stage">
+            <div className="hero-carousel-top">
+              <div className="hero-carousel-brand">C360</div>
+              <p className="hero-carousel-kicker">Innovation Lab</p>
+            </div>
+
+            <div className="hero-carousel-bottom">
+              <div className="hero-carousel-copy" key={activeSlide.src}>
+                <h1>{activeSlide.title}</h1>
+                <p className="hero-carousel-line">{activeSlide.line}</p>
+              </div>
+
+              <div className="hero-carousel-chrome">
+                <div
+                  className="hero-carousel-progress"
+                  role="tablist"
+                  aria-label="Slide progress"
+                  style={{ gridTemplateColumns: `repeat(${heroCarousel.length}, minmax(0, 1fr))` }}
+                >
+                  {heroCarousel.map((slide, index) => (
+                    <button
+                      key={slide.src}
+                      type="button"
+                      className={`hero-carousel-rail${index === heroIndex ? ' is-active' : ''}${index < heroIndex ? ' is-done' : ''}`}
+                      aria-label={`Show slide ${index + 1}: ${slide.title}`}
+                      aria-selected={index === heroIndex}
+                      onClick={() => goToSlide(index, index > heroIndex ? 1 : -1)}
+                    >
+                      <span
+                        key={`${heroIndex}-${index}`}
+                        className="hero-carousel-rail-fill"
+                        style={{ animationDuration: `${HERO_INTERVAL_MS}ms` }}
+                      />
+                    </button>
+                  ))}
+                </div>
+
+                <div className="hero-carousel-meta">
+                  <span className="hero-carousel-count">
+                    <em>{String(heroIndex + 1).padStart(2, '0')}</em>
+                    <span>/</span>
+                    {String(heroCarousel.length).padStart(2, '0')}
+                  </span>
+                  <div className="hero-carousel-nav">
+                    <button type="button" className="hero-carousel-nav-btn" aria-label="Previous slide" onClick={goPrev}>
+                      ←
+                    </button>
+                    <button type="button" className="hero-carousel-nav-btn" aria-label="Next slide" onClick={goNext}>
+                      →
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+      </section>
 
-        <div className="hero-visual">
-          <div className="stats-grid">
-            {[
-              ['500+', 'Youth Members'],
-              ['40+', 'Active Clubs'],
-              ['80+', 'Mentors'],
-              ['12+', 'Partners'],
-            ].map(([number, label]) => (
-              <div className="stat-card" key={label}>
-                <div className="stat-num">{number}</div>
-                <div className="stat-lbl">{label}</div>
-              </div>
+      <div className="pulse-strip" aria-hidden="true">
+        <div className="pulse-strip-track pulse-strip-track-a">
+          {[...marqueeItems, ...marqueeItems].map((item, index) => (
+            <span className="pulse-chip" key={`a-${item}-${index}`}>{item}</span>
+          ))}
+        </div>
+        <div className="pulse-strip-track pulse-strip-track-b">
+          {[...marqueeItems].reverse().concat([...marqueeItems].reverse()).map((item, index) => (
+            <span className="pulse-chip" key={`b-${item}-${index}`}>{item}</span>
+          ))}
+        </div>
+      </div>
+
+      <section className="field-notes">
+        <div className="field-notes-header reveal">
+          <div className="field-notes-label">
+            <span>01</span>
+            <em>Field Notes</em>
+          </div>
+          <h2>Ideas that leave<br />a mark on places.</h2>
+          <p>Real stories from young innovators who turned bold ideas into community impact.</p>
+        </div>
+        <div className="field-notes-layout">
+          <article className="field-feature reveal">
+            <img src={stories[0][0]} alt="" loading="lazy" />
+            <div className="field-feature-copy">
+              <span>{stories[0][1]}</span>
+              <h3>{stories[0][2]}</h3>
+              <Link to="/resources">Open story →</Link>
+            </div>
+          </article>
+          <div className="field-stack">
+            {stories.slice(1).map(([src, tag, title], index) => (
+              <article className={`field-note reveal reveal-delay-${index + 1}`} key={title}>
+                <span className="field-note-num">{String(index + 2).padStart(2, '0')}</span>
+                <img src={src} alt="" loading="lazy" />
+                <div>
+                  <small>{tag}</small>
+                  <h3>{title}</h3>
+                  <Link to="/resources">Read →</Link>
+                </div>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      <div className="marquee-section">
-        <div className="marquee-track">
-          {[...marqueeItems, ...marqueeItems].map((item, index) => (
-            <span className="marquee-item" key={`${item}-${index}`}><span className="marquee-dot" />{item}</span>
+      <section className="workshop-floor" id="programs">
+        <div className="workshop-header reveal">
+          <div className="field-notes-label">
+            <span>02</span>
+            <em>Workshop Floor</em>
+          </div>
+          <h2>Clubs where builders<br />collide and create.</h2>
+          <p>Pick a table. Meet peers. Ship something that matters.</p>
+        </div>
+        <div className="workshop-benches">
+          {clubs.slice(0, 3).map(([src, meta, name], index) => (
+            <article className={`workshop-bench reveal reveal-delay-${index + 1}`} key={name} style={{ '--bench-i': index }}>
+              <div className="workshop-tag">{meta}</div>
+              <img src={src} alt="" loading="lazy" />
+              <h3>{name}</h3>
+              <Link to="/clubs" className="workshop-join">Join floor →</Link>
+            </article>
           ))}
         </div>
-      </div>
-
-      <section className="stories-section">
-        <div className="section-header reveal">
-          <div className="section-tag">Innovation Stories</div>
-          <h2 style={{ fontFamily: 'var(--font-d)', fontSize: 'clamp(2rem,4vw,3rem)', fontWeight: 900, color: 'var(--cream)', letterSpacing: '-0.8px', lineHeight: 1.12, marginBottom: 16 }}><span className="gradient-text">Ideas That Are</span><br />Changing Communities</h2>
-          <p style={{ maxWidth: 500, margin: '0 auto', color: 'var(--silver)', fontSize: '1rem', lineHeight: 1.75, fontWeight: 300 }}>Real stories from young innovators who turned bold ideas into impact across communities.</p>
+        <div className="workshop-cta reveal">
+          <Link to="/clubs" className="btn-hero-outline">See every club →</Link>
         </div>
-        <div className="stories-grid">
-          {stories.map(([src, tag, title], index) => (
-            <article className={`story-card reveal reveal-delay-${index + 1} card-3d-inner`} key={title}>
-              <img src={src} alt="" className="story-img" loading="lazy" />
-              <div className="story-body">
-                <div className="story-tag">{tag}</div>
-                <div className="story-title">{title}</div>
-                <Link to="/resources" className="story-link">Read More →</Link>
+      </section>
+
+      <section className="launch-rails" id="about">
+        <div className="launch-rails-copy reveal">
+          <div className="field-notes-label">
+            <span>03</span>
+            <em>Launch Rails</em>
+          </div>
+          <h2>Three paths.<br />One ecosystem.</h2>
+          <p>C360 connects students, mentors, and partners so curiosity becomes capability.</p>
+        </div>
+        <div className="launch-track">
+          {cards.slice(0, 3).map(([number, icon, title, , path, label], index) => (
+            <Link
+              to={path}
+              className={`launch-car reveal reveal-delay-${index + 1}`}
+              key={title}
+              style={{ '--car-i': index }}
+            >
+              <span className="launch-car-num">{number.split(' ')[0]}</span>
+              <img src={icon} alt="" loading="lazy" />
+              <div>
+                <h3>{title}</h3>
+                <span>{label} →</span>
               </div>
-            </article>
-          ))}
-        </div>
-        <div className="stories-cta reveal">
-          <Link to="/resources" className="btn-hero-outline">View All Stories →</Link>
-        </div>
-      </section>
-
-      <section className="clubs-section" id="programs">
-        <div className="section-header reveal">
-          <div className="section-tag">Active Clubs</div>
-          <h2 style={{ fontFamily: 'var(--font-d)', fontSize: 'clamp(2rem,4vw,3rem)', fontWeight: 900, color: 'var(--cream)', letterSpacing: '-0.8px', lineHeight: 1.12, marginBottom: 16 }}><span className="gradient-text">Where Innovation</span><br />Comes to Life</h2>
-          <p style={{ maxWidth: 500, margin: '0 auto', color: 'var(--silver)', fontSize: '1rem', lineHeight: 1.75, fontWeight: 300 }}>Join one of our thriving clubs and start building, creating, and leading alongside bright young minds from around the world.</p>
-        </div>
-        <div className="clubs-grid">
-          {clubs.map(([src, meta, name], index) => (
-            <article className={`club-card reveal reveal-delay-${(index % 3) + 1} card-3d-inner`} key={name}>
-              <img src={src} alt="" className="club-img" loading="lazy" />
-              <div className="club-meta">{meta}</div>
-              <div className="club-name">{name}</div>
-            </article>
-          ))}
-        </div>
-        <div className="clubs-cta reveal">
-          <Link to="/clubs" className="btn-hero-outline">View All Clubs →</Link>
-        </div>
-      </section>
-
-      <section className="about" id="about">
-        <div className="section-header reveal">
-          <div className="section-tag">Who We Are</div>
-          <h2><span className="gradient-text">Building a Global</span><br />Innovation Ecosystem</h2>
-          <p className="about-desc">C360 Innovation Lab is a youth-driven platform connecting students, mentors, and partners to foster creativity, career growth, and enterprise across global communities.</p>
-        </div>
-
-        <div className="cards">
-          {cards.map(([number, icon, title, , path, label], index) => (
-            <article className={`card reveal reveal-delay-${(index % 3) + 1} card-3d-inner`} key={title}>
-              <div className="card-number">{number}</div>
-              <img src={icon} alt="" className="card-img-icon" loading="lazy" />
-              <h3>{title}</h3>
-              <Link to={path} className="card-link">{label} <span className="card-link-arrow">→</span></Link>
-              {title === 'Career Guidance' && (
-                <Link to="/mentorship-sessions" className="card-link" style={{ marginTop: 4 }}>Book a Session <span className="card-link-arrow">→</span></Link>
-              )}
-              {title === 'Innovation & Creativity' && (
-                <Link to="/competitions" className="card-link" style={{ marginTop: 4 }}>View Competitions <span className="card-link-arrow">→</span></Link>
-              )}
-            </article>
+            </Link>
           ))}
         </div>
       </section>
 
-      <section className="about" style={{ padding: '80px 6%' }}>
-        <div className="section-header reveal">
-          <div className="section-tag">AI Learning Workspace</div>
-          <h2>Learn Smarter<br />With Your AI Study Partner</h2>
-          <p className="about-desc" style={{ maxWidth: 600 }}>Upload notes, PDFs, and transcripts. Ask questions, generate summaries, create quizzes, and get personalized study plans — all powered by AI.</p>
-        </div>
-        <div className="cards" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
-          <article className="card reveal reveal-delay-1 card-3d-inner">
-            <div className="card-number">UPLOAD</div>
-            <img src="https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&w=600&q=80" alt="" className="card-img-icon" loading="lazy" />
-            <h3>Add Your Sources</h3>
-          </article>
-          <article className="card reveal reveal-delay-2 card-3d-inner">
-            <div className="card-number">ASK</div>
-            <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=600&q=80" alt="" className="card-img-icon" loading="lazy" />
-            <h3>Ask Anything</h3>
-          </article>
-          <article className="card reveal reveal-delay-3 card-3d-inner">
-            <div className="card-number">GROW</div>
-            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80" alt="" className="card-img-icon" loading="lazy" />
-            <h3>Track Progress</h3>
-          </article>
-        </div>
-        <div className="clubs-cta reveal" style={{ marginTop: 48 }}>
-          <Link to="/learn" className="btn-hero-primary">Open Learning Workspace <span className="btn-arrow">→</span></Link>
-        </div>
-      </section>
-
-      <section className="impact">
-        <div className="impact-bg" />
-        <div className="section-header reveal">
-          <div className="section-tag">Our Impact</div>
-          <h2>Measurable Growth,<br />Real Opportunity</h2>
-        </div>
-        <div className="big-stats">
-          {stats.map(([number, lineOne, lineTwo], index) => (
-            <div className={`big-stat reveal reveal-delay-${index + 1}`} key={number}>
-              <div className="big-stat-num">{number}</div>
-              <div className="big-stat-lbl">{lineOne}<br />{lineTwo}</div>
-              <div className="big-stat-divider" />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="cta-section">
-        <div className="cta-glow" />
-        <div className="reveal">
-          <div className="section-tag">Get Started Today</div>
-          <h2>Ready to Shape<br />Your Future?</h2>
-          <p>Join hundreds of young innovators already building, learning, and growing with C360 Innovation Lab.</p>
+      <section className="signal-gate">
+        <div className="signal-gate-bg" aria-hidden="true" />
+        <div className="signal-gate-inner reveal">
+          <p className="signal-gate-kicker">Get Started</p>
+          <h2>
+            <span>Ready to</span>
+            <em>shape what comes next?</em>
+          </h2>
+          <div className="signal-meters">
+            {stats.map(([number, lineOne], index) => (
+              <div className="signal-meter" key={number} style={{ '--meter-i': index }}>
+                <strong>{number}</strong>
+                <span>{lineOne}</span>
+                <i style={{ animationDelay: `${index * 0.2}s` }} />
+              </div>
+            ))}
+          </div>
           <div className="cta-btns">
             {isLoggedIn ? (
               <>
@@ -302,6 +402,31 @@ export default function HomePage() {
               </>
             )}
           </div>
+        </div>
+      </section>
+
+      <section className="gallery-section" aria-label="Campus moments">
+        <div className="gallery-visual" aria-hidden="true">
+          <div className="gallery-slide-stage">
+            <div className="gallery-slide-track">
+              {[...gallerySlides, ...gallerySlides].map((slide, index) => (
+                <figure className="gallery-slide-card" key={`${slide.src}-${index}`}>
+                  <img src={slide.src} alt={slide.alt} loading="lazy" />
+                  <span className="gallery-slide-glow" />
+                </figure>
+              ))}
+            </div>
+            <div className="gallery-slide-track gallery-slide-track-delayed">
+              {[...gallerySlides].reverse().concat([...gallerySlides].reverse()).map((slide, index) => (
+                <figure className="gallery-slide-card" key={`${slide.src}-b-${index}`}>
+                  <img src={slide.src} alt="" loading="lazy" />
+                  <span className="gallery-slide-glow" />
+                </figure>
+              ))}
+            </div>
+          </div>
+          <div className="gallery-slide-fade gallery-slide-fade-left" />
+          <div className="gallery-slide-fade gallery-slide-fade-right" />
         </div>
       </section>
       </main>

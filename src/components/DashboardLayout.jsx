@@ -1,7 +1,5 @@
 import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import CustomCursor from './CustomCursor.jsx';
-
 const ToastContext = createContext(null);
 
 export function useToast() {
@@ -112,8 +110,6 @@ export default function DashboardLayout({ children, activePage, notifications: n
   return (
     <ToastContext.Provider value={addToast}>
       <div className="dashboard-shell">
-        <CustomCursor />
-
         <nav className="dashboard-topbar">
           <div className="dashboard-topbar-left">
             <button

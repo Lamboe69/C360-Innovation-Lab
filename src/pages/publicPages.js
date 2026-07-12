@@ -1,6 +1,7 @@
 export const publicPages = {
   '/about': {
     title: 'About C360 Innovation Lab',
+    theme: 'manifesto',
     eyebrow: 'Who We Are',
     description: 'C360 Innovation Lab helps young people turn curiosity into capability through clubs, mentorship, research, and enterprise development.',
     cta: ['Explore Programs', '/programs'],
@@ -25,6 +26,7 @@ export const publicPages = {
   },
   '/programs': {
     title: 'Programs',
+    theme: 'blueprint',
     eyebrow: 'Learn By Building',
     description: 'Explore practical programs designed to help learners build skills, launch projects, and grow as innovators.',
     cta: ['Join a Program', '/register'],
@@ -50,6 +52,7 @@ export const publicPages = {
   },
   '/clubs': {
     title: 'Innovation Clubs',
+    theme: 'hive',
     eyebrow: 'Build With Peers',
     description: 'Join themed clubs where young innovators collaborate, create projects, and learn through practice.',
     cta: ['Create Account', '/register'],
@@ -73,6 +76,7 @@ export const publicPages = {
   },
   '/resources': {
     title: 'Resources',
+    theme: 'stacks',
     eyebrow: 'Toolkits & Guides',
     description: 'Access guides, templates, and learning materials for clubs, projects, competitions, and entrepreneurship.',
     cta: ['Start Learning', '/learn'],
@@ -98,6 +102,7 @@ export const publicPages = {
   },
   '/contact': {
     title: 'Contact Us',
+    theme: 'signal',
     eyebrow: 'Start A Conversation',
     description: 'Reach out to collaborate, join a program, support a club, or learn more about C360 Innovation Lab.',
     cta: ['Create Account', '/register'],
@@ -106,7 +111,7 @@ export const publicPages = {
       ['General Inquiries', 'Ask about programs, clubs, resources, or learner access.', 'https://images.unsplash.com/photo-1423666639041-f56000c27a9a?auto=format&fit=crop&w=800&q=80'],
       ['Partnerships', 'Work with us to support youth innovation through mentorship, grants, or learning opportunities.', 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&q=80'],
       ['Support', 'Get help with account access, applications, and dashboard features.', 'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=800&q=80'],
-      ['Media & Press', 'Share stories about youth innovation, club impact, and community development initiatives.', 'https://images.unsplash.com/photo-1504711434969-e33886168d9c?auto=format&fit=crop&w=800&q=80'],
+      ['Media & Press', 'Share stories about youth innovation, club impact, and community development initiatives.', 'https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=800&q=80'],
       ['Volunteer & Mentor', 'Contribute your expertise as a mentor, workshop facilitator, or club advisor.', 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=800&q=80'],
       ['Collaborate', 'Partner on innovation challenges, research projects, or enterprise development programs.', 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80'],
     ],
@@ -121,6 +126,7 @@ export const publicPages = {
   },
   '/competitions': {
     title: 'Competitions',
+    theme: 'arena',
     eyebrow: 'Challenge Yourself',
     description: 'Discover innovation challenges, pitch events, and project competitions for young builders.',
     cta: ['Prepare With Learn', '/learn'],
@@ -146,6 +152,7 @@ export const publicPages = {
   },
   '/financial-literacy': {
     title: 'Financial Literacy',
+    theme: 'ledger',
     eyebrow: 'Money Skills',
     description: 'Learn budgeting, saving, pricing, funding, and financial decision-making for life and enterprise.',
     cta: ['Open Learning Workspace', '/learn'],
@@ -163,6 +170,7 @@ export const publicPages = {
   },
   '/incubation': {
     title: 'Apply For Incubation',
+    theme: 'kiln',
     eyebrow: 'From Idea To Launch',
     description: 'Get structured support to refine, validate, prototype, and pitch your innovation or venture.',
     cta: ['Apply Now', '/register'],
@@ -180,6 +188,7 @@ export const publicPages = {
   },
   '/mentorship': {
     title: 'Career Guidance & Mentorship',
+    theme: 'guidepath',
     eyebrow: 'Guided Growth',
     description: 'Connect with mentors who help learners make better decisions, build skills, and move toward meaningful opportunities.',
     cta: ['Book A Session', '/mentorship-sessions'],
@@ -197,6 +206,7 @@ export const publicPages = {
   },
   '/mentorship-sessions': {
     title: 'Mentorship Sessions',
+    theme: 'guidepath',
     eyebrow: 'Book & Prepare',
     description: 'Manage mentorship sessions and prepare focused questions so every conversation creates progress.',
     cta: ['Open Dashboard', '/dashboard'],
@@ -214,6 +224,7 @@ export const publicPages = {
   },
   '/research': {
     title: 'Research & Innovation',
+    theme: 'labglass',
     eyebrow: 'Evidence Into Action',
     description: 'Support youth-led inquiry, experimentation, and practical research that informs better solutions.',
     cta: ['Use Learn Workspace', '/learn'],
@@ -231,6 +242,7 @@ export const publicPages = {
   },
   '/partnerships': {
     title: 'Grants & Partnerships',
+    theme: 'weave',
     eyebrow: 'Grow Together',
     description: 'Partner with C360 to support youth innovation through mentorship, funding, programs, and learning resources.',
     cta: ['Contact Us', '/contact'],
@@ -248,6 +260,7 @@ export const publicPages = {
   },
   '/profile': {
     title: 'My Profile',
+    theme: 'panel',
     eyebrow: 'Your Account',
     description: 'Manage your learning profile, interests, goals, and saved progress across C360.',
     cta: ['Go To Dashboard', '/dashboard'],
@@ -265,6 +278,7 @@ export const publicPages = {
   },
   '/my-club': {
     title: 'My Club',
+    theme: 'hive',
     eyebrow: 'Club Workspace',
     description: 'Track your club, activities, members, and project progress in one place.',
     cta: ['Explore Clubs', '/clubs'],
@@ -282,6 +296,7 @@ export const publicPages = {
   },
   '/notifications': {
     title: 'Notifications',
+    theme: 'panel',
     eyebrow: 'Updates',
     description: 'Review program reminders, mentorship updates, resource alerts, and club activity.',
     cta: ['Open Dashboard', '/dashboard'],
@@ -299,6 +314,7 @@ export const publicPages = {
   },
   '/terms': {
     title: 'Terms of Use',
+    theme: 'statute',
     eyebrow: 'Legal',
     description: 'Terms and conditions governing the use of C360 Innovation Lab platforms and services.',
     cta: ['Back to Home', '/'],
@@ -319,6 +335,7 @@ export const publicPages = {
   },
   '/privacy': {
     title: 'Privacy Policy',
+    theme: 'statute',
     eyebrow: 'Legal',
     description: 'How C360 Innovation Lab collects, uses, and protects your personal information.',
     cta: ['Back to Home', '/'],

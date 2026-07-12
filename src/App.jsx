@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import AuthPage from './components/AuthPage.jsx';
@@ -16,9 +16,25 @@ const pageVariants = {
   exit: { opacity: 0, y: -8, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } },
 };
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 function AnimatedPage({ children }) {
   return (
-    <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+    <motion.div
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      style={{ minHeight: '100dvh', background: 'var(--ink)' }}
+    >
       {children}
     </motion.div>
   );
@@ -29,6 +45,7 @@ export default function App() {
 
   return (
     <ErrorBoundary>
+      <ScrollToTop />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<AnimatedPage><HomePage /></AnimatedPage>} />
