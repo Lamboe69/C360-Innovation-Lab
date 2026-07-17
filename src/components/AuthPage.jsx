@@ -112,6 +112,28 @@ export default function AuthPage({ mode }) {
   }, [isLogin]);
 
   useEffect(() => {
+    const html = document.documentElement;
+    const { body } = document;
+    const prevHtmlOverflow = html.style.overflow;
+    const prevBodyOverflow = body.style.overflow;
+    const prevBodyHeight = body.style.height;
+
+    html.style.overflow = '';
+    body.style.overflow = '';
+    body.style.overflowY = 'auto';
+    body.style.height = 'auto';
+    body.classList.add('auth-page-active');
+
+    return () => {
+      html.style.overflow = prevHtmlOverflow;
+      body.style.overflow = prevBodyOverflow;
+      body.style.overflowY = '';
+      body.style.height = prevBodyHeight;
+      body.classList.remove('auth-page-active');
+    };
+  }, []);
+
+  useEffect(() => {
     const id = window.setInterval(() => setClock(new Date()), 1000);
     return () => window.clearInterval(id);
   }, []);

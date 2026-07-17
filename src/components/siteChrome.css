@@ -634,10 +634,23 @@ nav.site-nav,
   }
 }
 
-/* Auth pages: keep nav in document flow */
+/* Auth pages: keep nav in document flow + allow page scroll */
 .auth-chamber nav.site-nav,
 .auth-chamber .site-nav,
 .auth-page-shell nav.site-nav,
 .auth-page-shell .site-nav {
   position: relative !important;
+}
+
+body.auth-page-active {
+  overflow-x: clip;
+  overflow-y: auto !important;
+  height: auto !important;
+  overscroll-behavior-y: auto;
+}
+
+body.auth-page-active #root {
+  min-height: 100dvh;
+  height: auto;
+  overflow: visible;
 }

@@ -14,12 +14,13 @@
   position: relative;
   min-height: 100vh;
   min-height: 100dvh;
+  height: auto;
   background: var(--auth-ink);
   color: var(--auth-text);
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow-x: clip;
+  overflow-y: visible;
   isolation: isolate;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
 }
 
 .auth-chamber--genesis {
@@ -43,7 +44,7 @@
 
 /* ── Full-bleed cinematic plane ── */
 .auth-chamber-plane {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
@@ -834,47 +835,42 @@
 }
 
 @media (max-width: 760px) {
+  .auth-chamber {
+    overflow-x: clip;
+    overflow-y: visible;
+    height: auto;
+    min-height: 100dvh;
+  }
+
   .auth-chamber-stage,
   .auth-chamber--genesis .auth-chamber-stage {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      'rail'
-      'brand'
-      'chrono';
-    padding: 20px 4% 36px;
-    gap: 28px;
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: none;
+    grid-template-areas: none;
+    padding: 16px 4% 48px;
+    gap: 20px;
     min-height: 0;
-    align-items: start;
+    height: auto;
+    align-items: stretch;
   }
 
-  .auth-chamber-mark {
-    font-size: clamp(3rem, 16vw, 4.4rem);
-  }
-
-  .auth-chamber-brand h1 {
-    font-size: clamp(1.7rem, 7vw, 2.3rem);
-  }
-
-  .auth-chamber-lede {
-    font-size: 0.95rem;
-  }
-
-  .auth-chamber-instrument {
-    justify-self: center;
-    order: 3;
-  }
-
-  .auth-chrono {
-    width: min(100%, 200px);
-  }
-
-  .auth-chamber-meter {
-    width: min(100%, 200px);
+  .auth-chamber-brand,
+  .auth-chamber-instrument,
+  .auth-rail,
+  .auth-chamber--genesis .auth-chamber-brand,
+  .auth-chamber--genesis .auth-chamber-instrument,
+  .auth-chamber--genesis .auth-rail {
+    order: unset;
+    grid-area: auto;
+    max-width: none;
+    width: 100%;
   }
 
   .auth-rail {
+    order: 1;
     max-width: none;
-    padding: 20px 18px;
+    padding: 20px 16px;
     clip-path: none;
     border-left: 3px solid var(--auth-accent);
     border-right: 0;
@@ -884,6 +880,33 @@
     clip-path: none;
     border-right: 0;
     border-left: 3px solid var(--auth-accent);
+  }
+
+  .auth-chamber-brand {
+    order: 2;
+  }
+
+  .auth-chamber-instrument {
+    display: none;
+  }
+
+  .auth-chamber-mark {
+    font-size: clamp(2.2rem, 11vw, 3rem);
+    margin-bottom: 6px;
+  }
+
+  .auth-chamber-brand h1 {
+    font-size: clamp(1.35rem, 5.5vw, 1.75rem);
+    line-height: 1.15;
+  }
+
+  .auth-chamber-lede {
+    display: none;
+  }
+
+  .auth-chamber-coord {
+    margin-bottom: 10px;
+    font-size: 0.62rem;
   }
 
   .auth-rail-pair {
@@ -898,12 +921,22 @@
     min-height: 48px;
   }
 
+  .auth-rail-kicker {
+    font-size: 1.3rem;
+  }
+
   .auth-chamber-plane {
-    opacity: 0.7;
+    opacity: 0.55;
+    position: fixed;
   }
 
   .auth-chamber-signals {
     display: none;
+  }
+
+  .auth-chamber .site-nav,
+  .auth-chamber nav.site-nav {
+    position: relative !important;
   }
 
   .auth-chamber .auth-topbar,
@@ -923,7 +956,13 @@
     font-size: 0.6rem;
   }
 
-  .auth-chamber-instrument {
-    display: none;
+  .auth-chamber-stage,
+  .auth-chamber--genesis .auth-chamber-stage {
+    padding: 12px 4% 40px;
+    gap: 16px;
+  }
+
+  .auth-rail {
+    padding: 18px 14px;
   }
 }

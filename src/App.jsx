@@ -33,7 +33,7 @@ function AnimatedPage({ children }) {
       initial="initial"
       animate="animate"
       exit="exit"
-      style={{ minHeight: '100dvh', background: 'var(--ink)' }}
+      style={{ minHeight: '100dvh', height: 'auto', overflow: 'visible', background: 'var(--ink)' }}
     >
       {children}
     </motion.div>
