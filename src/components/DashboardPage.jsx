@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { photos } from '../data/media.js';
 import DashboardLayout, { useToast } from './DashboardLayout.jsx';
 
 const stats = [
-  { label: 'Club Joined', value: '1', status: 'Active', icon: '1F3F4' },
+  { label: 'Lab Joined', value: '1', status: 'Active', icon: '1F3F4' },
   { label: 'Badges Earned', value: '3', status: '1 new', icon: '1F3C5' },
-  { label: 'Programs Completed', value: '2', status: 'On track', icon: '1F4DA' },
+  { label: 'Career Tracks', value: '2', status: 'On track', icon: '1F4DA' },
   { label: 'Mentorship Sessions', value: '5', status: 'Next: Tomorrow', icon: '1F464' },
 ];
 
@@ -19,17 +20,17 @@ const notifications = [
   { title: 'New grant opportunity added', time: '2 hours ago' },
   { title: 'Mentorship session confirmed', time: 'Yesterday' },
   { title: 'Digital Solutions Hackathon deadline in 3 days', time: '2 days ago' },
-  { title: 'Club meeting rescheduled to Friday', time: '3 days ago' },
+  { title: 'Lab meeting rescheduled to Friday', time: '3 days ago' },
 ];
 
 const learningTracks = [
-  { title: 'Digital Skills Bootcamp', progress: 75, nextLesson: 'Building your online portfolio', description: 'Web, product, and digital problem-solving skills.', lessons: 12, estimatedHours: 18, image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80' },
-  { title: 'Design Thinking Intensive', progress: 40, nextLesson: 'Prototype testing with users', description: 'User research, problem framing, rapid prototyping.', lessons: 8, estimatedHours: 12, image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80' },
-  { title: 'Financial Literacy Basics', progress: 90, nextLesson: 'Budgeting for growth', description: 'Budgeting, saving, and investment fundamentals.', lessons: 10, estimatedHours: 8, image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&w=600&q=80' },
+  { title: 'Digital Skills Bootcamp', progress: 75, nextLesson: 'Building your online portfolio', description: 'Web, product, and digital problem-solving skills.', lessons: 12, estimatedHours: 18, image: photos.handsUpUbuntu },
+  { title: 'Design Thinking Intensive', progress: 40, nextLesson: 'Prototype testing with users', description: 'User research, problem framing, rapid prototyping.', lessons: 8, estimatedHours: 12, image: photos.clappingLine },
+  { title: 'Financial Literacy Basics', progress: 90, nextLesson: 'Budgeting for growth', description: 'Budgeting, saving, and investment fundamentals.', lessons: 10, estimatedHours: 8, image: photos.teamBranded },
 ];
 
 const quickActions = [
-  { label: 'Join a Club', route: '/clubs', icon: (
+  { label: 'Join a Lab', route: '/labs', icon: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
     </svg>
@@ -39,7 +40,7 @@ const quickActions = [
       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
     </svg>
   )},
-  { label: 'Browse Programs', route: '/learn', icon: (
+  { label: 'Career Platform', route: '/learn', icon: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
     </svg>

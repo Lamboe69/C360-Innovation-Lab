@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
 import AuthPage from './components/AuthPage.jsx';
 import DashboardPage from './components/DashboardPage.jsx';
 import LearnPage from './components/LearnPage.jsx';
@@ -8,13 +7,10 @@ import HomePage from './pages/HomePage.jsx';
 import PublicContentPage from './pages/PublicContentPage.jsx';
 import NotFoundPage from './components/NotFoundPage.jsx';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
+import RouteLoader from './components/RouteLoader.jsx';
 import { publicPages } from './pages/publicPages.js';
 
-const pageVariants = {
-  initial: { opacity: 0, y: 12 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } },
-  exit: { opacity: 0, y: -8, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } },
-};
+const LOADER_MIN_MS = 560;
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -26,18 +22,30 @@ function ScrollToTop() {
   return null;
 }
 
-function AnimatedPage({ children }) {
-  return (
-    <motion.div
-      variants={pageVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      style={{ minHeight: '100dvh', height: 'auto', overflow: 'visible', background: 'var(--ink)' }}
-    >
-      {children}
-    </motion.div>
-  );
+function NavigationLoader() {
+  const location = useLocation();
+  const [state, setState] = useState({ key: location.key, active: false });
+
+  // Sync during render so the overlay covers the first painted frame of the new route.
+  if (location.key !== state.key) {
+    setState({ key: location.key, active: true });
+  }
+
+  useEffect(() => {
+    if (!state.active) return undefined;
+
+    const timer = window.setTimeout(() => {
+      setState((current) => (
+        current.key === state.key
+          ? { ...current, active: false }
+          : current
+      ));
+    }, LOADER_MIN_MS);
+
+    return () => window.clearTimeout(timer);
+  }, [state.key, state.active]);
+
+  return <RouteLoader active={state.active} />;
 }
 
 export default function App() {
@@ -45,20 +53,24 @@ export default function App() {
 
   return (
     <ErrorBoundary>
+      <NavigationLoader />
       <ScrollToTop />
-      <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<AnimatedPage><HomePage /></AnimatedPage>} />
-          <Route path="/login" element={<AnimatedPage><AuthPage mode="login" /></AnimatedPage>} />
-          <Route path="/register" element={<AnimatedPage><AuthPage mode="register" /></AnimatedPage>} />
-          <Route path="/dashboard" element={<AnimatedPage><DashboardPage /></AnimatedPage>} />
-          <Route path="/learn" element={<AnimatedPage><LearnPage /></AnimatedPage>} />
+      <div className="app-route-shell" key={location.pathname}>
+        <Routes location={location}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<AuthPage mode="login" />} />
+          <Route path="/register" element={<AuthPage mode="register" />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/learn" element={<LearnPage />} />
+          <Route path="/clubs" element={<Navigate to="/labs" replace />} />
+          <Route path="/programs" element={<Navigate to="/career" replace />} />
+          <Route path="/partnerships" element={<Navigate to="/network" replace />} />
           {Object.entries(publicPages).map(([path, page]) => (
-            <Route key={path} path={path} element={<AnimatedPage><PublicContentPage page={page} path={path} /></AnimatedPage>} />
+            <Route key={path} path={path} element={<PublicContentPage page={page} path={path} />} />
           ))}
-          <Route path="*" element={<AnimatedPage><NotFoundPage /></AnimatedPage>} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
-      </AnimatePresence>
+      </div>
     </ErrorBoundary>
   );
 }

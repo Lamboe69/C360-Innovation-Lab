@@ -3,24 +3,24 @@ import { useNavigate } from 'react-router-dom';
 import DashboardLayout, { useToast } from './DashboardLayout.jsx';
 
 const sources = [
-  { title: 'Design Thinking Notes', type: 'PDF', meta: '12 highlights' },
-  { title: 'Digital Skills Bootcamp', type: 'Course', meta: '6 modules' },
-  { title: 'Pitch Deck Checklist', type: 'Guide', meta: '8 key ideas' },
-  { title: 'Mentorship Session Recap', type: 'Transcript', meta: '14 insights' },
+  { title: 'Career Needs Questionnaire', type: 'Assessment', meta: 'In progress' },
+  { title: 'Personal SWOT Profile', type: 'Assessment', meta: 'Strengths · Techniques' },
+  { title: 'Growth Pathway Plan', type: 'Dashboard', meta: 'Age-appropriate track' },
+  { title: 'Discussion Room Notes', type: 'Room', meta: 'Peer insights' },
 ];
 
 const suggestedQuestions = [
-  'Summarize my current learning progress',
-  'What should I study next?',
-  'Create a pitch practice checklist',
+  'Summarize my career assessment',
+  'What should I focus on next?',
+  'Which discussion room fits me?',
 ];
 
-const studyActions = ['Summarize', 'Quiz me', 'Make a study plan'];
+const studyActions = ['Summarize', 'Coach me', 'Update my plan'];
 
 const notes = [
-  'Strong problem framing improves every solution discussion.',
-  'Prototype tests should focus on one risky assumption at a time.',
-  'A good pitch connects user pain, product value, and proof of traction.',
+  'Questionnaires help us tailor career and personal development support.',
+  'SWOT insights feed AI agent notifications and room placement.',
+  'Your dashboard should match your age and career growth stage.',
 ];
 
 export default function LearnPage() {
@@ -33,7 +33,7 @@ export default function LearnPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    document.title = 'Learn - C360 Innovation Lab';
+    document.title = 'AI Career Platform - C360 Innovation Lab';
     const timer = setTimeout(() => setLoading(false), 400);
     return () => clearTimeout(timer);
   }, []);
@@ -160,7 +160,7 @@ export default function LearnPage() {
             </div>
 
             <div className="learn-chat-answer">
-              <span>AI Study Partner</span>
+              <span>AI Career Agent</span>
               <strong>{lastQuestion}</strong>
               <p>
                 Based on <em>{activeSource}</em>, I would start with a short summary, then turn

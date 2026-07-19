@@ -1,25 +1,26 @@
 @import '../global.css';
+@import './styles/brandSurfaces.css';
 
 #root {
   min-height: 100vh;
   min-height: 100dvh;
-  background: var(--ink);
+  background: var(--bg);
 }
 
 .public-page-shell {
   min-height: 100vh;
-  background: var(--ink);
+  background: var(--bg);
   color: var(--text);
   cursor: auto;
 }
 
 .public-page-main {
-  padding-top: 72px;
+  padding-top: 80px;
 }
 
 @media (max-width: 640px) {
   .public-page-main {
-    padding-top: 64px;
+    padding-top: 70px;
   }
 
   .public-page-shell {

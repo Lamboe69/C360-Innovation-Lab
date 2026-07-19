@@ -1,12 +1,13 @@
 import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { photos } from '../data/media.js';
 const ToastContext = createContext(null);
 
 export function useToast() {
   return useContext(ToastContext);
 }
 
-const profilePhoto = 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&q=80';
+const profilePhoto = photos.speakerC360Polo;
 
 const defaultNotifications = [
   ['New grant opportunity added', '2 hours ago'],
@@ -286,7 +287,7 @@ export default function DashboardLayout({ children, activePage, notifications: n
                     <path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H20v17H7.5A2.5 2.5 0 0 0 5 21.5v-17Zm2.5-.5A.5.5 0 0 0 7 4.5v13.55c.17-.03.33-.05.5-.05H18V4H7.5Z" />
                   </svg>
                 </span>
-                <span>Learn</span>
+                <span>Career Platform</span>
               </Link>
             </div>
           </nav>

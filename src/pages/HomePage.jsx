@@ -2,109 +2,95 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from '../components/Footer.jsx';
 import SiteNav from '../components/SiteNav.jsx';
+import { photos } from '../data/media.js';
 import './homePage.css';
 
-const marqueeItems = ['Innovation', 'Mentorship', 'Enterprise', 'Research', 'Financial Literacy', 'Future Builders', 'Incubation', 'Leadership', 'Community', 'Competitions'];
+const marqueeItems = [
+  'C360 Labs',
+  'AI Career Platform',
+  'Global Network',
+  'C360 Projects',
+  'Mentorship',
+  'Revel Roots',
+  'Talent Mobility',
+  'Sports4Development',
+  'Revolving Fund',
+  'Smart Climate',
+];
 
 const HERO_INTERVAL_MS = 4000;
 
 const heroCarousel = [
   {
-    src: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=2400&q=85',
-    alt: 'Young people collaborating in a modern learning space',
-    title: 'Build Together',
-    line: 'Where young minds meet, make, and move ideas forward.',
+    src: photos.ubuntuGroup,
+    alt: 'Students in Ubuntu shirts at a C360 community gathering',
+    title: 'C360 Labs',
+    line: 'Institutional and community labs for mentorship, ideas, and growth.',
   },
   {
-    src: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=2400&q=85',
-    alt: 'Team working together around a shared workspace',
-    title: 'Learn By Doing',
-    line: 'Hands-on projects that turn curiosity into real capability.',
+    src: photos.mentorField,
+    alt: 'C360 mentor guiding students in an outdoor field session',
+    title: 'AI Career Platform',
+    line: 'Premium assessments, AI agents, and tailored career pathways.',
   },
   {
-    src: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=2400&q=85',
-    alt: 'Innovators gathered for a community workshop',
-    title: 'Community First',
-    line: 'Clubs, mentors, and peers shaping the next wave of innovators.',
+    src: photos.armsRaisedDrone,
+    alt: 'Youth raising hands during a C360 community program',
+    title: 'Global Network',
+    line: 'Schools, mentors, industries, donors, and research allies.',
   },
   {
-    src: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=2400&q=85',
-    alt: 'Mentors and learners in a focused discussion',
-    title: 'Guided Ambition',
-    line: 'Mentorship that sharpens skills and opens clearer pathways.',
+    src: photos.danceBlueAxes,
+    alt: 'Youth cultural performance connected to C360 projects',
+    title: 'C360 Projects',
+    line: 'Food systems, media, talent, sports, finance, and climate action.',
   },
   {
-    src: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=2400&q=85',
-    alt: 'Creative session with notes and prototypes',
-    title: 'Prototype The Future',
-    line: 'From sticky notes to working systems — launch what matters.',
+    src: photos.c360ShirtsWalk,
+    alt: 'Community members wearing C360 Innovation Lab shirts',
+    title: 'Four Pillars',
+    line: 'One ecosystem — labs, career support, network, and projects.',
   },
 ];
 
 const gallerySlides = [
-  {
-    src: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80',
-    alt: 'Young innovators collaborating around a laptop',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=900&q=80',
-    alt: 'Team workshop with sticky notes and sketches',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=900&q=80',
-    alt: 'Students presenting ideas in a bright studio',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=900&q=80',
-    alt: 'Mentor guiding young builders',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=900&q=80',
-    alt: 'Group of smiling young people outdoors',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=900&q=80',
-    alt: 'Hands building a technology prototype',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=900&q=80',
-    alt: 'Young entrepreneurs pitching a venture',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80',
-    alt: 'Learners studying together on digital devices',
-  },
+  { src: photos.crowdJoy, alt: 'Joyful children at a C360 community event' },
+  { src: photos.laughingCyan, alt: 'Young person laughing during a field program' },
+  { src: photos.walkDirtRoad, alt: 'Students walking together on a rural road' },
+  { src: photos.girlsCelebrateWalk, alt: 'Girls celebrating during a community walk' },
+  { src: photos.speakerC360Polo, alt: 'Speaker in a C360 polo addressing the community' },
+  { src: photos.culturalHeaddress, alt: 'Youth cultural ensemble with traditional headdresses' },
+  { src: photos.handsUpUbuntu, alt: 'Students raising hands in an Ubuntu session' },
+  { src: photos.boyJerrycan, alt: 'Young boy smiling at a community gathering' },
 ];
 
 const stories = [
-  ['https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=600&q=80', 'Food Systems · Rural Hub', 'Smart Irrigation System Built by a 17-Year-Old', 'Amara used design thinking from her C360 club to build a low-cost irrigation sensor that now helps 12 local farmers.'],
-  ['https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=600&q=80', 'Civic Tech · City Hub', 'An App That Connects Street Vendors to Customers', 'A team of four from the Tech Innovators Club launched a mobile app now used by over 200 vendors in their city.'],
-  ['https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=600&q=80', 'Environment · Coastal Hub', 'Turning Plastic Waste into School Furniture', 'The Green Futures Club partnered with a local school to recycle plastic waste into durable, affordable furniture.'],
+  [photos.schoolyardTruck, 'Projects · Agribusiness', 'Farmer Empowerment Through Lab Innovation', 'A C360 Lab member built practical tools that now support rural farmers — the kind of delivery our Agribusiness & Food Systems track exists to scale.'],
+  [photos.speakerRacePeace, 'Projects · C360 Media', 'Storytelling That Amplifies Change Agents', 'Young storytellers in our labs learn to document and amplify community change agents across the Global Network.'],
+  [photos.walkProcession, 'Projects · Smart Climate', 'Climate-Smart Farming Awareness', 'Labs and partners promote smart farming while protecting the environment — linking livelihoods to climate stewardship.'],
 ];
 
 const clubs = [
-  ['https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80', '40+ Members · Online Campus', 'Tech Innovators Club', 'Building real-world tech solutions using design thinking, coding, and rapid prototyping.'],
-  ['https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=600&q=80', '28 Members · Community Hub', 'Green Futures Club', 'Tackling climate and sustainability challenges through youth-led environmental innovation.'],
-  ['https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=600&q=80', '35 Members · City Hub', 'Young Entrepreneurs Club', 'From business plans to pitching, developing the next generation of entrepreneurs.'],
-  ['https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=600&q=80', '22 Members · Research Hub', 'Science & Research Club', 'Conducting youth-led research projects and competing in national innovation challenges.'],
-  ['https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=600&q=80', '31 Members · Creative Hub', 'Creative Arts Club', 'Merging creativity with technology, design, media, and storytelling for social impact.'],
-  ['https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=600&q=80', '19 Members · Leadership Hub', 'Community Leaders Club', 'Developing leadership skills and driving community development projects worldwide.'],
+  [photos.studentsC360, 'Institutional · Kampala', 'Makerere University Lab', 'University lab for mentorship, research, idea development, and Career Platform pathways.'],
+  [photos.clappingLine, 'Institutional · Gulu', 'St. Joseph College–Layibi Lab', 'Secondary school makers growing skills, ideas, and peer leadership.'],
+  [photos.paimolSigns, 'Community · Paimol', 'Greater Paimol Community Lab', 'Community enterprise, local solutions, and personal growth.'],
+  [photos.crowdOrange, 'Community · Gulu', 'Gulu Community Lab', 'Youth skills, civic projects, and mentorship in community.'],
+  [photos.youthSmile, 'Institutional · Primary', 'St. Michael Primary School Lab', 'Age-appropriate creativity and discovery for younger learners.'],
+  [photos.teamBranded, 'Open · New Labs', 'Your Lab Could Be Next', 'When a new lab opens, it joins our searchable Labs directory — schools and communities welcome.'],
 ];
 
 const cards = [
-  ['01 / PROGRAMS', 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80', 'Innovation & Creativity', 'We run structured innovation clubs where young people tackle real-world challenges using design thinking, technology, and creative problem-solving at scale.', '/programs', 'Explore Programs'],
-  ['02 / MENTORSHIP', 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80', 'Career Guidance', 'Our mentorship network connects youth with experienced professionals who provide direction, skills training, and clear pathways into meaningful careers.', '/mentorship', 'Meet Mentors'],
-  ['03 / ENTERPRISE', 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=600&q=80', 'Enterprise Development', 'From idea to launch, we support young entrepreneurs through incubation, financial literacy training, and access to business partners.', '/incubation', 'Start Your Journey'],
-  ['04 / RESEARCH', 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=600&q=80', 'Research & Innovation', 'Young innovators explore evidence, build prototypes, and test bold ideas through practical research and experimentation.', '/research', 'Explore Research'],
-  ['05 / FINANCE', 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&w=600&q=80', 'Financial Literacy', 'Practical money skills help learners manage resources, understand opportunity, and make stronger enterprise decisions.', '/financial-literacy', 'Build Skills'],
-  ['06 / PARTNERS', 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=600&q=80', 'Grants & Partnerships', 'We connect youth projects with collaborators, resources, and partnership opportunities that help promising ideas grow.', '/partnerships', 'Partner With Us'],
+  ['01 / LABS', photos.ubuntuGroup, 'C360 Labs', 'Institutional and community labs where people access mentorship, develop ideas, grow as individuals, and can subscribe to the AI Career Platform.', '/labs', 'Find a Lab'],
+  ['02 / CAREER', photos.mentorField, 'AI Career Platform', 'Premium questionnaires, SWOT assessments, AI agents, progress dashboards, discussion rooms, and pen-pal links for paid members.', '/career', 'View Platform'],
+  ['03 / NETWORK', photos.walkPoliceEscort, 'C360 Global Network', 'Searchable lists of schools, mentors, industries, businesses, companies, donors, universities, and research agencies.', '/network', 'Browse Network'],
+  ['04 / PROJECTS', photos.culturalDrums, 'C360 Projects', 'Agribusiness & Food Systems, Media, Talent Mobility, Sports4Development, Revolving Fund, and Smart Climate Awareness.', '/projects', 'See Projects'],
 ];
 
 const stats = [
-  ['500+', 'Youth Members', 'Worldwide'],
-  ['40+', 'Active Innovation', 'Clubs Running'],
-  ['80+', 'Expert Mentors', 'Engaged'],
-  ['12+', 'Strategic', 'Partners'],
+  ['4', 'Operating', 'Pillars'],
+  ['5+', 'Listed', 'Labs'],
+  ['Premium', 'Career', 'Platform'],
+  ['8', 'Network', 'Categories'],
 ];
 
 export default function HomePage() {
@@ -123,7 +109,7 @@ export default function HomePage() {
   const goPrev = () => goToSlide(heroIndex - 1, -1);
 
   useEffect(() => {
-    document.title = 'C360 Innovation Lab — Home';
+    document.title = 'C360 Innovation Lab — Labs, Career Platform, Network & Projects';
     setIsLoggedIn(!!localStorage.getItem('c360_logged_in'));
 
     const observer = new IntersectionObserver(entries => {
@@ -216,11 +202,6 @@ export default function HomePage() {
           <div className="hero-carousel-frame" aria-hidden="true" />
 
           <div className="hero-carousel-stage">
-            <div className="hero-carousel-top">
-              <div className="hero-carousel-brand">C360</div>
-              <p className="hero-carousel-kicker">Innovation Lab</p>
-            </div>
-
             <div className="hero-carousel-bottom">
               <div className="hero-carousel-copy" key={activeSlide.src}>
                 <h1>{activeSlide.title}</h1>
@@ -274,45 +255,63 @@ export default function HomePage() {
       </section>
 
       <div className="pulse-strip" aria-hidden="true">
+        <div className="pulse-scan" />
         <div className="pulse-strip-track pulse-strip-track-a">
           {[...marqueeItems, ...marqueeItems].map((item, index) => (
-            <span className="pulse-chip" key={`a-${item}-${index}`}>{item}</span>
+            <span className="pulse-chip" key={`a-${item}-${index}`}>
+              <i />
+              {item}
+            </span>
           ))}
         </div>
         <div className="pulse-strip-track pulse-strip-track-b">
           {[...marqueeItems].reverse().concat([...marqueeItems].reverse()).map((item, index) => (
-            <span className="pulse-chip" key={`b-${item}-${index}`}>{item}</span>
+            <span className="pulse-chip" key={`b-${item}-${index}`}>
+              <i />
+              {item}
+            </span>
           ))}
         </div>
       </div>
 
-      <section className="field-notes">
-        <div className="field-notes-header reveal">
-          <div className="field-notes-label">
-            <span>01</span>
-            <em>Field Notes</em>
-          </div>
-          <h2>Ideas that leave<br />a mark on places.</h2>
-          <p>Real stories from young innovators who turned bold ideas into community impact.</p>
+      <section className="field-notes" aria-labelledby="field-notes-title">
+        <div className="field-notes-rail" aria-hidden="true">
+          <span>FIELD</span>
+          <span>NOTES</span>
+          <span>01</span>
         </div>
-        <div className="field-notes-layout">
-          <article className="field-feature reveal">
-            <img src={stories[0][0]} alt="" loading="lazy" />
-            <div className="field-feature-copy">
-              <span>{stories[0][1]}</span>
-              <h3>{stories[0][2]}</h3>
-              <Link to="/resources">Open story →</Link>
+        <div className="field-notes-main">
+          <header className="field-notes-header reveal">
+            <div className="field-notes-label">
+              <span>01</span>
+              <em>Field Notes</em>
             </div>
-          </article>
-          <div className="field-stack">
-            {stories.slice(1).map(([src, tag, title], index) => (
-              <article className={`field-note reveal reveal-delay-${index + 1}`} key={title}>
-                <span className="field-note-num">{String(index + 2).padStart(2, '0')}</span>
-                <img src={src} alt="" loading="lazy" />
-                <div>
-                  <small>{tag}</small>
-                  <h3>{title}</h3>
-                  <Link to="/resources">Read →</Link>
+            <h2 id="field-notes-title">Ideas that leave a mark on places.</h2>
+            <p>Stories from C360 Labs and Projects — food systems, media, and climate-smart action.</p>
+          </header>
+          <div className="field-film" role="list">
+            {stories.map(([src, tag, title, blurb], index) => (
+              <article
+                className={`field-frame reveal reveal-delay-${(index % 3) + 1}`}
+                key={title}
+                role="listitem"
+                style={{ '--frame-i': index }}
+              >
+                <div className="field-frame-sprocket" aria-hidden="true">
+                  <i /><i /><i /><i /><i />
+                </div>
+                <div className="field-frame-body">
+                  <img src={src} alt="" loading="lazy" />
+                  <div className="field-frame-meta">
+                    <span className="field-frame-num">{String(index + 1).padStart(2, '0')}</span>
+                    <small>{tag}</small>
+                    <h3>{title}</h3>
+                    <p>{blurb}</p>
+                    <Link to="/projects">Open projects →</Link>
+                  </div>
+                </div>
+                <div className="field-frame-sprocket" aria-hidden="true">
+                  <i /><i /><i /><i /><i />
                 </div>
               </article>
             ))}
@@ -320,85 +319,116 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="workshop-floor" id="programs">
+      <section className="workshop-floor" id="labs" aria-labelledby="labs-title">
+        <div className="workshop-blueprint" aria-hidden="true" />
         <div className="workshop-header reveal">
           <div className="field-notes-label">
             <span>02</span>
-            <em>Workshop Floor</em>
+            <em>C360 Labs</em>
           </div>
-          <h2>Clubs where builders<br />collide and create.</h2>
-          <p>Pick a table. Meet peers. Ship something that matters.</p>
+          <h2 id="labs-title">Walk the lab corridor.</h2>
+          <p>Institutional and community labs for mentorship, ideas, and growth — subscribe to the Career Platform when you are ready.</p>
         </div>
-        <div className="workshop-benches">
-          {clubs.slice(0, 3).map(([src, meta, name], index) => (
-            <article className={`workshop-bench reveal reveal-delay-${index + 1}`} key={name} style={{ '--bench-i': index }}>
-              <div className="workshop-tag">{meta}</div>
-              <img src={src} alt="" loading="lazy" />
-              <h3>{name}</h3>
-              <Link to="/clubs" className="workshop-join">Join floor →</Link>
+        <div className="workshop-corridor">
+          {clubs.slice(0, 4).map(([src, meta, name, blurb], index) => (
+            <article
+              className={`workshop-door reveal reveal-delay-${(index % 3) + 1}`}
+              key={name}
+              style={{ '--door-i': index }}
+            >
+              <div className="workshop-door-plate">
+                <span className="workshop-door-num">L{String(index + 1).padStart(2, '0')}</span>
+                <span className="workshop-tag">{meta}</span>
+              </div>
+              <div className="workshop-door-window">
+                <img src={src} alt="" loading="lazy" />
+                <span className="workshop-door-glare" aria-hidden="true" />
+              </div>
+              <div className="workshop-door-copy">
+                <h3>{name}</h3>
+                <p>{blurb}</p>
+                <Link to="/labs" className="workshop-join">Enter corridor →</Link>
+              </div>
+              <span className="workshop-door-hinge" aria-hidden="true" />
             </article>
           ))}
         </div>
         <div className="workshop-cta reveal">
-          <Link to="/clubs" className="btn-hero-outline">See every club →</Link>
+          <Link to="/labs" className="btn-hero-outline">Search every lab →</Link>
         </div>
       </section>
 
-      <section className="launch-rails" id="about">
-        <div className="launch-rails-copy reveal">
+      <section className="launch-rails" id="pillars" aria-labelledby="pillars-title">
+        <header className="launch-rails-copy reveal">
           <div className="field-notes-label">
             <span>03</span>
-            <em>Launch Rails</em>
+            <em>Four Pillars</em>
           </div>
-          <h2>Three paths.<br />One ecosystem.</h2>
-          <p>C360 connects students, mentors, and partners so curiosity becomes capability.</p>
-        </div>
-        <div className="launch-track">
-          {cards.slice(0, 3).map(([number, icon, title, , path, label], index) => (
+          <h2 id="pillars-title">Labs. Career. Network. Projects.</h2>
+          <p>Four alternating bands — one ecosystem, four clear ways in.</p>
+        </header>
+        <div className="pillar-cascade">
+          {cards.map(([number, icon, title, blurb, path, label], index) => (
             <Link
               to={path}
-              className={`launch-car reveal reveal-delay-${index + 1}`}
+              className={`pillar-band reveal reveal-delay-${(index % 3) + 1}${index % 2 ? ' is-flip' : ''}`}
               key={title}
-              style={{ '--car-i': index }}
+              style={{ '--band-i': index }}
             >
-              <span className="launch-car-num">{number.split(' ')[0]}</span>
-              <img src={icon} alt="" loading="lazy" />
-              <div>
+              <div className="pillar-band-media">
+                <img src={icon} alt="" loading="lazy" />
+                <span className="pillar-band-num">{number.split(' ')[0]}</span>
+              </div>
+              <div className="pillar-band-copy">
                 <h3>{title}</h3>
-                <span>{label} →</span>
+                <p>{blurb}</p>
+                <span className="pillar-band-cta">{label} →</span>
               </div>
             </Link>
           ))}
         </div>
       </section>
 
-      <section className="signal-gate">
-        <div className="signal-gate-bg" aria-hidden="true" />
+      <section className="signal-gate" aria-labelledby="signal-title">
+        <div className="signal-radar" aria-hidden="true">
+          <span className="signal-ring" />
+          <span className="signal-ring" />
+          <span className="signal-ring" />
+          <span className="signal-sweep" />
+          {stats.map(([number], index) => (
+            <span
+              className="signal-blip"
+              key={number}
+              style={{ '--blip-i': index }}
+            >
+              <strong>{number}</strong>
+            </span>
+          ))}
+        </div>
         <div className="signal-gate-inner reveal">
           <p className="signal-gate-kicker">Get Started</p>
-          <h2>
+          <h2 id="signal-title">
             <span>Ready to</span>
-            <em>shape what comes next?</em>
+            <em>enter a pillar?</em>
           </h2>
-          <div className="signal-meters">
-            {stats.map(([number, lineOne], index) => (
-              <div className="signal-meter" key={number} style={{ '--meter-i': index }}>
+          <ul className="signal-meters">
+            {stats.map(([number, lineOne, lineTwo], index) => (
+              <li className="signal-meter" key={`${number}-${lineOne}`} style={{ '--meter-i': index }}>
                 <strong>{number}</strong>
-                <span>{lineOne}</span>
-                <i style={{ animationDelay: `${index * 0.2}s` }} />
-              </div>
+                <span>{lineOne} {lineTwo}</span>
+              </li>
             ))}
-          </div>
+          </ul>
           <div className="cta-btns">
             {isLoggedIn ? (
               <>
                 <Link to="/dashboard" className="btn-hero-primary">Go to Dashboard <span className="btn-arrow">→</span></Link>
-                <Link to="/learn" className="btn-hero-outline">Start Learning</Link>
+                <Link to="/learn" className="btn-hero-outline">Career Platform</Link>
               </>
             ) : (
               <>
-                <Link to="/clubs" className="btn-hero-primary">Join a Club <span className="btn-arrow">→</span></Link>
-                <Link to="/programs" className="btn-hero-outline">View Programs</Link>
+                <Link to="/labs" className="btn-hero-primary">Join a Lab <span className="btn-arrow">→</span></Link>
+                <Link to="/career" className="btn-hero-outline">AI Career Platform</Link>
               </>
             )}
           </div>
@@ -406,13 +436,18 @@ export default function HomePage() {
       </section>
 
       <section className="gallery-section" aria-label="Campus moments">
-        <div className="gallery-visual" aria-hidden="true">
+        <div className="gallery-caption" aria-hidden="true">
+          <span>Moments on film</span>
+          <span>C360 · Continuous roll</span>
+        </div>
+        <div className="gallery-visual">
           <div className="gallery-slide-stage">
             <div className="gallery-slide-track">
               {[...gallerySlides, ...gallerySlides].map((slide, index) => (
                 <figure className="gallery-slide-card" key={`${slide.src}-${index}`}>
                   <img src={slide.src} alt={slide.alt} loading="lazy" />
                   <span className="gallery-slide-glow" />
+                  <span className="gallery-frame-id">F-{String((index % gallerySlides.length) + 1).padStart(2, '0')}</span>
                 </figure>
               ))}
             </div>

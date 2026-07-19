@@ -1,0 +1,363 @@
+/* Logo-matched surfaces — navy base, cyan accents, high-contrast text */
+
+html,
+body,
+#root {
+  background: var(--bg) !important;
+  color: var(--text);
+}
+
+.public-page-shell,
+.public-page-shell[class*='theme-'],
+.theme-manifesto,
+.theme-blueprint,
+.theme-hive,
+.theme-stacks,
+.theme-signal,
+.theme-arena,
+.theme-ledger,
+.theme-kiln,
+.theme-guidepath,
+.theme-labglass,
+.theme-weave,
+.theme-statute,
+.theme-panel,
+.home-page-shell {
+  background: var(--bg) !important;
+  color: var(--text) !important;
+}
+
+.theme-kicker,
+.home-page-shell .field-notes-label em,
+.home-page-shell .field-notes-label span,
+.home-page-shell .signal-gate-kicker,
+.directory-panel-kicker {
+  color: var(--cyan-bright) !important;
+}
+
+.theme-cta {
+  background: var(--surface) !important;
+  border-top: 1px solid var(--border) !important;
+}
+
+.theme-cta h2,
+.manifesto-hero-brand,
+.manifesto-hero h1,
+.stacks-brand,
+.arena-brand,
+.hive-brand,
+.signal-brand,
+.stacks-hero-copy h1,
+.arena-hero h1,
+.hive-hero h1,
+.signal-hero h1,
+.bp-hero h1,
+.ledger-hero h1,
+.kiln-hero h1,
+.guide-hero h1,
+.lab-hero h1,
+.weave-hero h1,
+.statute-hero h1,
+.panel-hero h1,
+.home-page-shell .field-notes-header h2,
+.home-page-shell .workshop-header h2,
+.home-page-shell .launch-rails-copy h2,
+.home-page-shell .signal-gate h2,
+.home-page-shell .field-frame-meta h3,
+.home-page-shell .workshop-door-copy h3,
+.home-page-shell .pillar-band-copy h3,
+.directory-panel-head h2,
+.directory-card h3,
+.directory-accordion-trigger {
+  color: var(--ink) !important;
+  -webkit-text-fill-color: unset !important;
+}
+
+.manifesto-lead,
+.stacks-lead,
+.arena-lead,
+.hive-lead,
+.signal-lead,
+.bp-lead,
+.theme-stat span,
+.ledger-hero p,
+.kiln-hero p,
+.guide-hero p,
+.lab-hero p,
+.weave-hero p,
+.statute-hero p,
+.panel-hero p,
+.home-page-shell .field-notes-header p,
+.home-page-shell .workshop-header p,
+.home-page-shell .launch-rails-copy p,
+.home-page-shell .field-frame-meta p,
+.home-page-shell .workshop-door-copy p,
+.home-page-shell .pillar-band-copy p,
+.home-page-shell .signal-meter span,
+.directory-meta,
+.directory-card p,
+.directory-summary,
+.directory-accordion-body li p,
+.directory-empty {
+  color: var(--muted) !important;
+}
+
+.theme-stats {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+.theme-stat {
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.theme-stat strong,
+.home-page-shell .signal-meter strong,
+.home-page-shell .pillar-band-num,
+.home-page-shell .workshop-door-num,
+.home-page-shell .signal-gate h2 em,
+.directory-card header span,
+.directory-accordion-trigger em {
+  color: var(--cyan-bright) !important;
+}
+
+.theme-actions .btn-hero-primary,
+.btn-hero-primary,
+.home-page-shell .btn-hero-primary {
+  background: linear-gradient(135deg, var(--cyan), var(--blue-dark)) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 24px rgba(8, 168, 248, 0.28) !important;
+}
+
+.theme-actions .btn-hero-outline,
+.btn-hero-outline,
+.home-page-shell .btn-hero-outline {
+  background: transparent !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+}
+
+.directory-panel {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+.directory-card,
+.directory-accordion {
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--cyan);
+}
+
+.directory-panel-search input {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.directory-panel-search input:focus {
+  border-color: var(--cyan);
+  outline: 2px solid rgba(8, 168, 248, 0.28);
+}
+
+.manifesto-stanza,
+.bp-sheet,
+.bp-stamp,
+.hive-cell,
+.stacks-drawer,
+.stacks-fiche-card,
+.signal-channel,
+.arena-match,
+.ledger-row,
+.kiln-chamber,
+.guide-stone,
+.lab-slide,
+.weave-band,
+.panel-tile,
+.panel-list-item,
+.statute-clause,
+.home-page-shell .signal-meter {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+}
+
+.home-page-shell .field-frame,
+.home-page-shell .workshop-door,
+.home-page-shell .pillar-band {
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+
+.manifesto-stanza h2,
+.bp-sheet h2,
+.bp-stamp h3,
+.hive-cell h2,
+.stacks-drawer h2,
+.signal-channel h2,
+.arena-match h2,
+.ledger-row h2,
+.kiln-chamber h2,
+.guide-stone h2,
+.lab-slide h2,
+.weave-band h2,
+.panel-tile h2,
+.panel-list-item h3,
+.statute-clause h2 {
+  color: var(--ink) !important;
+}
+
+.manifesto-stanza p,
+.bp-sheet p,
+.bp-stamp p,
+.hive-cell p,
+.stacks-drawer p,
+.signal-channel p,
+.arena-match p,
+.ledger-row p,
+.kiln-chamber p,
+.guide-stone p,
+.lab-slide p,
+.weave-band p,
+.panel-tile p,
+.panel-list-item p,
+.statute-clause p {
+  color: var(--muted) !important;
+}
+
+.home-page-shell .field-notes,
+.home-page-shell .workshop-floor,
+.home-page-shell .launch-rails,
+.home-page-shell .gallery-section,
+.home-page-shell .pulse-strip,
+.home-page-shell .signal-gate {
+  color: var(--text) !important;
+  border-color: var(--border);
+}
+
+.home-page-shell .field-notes {
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 0%, rgba(8, 168, 248, 0.12), transparent 55%),
+    #06101c !important;
+}
+
+.home-page-shell .workshop-floor {
+  background: linear-gradient(180deg, #07131f 0%, #0a1a2e 100%) !important;
+}
+
+.home-page-shell .launch-rails {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(0, 32, 96, 0.55), transparent 40%),
+    #070d18 !important;
+}
+
+.home-page-shell .signal-gate {
+  background:
+    radial-gradient(circle at 50% 55%, rgba(8, 168, 248, 0.12), transparent 42%),
+    #050a12 !important;
+}
+
+.home-page-shell .pulse-strip {
+  background:
+    linear-gradient(180deg, rgba(0, 32, 96, 0.35), rgba(7, 13, 24, 0.9)),
+    repeating-linear-gradient(
+      -12deg,
+      transparent,
+      transparent 18px,
+      rgba(8, 168, 248, 0.04) 18px,
+      rgba(8, 168, 248, 0.04) 19px
+    ) !important;
+}
+
+.home-page-shell .gallery-section {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #050a12 0 14px,
+      #0a1220 14px 28px
+    ) !important;
+}
+
+.home-page-shell .pulse-chip {
+  background: rgba(5, 14, 28, 0.85) !important;
+  border: 1px solid rgba(16, 184, 248, 0.28) !important;
+  color: #9ad8f8 !important;
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  border-radius: 0;
+}
+
+.home-page-shell .workshop-join,
+.home-page-shell .pillar-band-cta,
+.home-page-shell .field-frame-meta a {
+  color: var(--cyan-bright) !important;
+}
+
+.home-page-shell .workshop-tag {
+  background: rgba(8, 168, 248, 0.12) !important;
+  color: #9ad8f8 !important;
+  border-left: 2px solid var(--cyan) !important;
+}
+
+.home-page-shell .signal-radar {
+  opacity: 0.55;
+}
+
+.auth-chamber {
+  --auth-accent: var(--cyan);
+  --auth-accent-soft: rgba(8, 168, 248, 0.18);
+  --auth-ink: #070d18;
+}
+
+.auth-rail-mode a.is-active,
+.auth-rail-submit {
+  background: var(--cyan) !important;
+  color: #041018 !important;
+}
+
+/* High-contrast near footer / CTA */
+.theme-cta h2 {
+  color: #f2f6fc !important;
+}
+
+.theme-cta .theme-kicker {
+  color: #10b8f8 !important;
+}
+
+.site-footer {
+  background: #050a12 !important;
+  color: #e4ebf5 !important;
+}
+
+.site-footer-kicker {
+  color: #10b8f8 !important;
+}
+
+.site-footer-brand h2,
+.site-footer-col h3 {
+  color: #f2f6fc !important;
+}
+
+.site-footer-brand h2 span,
+.site-footer-coords a,
+.site-footer-bottom a,
+.site-footer-col a:hover {
+  color: #10b8f8 !important;
+}
+
+.site-footer-lede,
+.site-footer-col a,
+.site-footer-bottom,
+.site-footer-bottom p {
+  color: #c5d2e4 !important;
+}
+
+.home-page-shell .signal-gate h2 {
+  color: #f2f6fc !important;
+}
+
+.home-page-shell .signal-gate h2 span {
+  color: #b7c6db !important;
+}

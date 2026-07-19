@@ -3,6 +3,8 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import { navItems } from '../data/navItems.js';
 import './siteChrome.css';
 
+const LOGO_SRC = '/brand/c360-logo.png';
+
 export default function SiteNav({ authMode }) {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -31,19 +33,14 @@ export default function SiteNav({ authMode }) {
       <nav className="site-nav" data-open={mobileOpen ? 'true' : 'false'} aria-label="Site">
         <div className="site-nav-inner">
           <Link to="/" className="site-nav-brand" aria-label="C360 Innovation Lab home">
-            <span className="site-nav-emblem" aria-hidden="true">
-              <span className="site-nav-orbit" />
-              <span className="site-nav-orbit site-nav-orbit-b" />
-              <span className="site-nav-mark">C360</span>
-            </span>
-            <span className="site-nav-name">Innovation Lab</span>
+            <img src={LOGO_SRC} alt="C360 Innovation Lab" className="site-nav-logo" width="260" height="120" />
           </Link>
 
           <div className="site-nav-links">
             <ul>
-              {navItems.map(([label, path]) => (
+              {navItems.filter(([, path]) => path !== '/').map(([label, path]) => (
                 <li key={path}>
-                  <NavLink to={path} end={path === '/'} className={({ isActive }) => (isActive ? 'is-active' : undefined)}>
+                  <NavLink to={path} className={({ isActive }) => (isActive ? 'is-active' : undefined)}>
                     {label}
                   </NavLink>
                 </li>
@@ -56,8 +53,8 @@ export default function SiteNav({ authMode }) {
               <Link to="/dashboard" className="site-nav-cta site-nav-cta-fill">Dashboard</Link>
             ) : (
               <>
-                {showLogin && <Link to="/login" className="site-nav-cta site-nav-cta-ghost">Login</Link>}
-                {showRegister && <Link to="/register" className="site-nav-cta site-nav-cta-fill">Register</Link>}
+                {showLogin && <Link to="/login" className="site-nav-cta site-nav-cta-ghost">Sign in</Link>}
+                {showRegister && <Link to="/register" className="site-nav-cta site-nav-cta-fill">Get started</Link>}
               </>
             )}
             <button
@@ -74,11 +71,10 @@ export default function SiteNav({ authMode }) {
       </nav>
 
       <div className={`site-nav-drawer${mobileOpen ? ' is-open' : ''}`}>
-        {navItems.map(([label, path]) => (
+        {navItems.filter(([, path]) => path !== '/').map(([label, path]) => (
           <NavLink
             key={path}
             to={path}
-            end={path === '/'}
             className={({ isActive }) => (isActive ? 'is-active' : undefined)}
             onClick={() => setMobileOpen(false)}
           >
@@ -89,8 +85,8 @@ export default function SiteNav({ authMode }) {
           <Link to="/dashboard" className="site-nav-cta site-nav-cta-fill" onClick={() => setMobileOpen(false)}>Dashboard</Link>
         ) : (
           <div className="site-nav-drawer-auth">
-            {showLogin && <Link to="/login" className="site-nav-cta site-nav-cta-ghost" onClick={() => setMobileOpen(false)}>Login</Link>}
-            {showRegister && <Link to="/register" className="site-nav-cta site-nav-cta-fill" onClick={() => setMobileOpen(false)}>Register</Link>}
+            {showLogin && <Link to="/login" className="site-nav-cta site-nav-cta-ghost" onClick={() => setMobileOpen(false)}>Sign in</Link>}
+            {showRegister && <Link to="/register" className="site-nav-cta site-nav-cta-fill" onClick={() => setMobileOpen(false)}>Get started</Link>}
           </div>
         )}
       </div>

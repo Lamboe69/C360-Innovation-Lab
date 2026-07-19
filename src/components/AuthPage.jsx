@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { photos } from '../data/media.js';
 import AuthTopBar from './AuthTopBar.jsx';
 import './authChamber.css';
 
@@ -239,8 +240,8 @@ export default function AuthPage({ mode }) {
   }
 
   const planeSrc = isLogin
-    ? 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1800&q=80'
-    : 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1800&q=80';
+    ? photos.c360ShirtsWalk
+    : photos.armsRaisedDrone;
 
   return (
     <div className={`auth-chamber auth-chamber--${isLogin ? 'ingress' : 'genesis'}`}>
@@ -279,14 +280,14 @@ export default function AuthPage({ mode }) {
           </h1>
           <p className="auth-chamber-lede">
             {isLogin
-              ? 'Re-enter the lab through a living credential aperture — your programs, clubs, and mentorship wait on the other side.'
-              : 'Forge a personal account inside the genesis chamber. One identity for clubs, mentorship, resources, and launches.'}
+              ? 'Re-enter C360 — your lab, AI Career Platform membership, network links, and projects wait on the other side.'
+              : 'Create one identity for C360 Labs, the premium AI Career Platform, the Global Network, and Projects.'}
           </p>
 
           <ul className="auth-chamber-signals">
             {(isLogin
-              ? ['Resume learning paths', 'Sync club updates', 'Meet mentors live']
-              : ['Claim your username', 'Unlock program rails', 'Join the network']
+              ? ['Resume your lab', 'Career Platform access', 'Network & projects']
+              : ['Join a C360 Lab', 'Unlock Career Platform', 'Enter the network']
             ).map((item, index) => (
               <li key={item}>
                 <span>{String(index + 1).padStart(2, '0')}</span>
@@ -478,13 +479,13 @@ export default function AuthPage({ mode }) {
           <nav className="auth-rail-links" aria-label="Helpful links">
             {(isLogin
               ? [
-                  ['Browse Programs', '/programs'],
-                  ['Explore Clubs', '/clubs'],
+                  ['C360 Labs', '/labs'],
+                  ['Career Platform', '/career'],
                   ['Home', '/'],
                 ]
               : [
-                  ['Programs', '/programs'],
-                  ['Competitions', '/competitions'],
+                  ['Labs', '/labs'],
+                  ['Projects', '/projects'],
                   ['About', '/about'],
                   ['Home', '/'],
                 ]

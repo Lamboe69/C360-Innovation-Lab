@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import DirectoryPanel from '../components/DirectoryPanel.jsx';
 import Footer from '../components/Footer.jsx';
 import SiteNav from '../components/SiteNav.jsx';
+import { photos } from '../data/media.js';
 import './publicThemes.css';
 
 function StatsRibbon({ stats }) {
@@ -19,25 +21,28 @@ function StatsRibbon({ stats }) {
 
 function ThemeCta({ page, isLoggedIn }) {
   return (
-    <section className="theme-cta">
-      <div className="theme-cta-inner">
-        <p className="theme-kicker">Next Step</p>
-        <h2>Keep building with C360</h2>
-        <div className="theme-actions">
-          {isLoggedIn ? (
-            <>
-              <Link to="/dashboard" className="btn-hero-primary">Go to Dashboard <span className="btn-arrow">→</span></Link>
-              <Link to="/learn" className="btn-hero-outline">Start Learning</Link>
-            </>
-          ) : (
-            <>
-              <Link to={page.cta[1]} className="btn-hero-primary">{page.cta[0]} <span className="btn-arrow">→</span></Link>
-              <Link to="/register" className="btn-hero-outline">Create Account</Link>
-            </>
-          )}
+    <>
+      {page.directory ? <DirectoryPanel config={page.directory} /> : null}
+      <section className="theme-cta">
+        <div className="theme-cta-inner">
+          <p className="theme-kicker">Next Step</p>
+          <h2>Grow with C360’s four pillars</h2>
+          <div className="theme-actions">
+            {isLoggedIn ? (
+              <>
+                <Link to="/dashboard" className="btn-hero-primary">Go to Dashboard <span className="btn-arrow">→</span></Link>
+                <Link to="/learn" className="btn-hero-outline">Career Platform</Link>
+              </>
+            ) : (
+              <>
+                <Link to={page.cta[1]} className="btn-hero-primary">{page.cta[0]} <span className="btn-arrow">→</span></Link>
+                <Link to="/register" className="btn-hero-outline">Create Account</Link>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
 
@@ -47,7 +52,7 @@ function cardParts(card) {
 
 function ManifestoLayout({ page, isLoggedIn }) {
   const orbitImage = page.sections.find((section) => section[2])?.[2]
-    || 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80';
+    || photos.ubuntuGroup;
 
   return (
     <>
@@ -112,7 +117,7 @@ function BlueprintLayout({ page, isLoggedIn }) {
           <p className="bp-lead">{page.description}</p>
           <div className="theme-actions">
             <Link to={page.cta[1]} className="btn-hero-primary">{page.cta[0]} <span className="btn-arrow">→</span></Link>
-            <Link to="/clubs" className="btn-hero-outline">Browse Clubs</Link>
+            <Link to="/labs" className="btn-hero-outline">Browse Labs</Link>
           </div>
         </div>
         <aside className="bp-dial" aria-label="Program overview">
@@ -235,28 +240,28 @@ function HiveLayout({ page, isLoggedIn }) {
 
           <div className="hive-facet hive-facet-core">
             <img
-              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1600&q=80"
+              src={photos.ubuntuGroup}
               alt=""
               loading="eager"
             />
           </div>
           <div className="hive-facet hive-facet-a">
             <img
-              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80"
+              src={photos.studentsC360}
               alt=""
               loading="lazy"
             />
           </div>
           <div className="hive-facet hive-facet-b">
             <img
-              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80"
+              src={photos.clappingLine}
               alt=""
               loading="lazy"
             />
           </div>
           <div className="hive-facet hive-facet-c">
             <img
-              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80"
+              src={photos.youthSmile}
               alt=""
               loading="lazy"
             />
@@ -310,7 +315,7 @@ function StacksLayout({ page, isLoggedIn }) {
           <p className="stacks-lead">{page.description}</p>
           <div className="theme-actions">
             <Link to={page.cta[1]} className="btn-hero-primary">{page.cta[0]} <span className="btn-arrow">→</span></Link>
-            <Link to="/programs" className="btn-hero-outline">Browse Programs</Link>
+            <Link to="/career" className="btn-hero-outline">Career Platform</Link>
           </div>
           <ul className="stacks-pulse" aria-label="Resource highlights">
             {page.stats.slice(0, 3).map(([value, label]) => (
@@ -325,9 +330,9 @@ function StacksLayout({ page, isLoggedIn }) {
         <div className="stacks-vault" aria-hidden="true">
           <div className="stacks-vault-shelf" />
           {[
-            'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=900&q=80',
-            'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=900&q=80',
-            page.sections[0]?.[2] || 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=900&q=80',
+            photos.raceForPeaceSign,
+            photos.speakerRacePeace,
+            page.sections[0]?.[2] || photos.teamBranded,
           ].map((src, index) => (
             <figure
               key={src + index}
@@ -435,7 +440,7 @@ function SignalLayout({ page, isLoggedIn }) {
           <div className="signal-wave signal-wave-b" />
           <div className="signal-lens">
             <img
-              src="https://images.unsplash.com/photo-1423666639041-f56000c27a9a?auto=format&fit=crop&w=1600&q=80"
+              src={photos.speakerC360Polo}
               alt=""
               loading="eager"
             />
@@ -503,14 +508,14 @@ function ArenaLayout({ page, isLoggedIn }) {
         <div className="arena-hero-field" aria-hidden="true">
           <div className="arena-duel arena-duel-back">
             <img
-              src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80"
+              src={photos.danceBlueJump}
               alt=""
               loading="lazy"
             />
           </div>
           <div className="arena-duel arena-duel-front">
             <img
-              src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1600&q=80"
+              src={photos.culturalHeaddress}
               alt=""
               loading="eager"
             />
