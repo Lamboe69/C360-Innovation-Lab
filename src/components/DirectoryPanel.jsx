@@ -6,9 +6,19 @@ function matchesQuery(text, query) {
   return text.toLowerCase().includes(query.trim().toLowerCase());
 }
 
-export default function DirectoryPanel({ config }) {
+function partnerInitials(name) {
+  return name
+    .split(' ')
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+export default function DirectoryPanel({ config, embedded = false }) {
   const [query, setQuery] = useState('');
-  const [openId, setOpenId] = useState(null);
+  const [openId, setOpenId] = useState(config.kind === 'network' ? networkCategories[0]?.id : null);
 
   const labs = useMemo(() => {
     if (config.kind !== 'labs') return [];
@@ -55,11 +65,18 @@ export default function DirectoryPanel({ config }) {
       .filter((category) => category.items.length > 0 || !query.trim());
   }, [config.kind, query]);
 
+  const toggleCategory = (categoryId) => {
+    setOpenId((current) => (current === categoryId ? null : categoryId));
+  };
+
   return (
-    <section className="directory-panel" aria-label={config.title}>
+    <section
+      className={`directory-panel${embedded ? ' directory-panel-embedded' : ''}${config.kind === 'network' ? ' directory-panel-network' : ''}`}
+      aria-label={config.title}
+    >
       <div className="directory-panel-head">
         <div>
-          <p className="directory-panel-kicker">Search</p>
+          <p className="directory-panel-kicker">{config.kind === 'network' ? 'Partner categories' : 'Search'}</p>
           <h2>{config.title}</h2>
         </div>
         <label className="directory-panel-search">
@@ -106,7 +123,10 @@ export default function DirectoryPanel({ config }) {
                   onClick={() => setOpenId((current) => (current === project.id ? null : project.id))}
                 >
                   <span>{project.title}</span>
-                  <em>{project.items.length}</em>
+                  <span className="directory-accordion-meta">
+                    <em>{project.items.length}</em>
+                    <span className="directory-accordion-chevron" aria-hidden="true" />
+                  </span>
                 </button>
                 {isOpen && (
                   <div className="directory-accordion-body">
@@ -131,33 +151,41 @@ export default function DirectoryPanel({ config }) {
       )}
 
       {config.kind === 'network' && (
-        <div className="directory-accordions">
+        <div className="network-directory">
           {network.length === 0 && <p className="directory-empty">No network entries match that search.</p>}
           {network.map((category) => {
             const isOpen = openId === category.id || Boolean(query.trim());
             return (
-              <div className={`directory-accordion${isOpen ? ' is-open' : ''}`} key={category.id}>
+              <div className={`network-category${isOpen ? ' is-open' : ''}`} key={category.id}>
                 <button
                   type="button"
-                  className="directory-accordion-trigger"
+                  className="network-category-trigger"
                   aria-expanded={isOpen}
-                  onClick={() => setOpenId((current) => (current === category.id ? null : category.id))}
+                  onClick={() => toggleCategory(category.id)}
                 >
-                  <span>{category.label}</span>
-                  <em>{category.items.length}</em>
+                  <span className="network-category-label">
+                    <strong>{category.label}</strong>
+                    <em>{category.items.length} partners</em>
+                  </span>
+                  <span className="network-category-chevron" aria-hidden="true" />
                 </button>
-                {isOpen && (
-                  <div className="directory-accordion-body">
-                    <ul>
-                      {category.items.map((item) => (
-                        <li key={item.name}>
-                          <strong>{item.name}</strong>
-                          <p>{item.detail}</p>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                <div className="network-category-panel" hidden={!isOpen}>
+                  <ul className="network-partner-grid">
+                    {category.items.map((item) => (
+                      <li key={item.name}>
+                        <article className="network-partner-card">
+                          <div className="network-partner-mark" aria-hidden="true">
+                            {partnerInitials(item.name)}
+                          </div>
+                          <div className="network-partner-copy">
+                            <h3>{item.name}</h3>
+                            <p>{item.detail}</p>
+                          </div>
+                        </article>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             );
           })}

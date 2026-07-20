@@ -33,7 +33,7 @@ export default function LearnPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    document.title = 'AI Career Platform - C360 Innovation Lab';
+    document.title = 'Career Engine - C360 Innovation Lab';
     const timer = setTimeout(() => setLoading(false), 400);
     return () => clearTimeout(timer);
   }, []);

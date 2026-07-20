@@ -4,7 +4,7 @@ export const pillarNavItems = [
   ['Home', '/'],
   ['About', '/about'],
   ['Labs', '/labs'],
-  ['Career Platform', '/career'],
+  ['Career Engine', '/career'],
   ['Network', '/network'],
   ['Projects', '/projects'],
   ['Contact', '/contact'],
@@ -110,7 +110,7 @@ export const c360Projects = [
       },
       {
         name: 'Revel Roots',
-        body: 'A fellowship bringing Europeans to Uganda to strengthen food systems through collaborative learning with local communities and labs.',
+        body: 'A self-sponsored fellowship bringing learners to Uganda to strengthen food systems through collaborative learning with local communities and labs.',
       },
     ],
   },

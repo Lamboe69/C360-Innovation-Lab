@@ -43,3 +43,12 @@ export const photoList = Object.values(photos);
 export function photoAt(index) {
   return photoList[index % photoList.length];
 }
+
+/** Professional headshots for About page team cards — drop JPGs in /public/photos/team/ */
+export function teamPortrait(slug) {
+  return `/photos/team/${slug}.jpg`;
+}
+
+export function teamPortraitFallback(slug) {
+  return `/photos/team/${slug}.svg`;
+}

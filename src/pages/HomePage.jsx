@@ -7,7 +7,7 @@ import './homePage.css';
 
 const marqueeItems = [
   'C360 Labs',
-  'AI Career Platform',
+  'Career Engine',
   'Global Network',
   'C360 Projects',
   'Mentorship',
@@ -30,7 +30,7 @@ const heroCarousel = [
   {
     src: photos.mentorField,
     alt: 'C360 mentor guiding students in an outdoor field session',
-    title: 'AI Career Platform',
+    title: 'Career Engine',
     line: 'Premium assessments, AI agents, and tailored career pathways.',
   },
   {
@@ -71,7 +71,7 @@ const stories = [
 ];
 
 const clubs = [
-  [photos.studentsC360, 'Institutional · Kampala', 'Makerere University Lab', 'University lab for mentorship, research, idea development, and Career Platform pathways.'],
+  [photos.studentsC360, 'Institutional · Kampala', 'Makerere University Lab', 'University lab for mentorship, research, idea development, and Career Engine pathways.'],
   [photos.clappingLine, 'Institutional · Gulu', 'St. Joseph College–Layibi Lab', 'Secondary school makers growing skills, ideas, and peer leadership.'],
   [photos.paimolSigns, 'Community · Paimol', 'Greater Paimol Community Lab', 'Community enterprise, local solutions, and personal growth.'],
   [photos.crowdOrange, 'Community · Gulu', 'Gulu Community Lab', 'Youth skills, civic projects, and mentorship in community.'],
@@ -80,8 +80,8 @@ const clubs = [
 ];
 
 const cards = [
-  ['01 / LABS', photos.ubuntuGroup, 'C360 Labs', 'Institutional and community labs where people access mentorship, develop ideas, grow as individuals, and can subscribe to the AI Career Platform.', '/labs', 'Find a Lab'],
-  ['02 / CAREER', photos.mentorField, 'AI Career Platform', 'Premium questionnaires, SWOT assessments, AI agents, progress dashboards, discussion rooms, and pen-pal links for paid members.', '/career', 'View Platform'],
+  ['01 / LABS', photos.ubuntuGroup, 'C360 Labs', 'Institutional and community labs where people access mentorship, develop ideas, grow as individuals, and can subscribe to the Career Engine.', '/labs', 'Find a Lab'],
+  ['02 / CAREER', photos.mentorField, 'Career Engine', 'Premium questionnaires, SWOT assessments, AI agents, progress dashboards, discussion rooms, and pen-pal links for paid members.', '/career', 'View Engine'],
   ['03 / NETWORK', photos.walkPoliceEscort, 'C360 Global Network', 'Searchable lists of schools, mentors, industries, businesses, companies, donors, universities, and research agencies.', '/network', 'Browse Network'],
   ['04 / PROJECTS', photos.culturalDrums, 'C360 Projects', 'Agribusiness & Food Systems, Media, Talent Mobility, Sports4Development, Revolving Fund, and Smart Climate Awareness.', '/projects', 'See Projects'],
 ];
@@ -89,7 +89,7 @@ const cards = [
 const stats = [
   ['4', 'Operating', 'Pillars'],
   ['5+', 'Listed', 'Labs'],
-  ['Premium', 'Career', 'Platform'],
+  ['Premium', 'Career', 'Engine'],
   ['8', 'Network', 'Categories'],
 ];
 
@@ -109,7 +109,7 @@ export default function HomePage() {
   const goPrev = () => goToSlide(heroIndex - 1, -1);
 
   useEffect(() => {
-    document.title = 'C360 Innovation Lab — Labs, Career Platform, Network & Projects';
+    document.title = 'C360 Innovation Lab — Labs, Career Engine, Network & Projects';
     setIsLoggedIn(!!localStorage.getItem('c360_logged_in'));
 
     const observer = new IntersectionObserver(entries => {
@@ -327,7 +327,7 @@ export default function HomePage() {
             <em>C360 Labs</em>
           </div>
           <h2 id="labs-title">Walk the lab corridor.</h2>
-          <p>Institutional and community labs for mentorship, ideas, and growth — subscribe to the Career Platform when you are ready.</p>
+          <p>Institutional and community labs for mentorship, ideas, and growth — subscribe to the Career Engine when you are ready.</p>
         </div>
         <div className="workshop-corridor">
           {clubs.slice(0, 4).map(([src, meta, name, blurb], index) => (
@@ -423,12 +423,12 @@ export default function HomePage() {
             {isLoggedIn ? (
               <>
                 <Link to="/dashboard" className="btn-hero-primary">Go to Dashboard <span className="btn-arrow">→</span></Link>
-                <Link to="/learn" className="btn-hero-outline">Career Platform</Link>
+                <Link to="/learn" className="btn-hero-outline">Career Engine</Link>
               </>
             ) : (
               <>
                 <Link to="/labs" className="btn-hero-primary">Join a Lab <span className="btn-arrow">→</span></Link>
-                <Link to="/career" className="btn-hero-outline">AI Career Platform</Link>
+                <Link to="/career" className="btn-hero-outline">Career Engine</Link>
               </>
             )}
           </div>

@@ -280,14 +280,14 @@ export default function AuthPage({ mode }) {
           </h1>
           <p className="auth-chamber-lede">
             {isLogin
-              ? 'Re-enter C360 — your lab, AI Career Platform membership, network links, and projects wait on the other side.'
-              : 'Create one identity for C360 Labs, the premium AI Career Platform, the Global Network, and Projects.'}
+              ? 'Re-enter C360 — your lab, Career Engine membership, network links, and projects wait on the other side.'
+              : 'Create one identity for C360 Labs, the premium Career Engine, the Global Network, and Projects.'}
           </p>
 
           <ul className="auth-chamber-signals">
             {(isLogin
-              ? ['Resume your lab', 'Career Platform access', 'Network & projects']
-              : ['Join a C360 Lab', 'Unlock Career Platform', 'Enter the network']
+              ? ['Resume your lab', 'Career Engine access', 'Network & projects']
+              : ['Join a C360 Lab', 'Unlock Career Engine', 'Enter the network']
             ).map((item, index) => (
               <li key={item}>
                 <span>{String(index + 1).padStart(2, '0')}</span>
@@ -480,7 +480,7 @@ export default function AuthPage({ mode }) {
             {(isLogin
               ? [
                   ['C360 Labs', '/labs'],
-                  ['Career Platform', '/career'],
+                  ['Career Engine', '/career'],
                   ['Home', '/'],
                 ]
               : [

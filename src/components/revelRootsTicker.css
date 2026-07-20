@@ -1,0 +1,218 @@
+.revel-ticker {
+  --rt-ink: #041018;
+  --rt-navy: #002060;
+  --rt-cyan: #10b8f8;
+  --rt-amber: #f0c440;
+  --rt-height: 56px;
+  position: fixed;
+  top: 80px;
+  left: 0;
+  right: 0;
+  z-index: 450;
+  display: grid;
+  grid-template-columns: 52px 1fr auto;
+  height: var(--rt-height);
+  min-height: var(--rt-height);
+  margin: 0;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, #03101c 0%, #06243a 42%, #03101c 100%);
+  border-block: 1px solid rgba(16, 184, 248, 0.45);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.revel-ticker-spacer {
+  height: 56px;
+  flex-shrink: 0;
+}
+
+.revel-ticker-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(180deg, #002060, #061830);
+  border-right: 1px solid rgba(16, 184, 248, 0.35);
+  font-family: var(--font-m, 'DM Sans', sans-serif);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: rgba(16, 184, 248, 0.9);
+}
+
+.revel-ticker-viewport {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.revel-ticker-scan {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 22%;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(16, 184, 248, 0.18), transparent);
+  animation: revelScan 4.8s ease-in-out infinite;
+}
+
+.revel-ticker-track {
+  display: flex;
+  width: max-content;
+  gap: 0;
+  animation: revelMarquee 58s linear infinite;
+  will-change: transform;
+}
+
+.revel-ticker-chunk {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 28px;
+  white-space: nowrap;
+  color: rgba(226, 232, 240, 0.88);
+  font-size: 0.84rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.revel-ticker-chunk em {
+  font-style: normal;
+  font-family: var(--font-d, 'DM Sans', sans-serif);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.revel-ticker-chunk strong {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rt-cyan);
+}
+
+.revel-ticker-stamp {
+  display: inline-grid;
+  place-items: center;
+  min-width: 46px;
+  height: 22px;
+  padding: 0 8px;
+  border: 1.5px solid rgba(240, 196, 64, 0.85);
+  border-radius: 2px;
+  color: #f0c440;
+  font-family: var(--font-m, 'DM Sans', sans-serif);
+  font-size: 0.58rem;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  transform: rotate(-8deg);
+  box-shadow: inset 0 0 0 1px rgba(240, 196, 64, 0.25);
+  animation: revelStamp 2.8s ease-in-out infinite;
+}
+
+.revel-ticker-cta {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 0 18px 0 16px;
+  text-decoration: none;
+  color: #041018;
+  background: linear-gradient(135deg, #10b8f8 0%, #08a8f8 55%, #0066c2 140%);
+  clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px);
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.revel-ticker-cta:hover {
+  filter: brightness(1.08);
+  transform: translateX(-2px);
+}
+
+.revel-ticker-cta-kicker {
+  font-family: var(--font-m, 'DM Sans', sans-serif);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.revel-ticker-cta-main {
+  font-family: var(--font-d, 'DM Sans', sans-serif);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.revel-ticker-cta-arrow {
+  font-size: 1.1rem;
+  transition: transform 0.2s ease;
+}
+
+.revel-ticker-cta:hover .revel-ticker-cta-arrow {
+  transform: translateX(4px);
+}
+
+@keyframes revelMarquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes revelScan {
+  0% { transform: translateX(-30%); }
+  100% { transform: translateX(480%); }
+}
+
+@keyframes revelStamp {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; box-shadow: 0 0 16px rgba(240, 196, 64, 0.35), inset 0 0 0 1px rgba(240, 196, 64, 0.25); }
+}
+
+@media (max-width: 720px) {
+  .revel-ticker {
+    grid-template-columns: 1fr auto;
+  }
+
+  .revel-ticker-rail {
+    display: none;
+  }
+
+  .revel-ticker-cta-kicker {
+    display: none;
+  }
+
+  .revel-ticker-chunk {
+    font-size: 0.78rem;
+    padding: 0 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  .revel-ticker {
+    top: 70px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .revel-ticker-track,
+  .revel-ticker-scan,
+  .revel-ticker-stamp {
+    animation: none;
+  }
+
+  .revel-ticker-track {
+    transform: none;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .revel-ticker-chunk:not(:first-child) {
+    display: none;
+  }
+}

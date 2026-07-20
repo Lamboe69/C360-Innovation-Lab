@@ -5,6 +5,7 @@ import DashboardPage from './components/DashboardPage.jsx';
 import LearnPage from './components/LearnPage.jsx';
 import HomePage from './pages/HomePage.jsx';
 import PublicContentPage from './pages/PublicContentPage.jsx';
+import RevelRootsApplyPage from './pages/RevelRootsApplyPage.jsx';
 import NotFoundPage from './components/NotFoundPage.jsx';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
 import RouteLoader from './components/RouteLoader.jsx';
@@ -65,6 +66,7 @@ export default function App() {
           <Route path="/clubs" element={<Navigate to="/labs" replace />} />
           <Route path="/programs" element={<Navigate to="/career" replace />} />
           <Route path="/partnerships" element={<Navigate to="/network" replace />} />
+          <Route path="/projects/revel-roots" element={<RevelRootsApplyPage />} />
           {Object.entries(publicPages).map(([path, page]) => (
             <Route key={path} path={path} element={<PublicContentPage page={page} path={path} />} />
           ))}

@@ -1,5 +1,6 @@
 import { c360Labs, c360Projects, networkCategories } from '../data/pillars.js';
 import { photos, photoAt } from '../data/media.js';
+import { c360Team } from '../data/team.js';
 
 const labPhotos = [
   photos.ubuntuGroup,
@@ -11,7 +12,7 @@ const labPhotos = [
 
 const labSections = c360Labs.map((lab, index) => [
   lab.name,
-  `${lab.type} lab · ${lab.region}. ${lab.focus}. Members join for mentorship, idea development, personal growth, and optional access to the AI Career Platform.`,
+  `${lab.type} lab · ${lab.region}. ${lab.focus}. Members join for mentorship, idea development, personal growth, and optional access to the Career Engine.`,
   labPhotos[index % labPhotos.length],
 ]);
 
@@ -49,47 +50,58 @@ const networkSections = networkCategories.map((category, index) => [
 
 export const publicPages = {
   '/about': {
-    title: 'About C360',
+    title: 'About Us',
     theme: 'manifesto',
     eyebrow: 'Four Pillars',
     description:
-      'C360 Innovation Lab operates under four connected pillars: C360 Labs, the AI Career Platform, the C360 Global Network, and C360 Projects — so people can grow in community, access tailored career support, connect across institutions, and deliver real-world impact.',
+      '360-degree career support that connects discovery to action — through labs, the Career Engine, a global network, and projects that turn ideas into opportunity.',
+    intro: {
+      eyebrow: 'About Us',
+      title: 'Uganda’s career gateway — where ideas become opportunity.',
+      summary:
+        'C360 Innovation Lab is Uganda’s career gateway — where ideas become opportunity. We work inside schools, institutions, and communities to help young people discover who they can become and give them a real path to get there.',
+      more: [
+        'At C360, a young person doesn’t just learn about a career — they join a lab, generate an idea, and watch that idea grow: into a funded pilot, a community project, a job, or a global opportunity.',
+        'We call it 360-degree career support because we close the loop that most programmes leave open. Career guidance without a next step is just information. We connect discovery to action — pairing AI-powered career intelligence with real human mentorship, hands-on innovation labs, a revolving fund to prototype ideas, and a global network ready to hire, fund, or partner with what our members build. We complement Uganda’s current competency-based curriculum.',
+      ],
+      tagline: 'This is where classroom ends and career begins.',
+    },
     cta: ['Explore Labs', '/labs'],
     stats: [
-      ['4', 'Pillars'],
-      [`${c360Labs.length}+`, 'Labs'],
-      ['Premium', 'Career Platform'],
+      ['Labs', 'Mentorship'],
+      ['Career Engine', 'AI + Mentors'],
       ['Global', 'Network'],
-      [`${c360Projects.length}`, 'Project Tracks'],
+      ['Projects', 'Impact'],
     ],
     sections: [
       [
-        'Pillar 1 — C360 Labs',
-        'Institutional and community-based labs where people join for mentorship, idea development, and personal growth. Members can also subscribe to the AI Career Platform for in-depth career support. As new labs open — from universities to primary schools to community hubs — they are added to our searchable Labs directory.',
+        'C360 Labs',
+        'Institutional and community-based labs where people join for mentorship, idea development, and personal growth. Members can also subscribe to the Career Engine for in-depth career support. As new labs open — from universities to primary schools to community hubs — they are added to our searchable Labs directory.',
         photos.ubuntuGroup,
       ],
       [
-        'Pillar 2 — AI Career Platform',
-        'A premium web platform for paid members. Questionnaires assess career needs, personal development, career plans, and SWOT (Strengths, Weaknesses, Opportunities, Techniques). AI-trained agents deliver tailored notifications, age-appropriate growth pathways, discussion rooms, and pen-pal links through a career progress dashboard.',
+        'C360 Career Engine',
+        'Your career pathway — mapped by AI, walked with a mentor. The C360 Career Engine starts with a guided discovery profile that maps your strengths, interests, and Uganda’s real labour market into 3–5 personalised career pathways. But a recommendation isn’t a relationship — so every pathway connects you to a real person: a vetted mentor in Uganda, the UK, or Europe who has walked the path you’re considering. AI tells you what’s possible. Mentorship helps you actually get there. Together, they turn a career quiz into a career — with skill-building resources matched to your gaps, one-on-one sessions with working professionals, and a portfolio that grows every time you complete a step. This is career guidance that doesn’t stop at advice.',
         photos.mentorField,
       ],
       [
-        'Pillar 3 — C360 Global Network',
+        'C360 Global Network',
         'Schools, mentors, industries, businesses, companies, donors, institutions/universities, and research agencies working with us. Each network category is searchable so you can quickly find a mentor, school, company, or partner.',
         photos.armsRaisedDrone,
       ],
       [
-        'Pillar 4 — C360 Projects',
-        'Programs run through our labs: Agribusiness & Food Systems (including Rural Farmer Support and Revel Roots), C360 Media, Talent Mobility, Sports4Development, the Revolving Fund, and Smart Climate Awareness.',
+        'C360 Projects',
+        'Programs run through our labs: Agribusiness & Food Systems (including Rural Farmer Support and self-sponsored Revel Roots fellowship travel to Uganda), C360 Media, Talent Mobility, Sports4Development, the Revolving Fund, and Smart Climate Awareness.',
         photos.culturalDrums,
       ],
     ],
     cards: [
       ['C360 Labs', 'Join a lab near you.', '/labs'],
-      ['AI Career Platform', 'Premium tailored support.', '/career'],
+      ['C360 Career Engine', 'AI pathways + real mentors.', '/career'],
       ['Global Network', 'Search our partners.', '/network'],
       ['C360 Projects', 'See what labs deliver.', '/projects'],
     ],
+    team: c360Team,
   },
 
   '/labs': {
@@ -97,18 +109,18 @@ export const publicPages = {
     theme: 'hive',
     eyebrow: 'Pillar 01',
     description:
-      'Institutional and community-based labs. Join for mentorship, develop your ideas, grow as an individual — and optionally subscribe to the AI Career Platform for deeper career support. Search the directory as new labs open worldwide.',
+      'Institutional and community-based labs. Join for mentorship, develop your ideas, grow as an individual — and optionally subscribe to the Career Engine for deeper career support. Search the directory as new labs open worldwide.',
     cta: ['Join a Lab', '/register'],
     stats: [
-      [`${c360Labs.length}`, 'Listed Labs'],
+      [`${c360Labs.length}`, 'Labs'],
       ['Institutional', '& Community'],
       ['Mentorship', 'Inside Labs'],
       ['Ideas', 'Developed'],
-      ['Career', 'Platform Access'],
+      ['Career', 'Engine Access'],
     ],
     sections: labSections,
     cards: [
-      ['AI Career Platform', 'Premium assessments & agents.', '/career'],
+      ['Career Engine', 'Premium assessments & agents.', '/career'],
       ['C360 Projects', 'What labs deliver in the field.', '/projects'],
       ['Global Network', 'Mentors & partner schools.', '/network'],
       ['Contact', 'Open or join a lab.', '/contact'],
@@ -117,7 +129,7 @@ export const publicPages = {
   },
 
   '/career': {
-    title: 'AI Career Platform',
+    title: 'Career Engine',
     theme: 'blueprint',
     eyebrow: 'Pillar 02 · Premium',
     description:
@@ -153,20 +165,14 @@ export const publicPages = {
       ],
       [
         'Linked from C360 Labs',
-        'Lab members can subscribe to the AI Career Platform for in-depth career support while continuing mentorship and idea development in their lab.',
+        'Lab members can subscribe to the Career Engine for in-depth career support while continuing mentorship and idea development in their lab.',
         photoAt(16),
       ],
       [
         'Premium access',
-        'Platform capabilities are available to paid members. Create an account, complete onboarding assessments, and unlock the full career workspace.',
+        'Engine capabilities are available to paid members. Create an account, complete onboarding assessments, and unlock the full career workspace.',
         photoAt(17),
       ],
-    ],
-    cards: [
-      ['Open Platform', 'Paid member workspace.', '/learn'],
-      ['Join a Lab', 'Community + mentorship first.', '/labs'],
-      ['Register', 'Start your member profile.', '/register'],
-      ['Contact', 'Ask about premium access.', '/contact'],
     ],
   },
 
@@ -188,21 +194,22 @@ export const publicPages = {
     cards: [
       ['C360 Labs', 'Where network meets local action.', '/labs'],
       ['Projects', 'Shared delivery with partners.', '/projects'],
-      ['Career Platform', 'Mentorship meets premium support.', '/career'],
+      ['Career Engine', 'Mentorship meets premium support.', '/career'],
       ['Contact', 'Join the network.', '/contact'],
     ],
-    directory: { kind: 'network', title: 'Network directory', placeholder: 'Search mentors, schools, companies…' },
+    directory: { kind: 'network', title: 'Browse the network', placeholder: 'Search mentors, schools, companies…' },
   },
 
   '/projects': {
     title: 'C360 Projects',
     theme: 'arena',
+    sectionHeader: 'title',
     eyebrow: 'Pillar 04',
     description:
       'Projects run by C360 Innovation Labs — from agribusiness and media to talent mobility, sports for development, revolving finance, and climate-smart farming.',
     cta: ['Explore Labs', '/labs'],
     stats: [
-      [`${c360Projects.length}`, 'Project Tracks'],
+      [`${c360Projects.length}`, 'Projects'],
       ['Food', 'Systems'],
       ['Media', '& Voice'],
       ['Talent', 'Mobility'],
@@ -215,7 +222,7 @@ export const publicPages = {
       ['Revolving Fund', 'Capital for lab start-ups.', '/projects'],
       ['Labs', 'Where projects grow.', '/labs'],
     ],
-    directory: { kind: 'projects', title: 'Project tracks', placeholder: 'Search projects by name…' },
+    directory: { kind: 'projects', title: 'Projects', placeholder: 'Search projects by name…' },
   },
 
   '/contact': {
@@ -223,7 +230,7 @@ export const publicPages = {
     theme: 'signal',
     eyebrow: 'Start A Conversation',
     description:
-      'Reach out to join a lab, inquire about AI Career Platform membership, join the Global Network, partner on a project, or open a new C360 Lab.',
+      'Reach out to join a lab, inquire about Career Engine membership, join the Global Network, partner on a project, or open a new C360 Lab.',
     cta: ['Create Account', '/register'],
     stats: [
       ['Labs', 'Join / Open'],
@@ -239,7 +246,7 @@ export const publicPages = {
         photoAt(18),
       ],
       [
-        'AI Career Platform',
+        'Career Engine',
         'Questions about premium membership, assessments, and member access.',
         photoAt(19),
       ],
@@ -269,7 +276,7 @@ export const publicPages = {
       ['Partnerships', 'partners@c360innovation.org'],
       ['Support', 'help@c360innovation.org'],
       ['Explore Labs', 'Find a lab near you.', '/labs'],
-      ['Career Platform', 'Premium member access.', '/career'],
+      ['Career Engine', 'Premium member access.', '/career'],
       ['Global Network', 'Browse partners.', '/network'],
     ],
   },
@@ -280,8 +287,8 @@ export const publicPages = {
     theme: 'stacks',
     eyebrow: 'Across The Pillars',
     description:
-      'Guides and materials that support C360 Labs, AI Career Platform members, Global Network partners, and project teams.',
-    cta: ['Open Career Platform', '/career'],
+      'Guides and materials that support C360 Labs, Career Engine members, Global Network partners, and project teams.',
+    cta: ['Open Career Engine', '/career'],
     stats: [['Labs', 'Toolkits'], ['Career', 'Guides'], ['Network', 'Briefs'], ['Projects', 'Playbooks']],
     sections: [
       ['Lab facilitation guides', 'Run meetings, mentorship circles, and idea sprints inside C360 Labs.', photoAt(24)],
@@ -291,7 +298,7 @@ export const publicPages = {
     ],
     cards: [
       ['Labs', 'Join a lab.', '/labs'],
-      ['Career Platform', 'Premium workspace.', '/career'],
+      ['Career Engine', 'Premium workspace.', '/career'],
       ['Network', 'Find partners.', '/network'],
       ['Projects', 'See delivery tracks.', '/projects'],
     ],
@@ -312,7 +319,7 @@ export const publicPages = {
     cards: [
       ['Labs', 'Build with peers.', '/labs'],
       ['Projects', 'Field delivery.', '/projects'],
-      ['Career Platform', 'Polish your pathway.', '/career'],
+      ['Career Engine', 'Polish your pathway.', '/career'],
     ],
   },
   '/financial-literacy': {
@@ -320,8 +327,8 @@ export const publicPages = {
     theme: 'ledger',
     eyebrow: 'Skills For Labs & Ventures',
     description:
-      'Money skills that support lab members, revolving-fund applicants, and career platform members building sustainable pathways.',
-    cta: ['Career Platform', '/career'],
+      'Money skills that support lab members, revolving-fund applicants, and Career Engine members building sustainable pathways.',
+    cta: ['Career Engine', '/career'],
     stats: [['Budget', 'Skills'], ['Venture', 'Ready'], ['Fund', 'Aware']],
     sections: [
       ['Personal finance', 'Budgeting and saving for learners in labs.', photoAt(31)],
@@ -331,7 +338,7 @@ export const publicPages = {
     cards: [
       ['Revolving Fund', 'See the project track.', '/projects'],
       ['Labs', 'Grow with mentors.', '/labs'],
-      ['Career Platform', 'Personal development plan.', '/career'],
+      ['Career Engine', 'Personal development plan.', '/career'],
     ],
   },
   '/incubation': {
@@ -350,7 +357,7 @@ export const publicPages = {
     cards: [
       ['Projects', 'Revolving Fund track.', '/projects'],
       ['Network', 'Meet partners.', '/network'],
-      ['Career Platform', 'Strengthen your plan.', '/career'],
+      ['Career Engine', 'Strengthen your plan.', '/career'],
     ],
   },
   '/mentorship': {
@@ -358,18 +365,18 @@ export const publicPages = {
     theme: 'guidepath',
     eyebrow: 'Inside Labs & Network',
     description:
-      'Mentorship lives inside C360 Labs and across the Global Network — and deepens on the AI Career Platform for paid members.',
+      'Mentorship lives inside C360 Labs and across the Global Network — and deepens on the Career Engine for paid members.',
     cta: ['Find Mentors', '/network'],
     stats: [['Labs', 'Mentors'], ['Network', 'Experts'], ['Career', 'Agents']],
     sections: [
       ['Lab mentorship', 'Grow ideas and character inside your lab.', photoAt(37)],
       ['Network mentors', 'Search mentors in the Global Network directory.', photoAt(38)],
-      ['Career Platform guidance', 'AI agents and tailored pathways for paid members.', photoAt(39)],
+      ['Career Engine guidance', 'AI agents and tailored pathways for paid members.', photoAt(39)],
     ],
     cards: [
       ['Labs', 'Join for mentorship.', '/labs'],
       ['Network', 'Search mentors.', '/network'],
-      ['Career Platform', 'Premium support.', '/career'],
+      ['Career Engine', 'Premium support.', '/career'],
     ],
   },
   '/mentorship-sessions': {
@@ -385,7 +392,7 @@ export const publicPages = {
       ['Follow up', 'Turn advice into deadlines.', photoAt(42)],
     ],
     cards: [
-      ['Career Platform', 'Member workspace.', '/career'],
+      ['Career Engine', 'Member workspace.', '/career'],
       ['Labs', 'Back to your lab.', '/labs'],
       ['Network', 'Find a mentor.', '/network'],
     ],
@@ -413,17 +420,17 @@ export const publicPages = {
     title: 'My Profile',
     theme: 'panel',
     eyebrow: 'Your Account',
-    description: 'Manage your profile across Labs membership and AI Career Platform progress.',
+    description: 'Manage your profile across Labs membership and Career Engine progress.',
     cta: ['Go To Dashboard', '/dashboard'],
     stats: [['Lab', 'Membership'], ['Career', 'Progress'], ['Goals', 'Saved']],
     sections: [
       ['Personal details', 'Keep your account information current.', photoAt(46)],
       ['Lab & career interests', 'Choose labs, projects, and development focus.', photoAt(47)],
-      ['Progress', 'Activity across labs and the Career Platform.', photoAt(48)],
+      ['Progress', 'Activity across labs and the Career Engine.', photoAt(48)],
     ],
     cards: [
       ['Dashboard', 'Member home.', '/dashboard'],
-      ['Career Platform', 'Premium workspace.', '/learn'],
+      ['Career Engine', 'Premium workspace.', '/learn'],
       ['Labs', 'Find your lab.', '/labs'],
     ],
   },
@@ -441,7 +448,7 @@ export const publicPages = {
     ],
     cards: [
       ['All Labs', 'Directory search.', '/labs'],
-      ['Career Platform', 'Subscribe for depth.', '/career'],
+      ['Career Engine', 'Subscribe for depth.', '/career'],
       ['Projects', 'Lab delivery tracks.', '/projects'],
     ],
     directory: { kind: 'labs', title: 'Lab directory', placeholder: 'Search labs…' },
@@ -451,16 +458,16 @@ export const publicPages = {
     theme: 'panel',
     eyebrow: 'Updates',
     description:
-      'Lab reminders, Career Platform agent alerts, network notices, and project updates — tailored as you grow.',
+      'Lab reminders, Career Engine agent alerts, network notices, and project updates — tailored as you grow.',
     cta: ['Open Dashboard', '/dashboard'],
     stats: [['Labs', 'Alerts'], ['Career', 'Agents'], ['Network', 'News']],
     sections: [
-      ['Career agents', 'Tailored notifications from the AI Career Platform.', photoAt(52)],
+      ['Career agents', 'Tailored notifications from the Career Engine.', photoAt(52)],
       ['Lab activity', 'Meetings, mentorship, and idea sprints.', photoAt(53)],
       ['Projects & network', 'Partner and project announcements.', photoAt(54)],
     ],
     cards: [
-      ['Career Platform', 'Member alerts.', '/career'],
+      ['Career Engine', 'Member alerts.', '/career'],
       ['Labs', 'Your lab home.', '/labs'],
       ['Dashboard', 'All updates.', '/dashboard'],
     ],
@@ -469,14 +476,14 @@ export const publicPages = {
     title: 'Terms of Use',
     theme: 'statute',
     eyebrow: 'Legal',
-    description: 'Terms governing C360 Labs, the AI Career Platform, Global Network participation, and related services.',
+    description: 'Terms governing C360 Labs, the Career Engine, Global Network participation, and related services.',
     cta: ['Back to Home', '/'],
     stats: [['Last Updated', 'July 2026'], ['Effective', 'Immediately']],
     sections: [
       ['Acceptance', 'By using C360 services you agree to these terms.'],
       ['User Accounts', 'Keep your credentials confidential.'],
       ['Labs & Network', 'Participate respectfully in labs and partner spaces.'],
-      ['AI Career Platform', 'Premium features are for paid members under membership terms.'],
+      ['Career Engine', 'Premium features are for paid members under membership terms.'],
       ['Acceptable Use', 'Use platforms lawfully and respectfully.'],
       ['Termination', 'Accounts may be suspended for violations.'],
     ],
@@ -491,11 +498,11 @@ export const publicPages = {
     theme: 'statute',
     eyebrow: 'Legal',
     description:
-      'How C360 collects and protects data across Labs, Career Platform assessments, network directories, and project engagement.',
+      'How C360 collects and protects data across Labs, Career Engine assessments, network directories, and project engagement.',
     cta: ['Back to Home', '/'],
     stats: [['Last Updated', 'July 2026'], ['Effective', 'Immediately']],
     sections: [
-      ['Information We Collect', 'Account details, lab activity, and Career Platform assessment responses.'],
+      ['Information We Collect', 'Account details, lab activity, and Career Engine assessment responses.'],
       ['How We Use Data', 'To tailor mentorship, AI agent support, and relevant network connections.'],
       ['Data Security', 'Industry-standard protections for member information.'],
       ['Third Parties', 'We do not sell personal data.'],

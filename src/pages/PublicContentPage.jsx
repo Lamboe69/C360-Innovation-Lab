@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import DirectoryPanel from '../components/DirectoryPanel.jsx';
 import Footer from '../components/Footer.jsx';
+import RevelRootsTicker from '../components/RevelRootsTicker.jsx';
 import SiteNav from '../components/SiteNav.jsx';
 import { photos } from '../data/media.js';
 import './publicThemes.css';
@@ -20,9 +21,11 @@ function StatsRibbon({ stats }) {
 }
 
 function ThemeCta({ page, isLoggedIn }) {
+  const showDirectory = page.directory && page.directory.kind !== 'network';
+
   return (
     <>
-      {page.directory ? <DirectoryPanel config={page.directory} /> : null}
+      {showDirectory ? <DirectoryPanel config={page.directory} /> : null}
       <section className="theme-cta">
         <div className="theme-cta-inner">
           <p className="theme-kicker">Next Step</p>
@@ -31,7 +34,7 @@ function ThemeCta({ page, isLoggedIn }) {
             {isLoggedIn ? (
               <>
                 <Link to="/dashboard" className="btn-hero-primary">Go to Dashboard <span className="btn-arrow">→</span></Link>
-                <Link to="/learn" className="btn-hero-outline">Career Platform</Link>
+                <Link to="/learn" className="btn-hero-outline">Career Engine</Link>
               </>
             ) : (
               <>
@@ -50,18 +53,93 @@ function cardParts(card) {
   return card.length === 3 ? [card[0], card[1], card[2]] : [card[0], card[1], null];
 }
 
+function teamInitials(name) {
+  return name
+    .split(' ')
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+function TeamMemberPortrait({ member }) {
+  const [failed, setFailed] = useState(false);
+  const initials = teamInitials(member.name);
+
+  return (
+    <div className={`manifesto-team-portrait${failed ? ' is-initials' : ''}`}>
+      {!failed ? (
+        <img
+          src={member.photo}
+          alt=""
+          loading="lazy"
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <span className="manifesto-team-portrait-initials" aria-hidden="true">{initials}</span>
+      )}
+    </div>
+  );
+}
+
+function ManifestoHeroIntro({ intro }) {
+  const [expanded, setExpanded] = useState(false);
+  const panelId = 'manifesto-hero-intro-more';
+
+  return (
+    <div className="manifesto-hero-intro">
+      <p className="manifesto-hero-intro-kicker">{intro.eyebrow}</p>
+      {intro.title ? <h2 className="manifesto-hero-intro-title">{intro.title}</h2> : null}
+      <p className="manifesto-hero-intro-summary">{intro.summary}</p>
+
+      {expanded ? (
+        <div id={panelId} className="manifesto-hero-intro-more">
+          {intro.more.map((paragraph) => (
+            <p key={paragraph.slice(0, 32)}>{paragraph}</p>
+          ))}
+        </div>
+      ) : null}
+
+      <button
+        type="button"
+        className="manifesto-hero-intro-toggle"
+        aria-expanded={expanded}
+        aria-controls={panelId}
+        onClick={() => setExpanded((open) => !open)}
+      >
+        {expanded ? 'Read less' : 'Read more'}
+      </button>
+
+      {intro.tagline ? (
+        <p className="manifesto-hero-intro-tagline">{intro.tagline}</p>
+      ) : null}
+
+      {intro.quote ? (
+        <blockquote className="manifesto-hero-intro-quote">
+          <p>{intro.quote.text}</p>
+          <cite>{intro.quote.cite}</cite>
+        </blockquote>
+      ) : null}
+    </div>
+  );
+}
+
 function ManifestoLayout({ page, isLoggedIn }) {
   const orbitImage = page.sections.find((section) => section[2])?.[2]
     || photos.ubuntuGroup;
 
   return (
     <>
-      <section className="manifesto-hero">
+      <section className={`manifesto-hero${page.intro ? ' has-intro' : ''}`}>
         <div className="manifesto-hero-brand">C360</div>
         <div className="manifesto-hero-copy">
-          <p className="theme-kicker">{page.eyebrow}</p>
+          {!page.intro ? <p className="theme-kicker">{page.eyebrow}</p> : null}
           <h1>{page.title}</h1>
-          <p className="manifesto-lead">{page.description}</p>
+          {page.intro ? (
+            <ManifestoHeroIntro intro={page.intro} />
+          ) : (
+            <p className="manifesto-lead">{page.description}</p>
+          )}
           <div className="theme-actions">
             <Link to={page.cta[1]} className="btn-hero-primary">{page.cta[0]} <span className="btn-arrow">→</span></Link>
           </div>
@@ -72,10 +150,15 @@ function ManifestoLayout({ page, isLoggedIn }) {
           </div>
         </div>
       </section>
-      <section className="manifesto-stanzas">
+      <section className="manifesto-stanzas" aria-labelledby={page.intro ? 'manifesto-pillars-heading' : undefined}>
+        {page.intro ? (
+          <header className="manifesto-stanzas-head">
+            <p className="theme-kicker" id="manifesto-pillars-heading">{page.eyebrow}</p>
+            <p className="manifesto-stanzas-lead">{page.description}</p>
+          </header>
+        ) : null}
         {page.sections.map(([title, body, image], index) => (
           <article className={`manifesto-stanza${index % 2 ? ' is-flip' : ''}`} key={title}>
-            <div className="manifesto-stanza-index">{String(index + 1).padStart(2, '0')}</div>
             <div className="manifesto-stanza-copy">
               <h2>{title}</h2>
               <p>{body}</p>
@@ -84,6 +167,32 @@ function ManifestoLayout({ page, isLoggedIn }) {
           </article>
         ))}
       </section>
+      {page.team ? (
+        <section className="manifesto-team" aria-labelledby="manifesto-team-heading">
+          <div className="manifesto-team-shell">
+            <header className="manifesto-team-head">
+              <p className="theme-kicker">{page.team.eyebrow}</p>
+              <h2 id="manifesto-team-heading">{page.team.title}</h2>
+              <p className="manifesto-team-lead">{page.team.description}</p>
+            </header>
+
+            <ul className="manifesto-team-grid">
+              {page.team.members.map((member, index) => (
+                <li className="manifesto-team-card" key={member.slug} style={{ '--team-i': index }}>
+                  <div className="manifesto-team-card-media">
+                    <TeamMemberPortrait member={member} />
+                  </div>
+                  <div className="manifesto-team-card-body">
+                    <h3>{member.name}</h3>
+                    <p className="manifesto-team-role">{member.role}</p>
+                    <p className="manifesto-team-bio">{member.bio}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
       <section className="manifesto-links">
         {page.cards.map((card) => {
           const [title, body, href] = cardParts(card);
@@ -167,31 +276,6 @@ function BlueprintLayout({ page, isLoggedIn }) {
             <div className="bp-sheet-corner" aria-hidden="true" />
           </article>
         ))}
-      </section>
-
-      <section className="bp-tools">
-        <div className="bp-tools-head">
-          <p className="theme-kicker">Drafting Kit</p>
-          <h2>Tools that sharpen every build.</h2>
-        </div>
-        <div className="bp-stamp-board">
-          {page.cards.map((card, index) => {
-            const [title, body, href] = cardParts(card);
-            const Wrapper = href ? Link : 'div';
-            return (
-              <Wrapper
-                key={title}
-                {...(href ? { to: href } : {})}
-                className="bp-stamp"
-                style={{ '--stamp-i': index }}
-              >
-                <span className="bp-stamp-seal">{String(index + 1).padStart(2, '0')}</span>
-                <h3>{title}</h3>
-                <p>{body}</p>
-              </Wrapper>
-            );
-          })}
-        </div>
       </section>
 
       <StatsRibbon stats={page.stats} />
@@ -315,7 +399,7 @@ function StacksLayout({ page, isLoggedIn }) {
           <p className="stacks-lead">{page.description}</p>
           <div className="theme-actions">
             <Link to={page.cta[1]} className="btn-hero-primary">{page.cta[0]} <span className="btn-arrow">→</span></Link>
-            <Link to="/career" className="btn-hero-outline">Career Platform</Link>
+            <Link to="/career" className="btn-hero-outline">Career Engine</Link>
           </div>
           <ul className="stacks-pulse" aria-label="Resource highlights">
             {page.stats.slice(0, 3).map(([value, label]) => (
@@ -532,10 +616,20 @@ function ArenaLayout({ page, isLoggedIn }) {
       <section className="arena-bracket">
         {page.sections.map(([title, body, image], index) => (
           <article className="arena-match" key={title}>
-            <div className="arena-round">ROUND {String(index + 1).padStart(2, '0')}</div>
+            {page.sectionHeader === 'title' ? (
+              <h2 className="arena-match-title">{title}</h2>
+            ) : (
+              <div className="arena-round">ROUND {String(index + 1).padStart(2, '0')}</div>
+            )}
             {image && <img src={image} alt="" loading="lazy" />}
-            <h2>{title}</h2>
-            <p>{body}</p>
+            {page.sectionHeader === 'title' ? (
+              <p>{body}</p>
+            ) : (
+              <>
+                <h2>{title}</h2>
+                <p>{body}</p>
+              </>
+            )}
           </article>
         ))}
       </section>
@@ -731,17 +825,21 @@ function WeaveLayout({ page, isLoggedIn }) {
           <Link to={page.cta[1]} className="btn-hero-primary">{page.cta[0]} <span className="btn-arrow">→</span></Link>
         </div>
       </section>
-      <section className="weave-bands">
-        {page.sections.map(([title, body, image], index) => (
-          <article className="weave-band" key={title} style={{ '--band-i': index }}>
-            {image && <img src={image} alt="" loading="lazy" />}
-            <div>
-              <h2>{title}</h2>
-              <p>{body}</p>
-            </div>
-          </article>
-        ))}
-      </section>
+      {page.directory?.kind === 'network' ? (
+        <DirectoryPanel config={page.directory} embedded />
+      ) : (
+        <section className="weave-bands">
+          {page.sections.map(([title, body, image], index) => (
+            <article className="weave-band" key={title} style={{ '--band-i': index }}>
+              {image && <img src={image} alt="" loading="lazy" />}
+              <div>
+                <h2>{title}</h2>
+                <p>{body}</p>
+              </div>
+            </article>
+          ))}
+        </section>
+      )}
       <section className="weave-knots">
         {page.cards.map((card) => {
           const [title, body, href] = cardParts(card);
@@ -858,6 +956,7 @@ export default function PublicContentPage({ page, path }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const theme = page.theme || 'panel';
   const Layout = layouts[theme] || PanelLayout;
+  const showRevelTicker = path === '/projects' || path === '/about';
 
   useEffect(() => {
     document.title = `${page.title} — C360 Innovation Lab`;
@@ -865,10 +964,11 @@ export default function PublicContentPage({ page, path }) {
   }, [page.title]);
 
   return (
-    <div className={`public-page-shell theme-${theme}`}>
+    <div className={`public-page-shell theme-${theme}${path === '/projects' ? ' projects-page' : ''}`}>
       <a href="#main-content" className="skip-link">Skip to content</a>
       <SiteNav />
       <main id="main-content" className="public-page-main theme-main">
+        {showRevelTicker ? <RevelRootsTicker /> : null}
         <Layout page={page} isLoggedIn={isLoggedIn} />
       </main>
       <Footer />

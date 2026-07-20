@@ -119,8 +119,25 @@ body,
 .home-page-shell .workshop-door-num,
 .home-page-shell .signal-gate h2 em,
 .directory-card header span,
-.directory-accordion-trigger em {
+.directory-accordion-trigger em,
+.network-partner-mark {
   color: var(--cyan-bright) !important;
+}
+
+.network-category-label strong,
+.network-partner-card h3 {
+  color: var(--ink) !important;
+}
+
+.network-partner-card,
+.network-category {
+  background: var(--surface-soft) !important;
+  border-color: var(--border) !important;
+}
+
+.network-partner-card p,
+.network-category-label em {
+  color: var(--muted) !important;
 }
 
 .theme-actions .btn-hero-primary,
@@ -199,6 +216,7 @@ body,
 .stacks-drawer h2,
 .signal-channel h2,
 .arena-match h2,
+.arena-match-title,
 .ledger-row h2,
 .kiln-chamber h2,
 .guide-stone h2,
@@ -206,11 +224,17 @@ body,
 .weave-band h2,
 .panel-tile h2,
 .panel-list-item h3,
-.statute-clause h2 {
+.statute-clause h2,
+.manifesto-hero-intro-title {
   color: var(--ink) !important;
 }
 
 .manifesto-stanza p,
+.manifesto-hero-intro-summary,
+.manifesto-hero-intro-more p,
+.manifesto-hero-intro-quote p,
+.manifesto-hero-intro-tagline,
+.manifesto-stanzas-lead,
 .bp-sheet p,
 .bp-stamp p,
 .hive-cell p,

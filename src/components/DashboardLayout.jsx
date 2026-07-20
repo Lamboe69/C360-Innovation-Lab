@@ -287,7 +287,7 @@ export default function DashboardLayout({ children, activePage, notifications: n
                     <path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H20v17H7.5A2.5 2.5 0 0 0 5 21.5v-17Zm2.5-.5A.5.5 0 0 0 7 4.5v13.55c.17-.03.33-.05.5-.05H18V4H7.5Z" />
                   </svg>
                 </span>
-                <span>Career Platform</span>
+                <span>Career Engine</span>
               </Link>
             </div>
           </nav>
