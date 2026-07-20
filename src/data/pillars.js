@@ -100,72 +100,68 @@ export const networkCategories = [
 /** Projects run by C360 Innovation Labs. */
 export const c360Projects = [
   {
-    id: 'agri',
-    title: 'Agribusiness and Food Systems',
-    summary: 'Strengthen rural livelihoods and food systems through farmer support and collaborative learning.',
+    id: 'climate',
+    title: 'Smart Climate Farming',
+    summary: 'Growing resilience, one farm at a time.',
     items: [
       {
-        name: 'Rural Farmer Support & Farmer Empowerment',
-        body: 'Programs that equip rural farmers with skills, networks, and practical tools to grow resilient food enterprises.',
+        name: 'Climate-smart agriculture pilots',
+        body: 'We work with young innovators and smallholder farmers to pilot climate-smart agricultural practices — from soil health to water-efficient techniques — that protect livelihoods against a changing climate while opening new agribusiness pathways for youth.',
       },
+    ],
+  },
+  {
+    id: 'revel',
+    title: 'REVEL Roots Uganda',
+    summary: 'Making global value chains more human, more ecological.',
+    items: [
       {
-        name: 'Revel Roots',
-        body: 'A self-sponsored fellowship bringing learners to Uganda to strengthen food systems through collaborative learning with local communities and labs.',
+        name: 'Immersive food systems exchange',
+        body: 'A 3-week immersive food systems exchange co-hosted with REVEL (Belgium), bringing young Europeans into Uganda’s farming communities — from smallholder cooperatives to export-oriented value chains — to reimagine what a fairer, more sustainable food system looks like from the ground up.',
+      },
+    ],
+  },
+  {
+    id: 'sports',
+    title: 'Sports4Development',
+    summary: 'Unity, peace, and development — on the field.',
+    items: [
+      {
+        name: 'Sport for youth cohesion',
+        body: 'We use sport as a platform for youth cohesion and community healing, particularly in post-conflict Northern Uganda, turning teams and tournaments into spaces where young people build discipline, leadership, and lasting peace.',
+      },
+    ],
+  },
+  {
+    id: 'fund',
+    title: 'Community Revolving Fund',
+    summary: 'Backing ideas worth believing in.',
+    items: [
+      {
+        name: 'Revolving seed capital',
+        body: 'A small-grants and micro-financing pool that turns lab prototypes into real pilots. Young innovators access seed capital, repay into the fund as their idea grows, and open the door for the next founder behind them — a cycle of opportunity, not a one-time handout.',
       },
     ],
   },
   {
     id: 'media',
     title: 'C360 Media',
-    summary: 'Storytelling for change — amplifying community change agents.',
+    summary: 'Amplifying the voices too often left unheard.',
     items: [
       {
-        name: 'Storytelling for Change',
-        body: 'Teaches young people storytelling craft and helps amplify the voices of community change agents across our labs and network.',
+        name: 'Community storytelling',
+        body: 'Our storytelling arm documents and shares the realities, ideas, and successes of the communities we work in — turning lived experience into content that informs partners, attracts support, and puts community voices at the centre of the narrative.',
       },
     ],
   },
   {
-    id: 'talent',
-    title: 'C360 Talent Mobility',
-    summary: 'Connect our alumni workforce to real opportunities.',
+    id: 'mobility',
+    title: 'C360 Mobility',
+    summary: 'Mentoring — and delivering — the next global workforce.',
     items: [
       {
-        name: 'Mentored Workforce Placement',
-        body: 'Our dynamic workforce includes interns, housekeepers, professionals, and consultants. Navigate availability lists of readily mentored talent and speak with our agent to deploy the right people for your needs.',
-      },
-    ],
-  },
-  {
-    id: 'sports',
-    title: 'C360 Sports4Development',
-    summary: 'Sport, culture, and enterprise for resilience — especially women and girls.',
-    items: [
-      {
-        name: 'Community Sports & Street Business Coaching',
-        body: 'We support local community sports and cultural groups, especially women and girls, to build resilience while providing certified street business coaching for self-reliance.',
-      },
-    ],
-  },
-  {
-    id: 'fund',
-    title: 'C360 Revolving Fund',
-    summary: 'Community capital for lab-born start-ups.',
-    items: [
-      {
-        name: 'Revolving Community Empowerment Fund',
-        body: 'We run a revolving fund that fuels business start-ups sprouting from our labs — capital that returns to support the next cohort of builders.',
-      },
-    ],
-  },
-  {
-    id: 'climate',
-    title: 'Smart Climate Awareness',
-    summary: 'Smart farming with environmental stewardship.',
-    items: [
-      {
-        name: 'Smart Climate Awareness Initiative',
-        body: 'Promotes smart farming practices while protecting the environment — linking lab projects to climate-conscious livelihoods.',
+        name: 'Work-ready talent pipeline',
+        body: 'We prepare young people not just with career guidance but with real workplace readiness, connecting a trusted, work-ready talent pipeline to industries and employers in Uganda and internationally who need reliable, skilled workers.',
       },
     ],
   },

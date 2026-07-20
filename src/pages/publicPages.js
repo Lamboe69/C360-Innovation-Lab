@@ -27,7 +27,7 @@ const projectPhotos = [
 
 const projectSections = c360Projects.map((project, index) => [
   project.title,
-  `${project.summary} ${project.items.map((item) => item.name).join(' · ')}.`,
+  `${project.summary} ${project.items.map((item) => item.body).join(' ')}`,
   projectPhotos[index % projectPhotos.length],
 ]);
 
@@ -81,7 +81,7 @@ export const publicPages = {
       ],
       [
         'C360 Career Engine',
-        'Your career pathway — mapped by AI, walked with a mentor. The C360 Career Engine starts with a guided discovery profile that maps your strengths, interests, and Uganda’s real labour market into 3–5 personalised career pathways. But a recommendation isn’t a relationship — so every pathway connects you to a real person: a vetted mentor in Uganda, the UK, or Europe who has walked the path you’re considering. AI tells you what’s possible. Mentorship helps you actually get there. Together, they turn a career quiz into a career — with skill-building resources matched to your gaps, one-on-one sessions with working professionals, and a portfolio that grows every time you complete a step. This is career guidance that doesn’t stop at advice.',
+        'Your career pathway — mapped by AI, walked with a mentor. The C360 Career Engine starts with a guided discovery profile that maps your strengths, interests, and Uganda’s real labour market into 3–5 personalised career pathways. But a recommendation isn’t a relationship — so every pathway connects you to a real person: a vetted mentor in Uganda, the UK, or Europe who has walked the path you’re considering. AI tells you what’s possible. Mentorship helps you actually get there. Together, they turn a career quiz into a career — with skill-building resources matched to your gaps, one-on-one sessions with working professionals, and a portfolio that grows every time you complete a step. This is career guidance that doesn’t stop at advice — every pathway comes with clear next steps, visible progress, and connections into labs, the Global Network, and projects when you’re ready to turn interest into experience.',
         photos.mentorField,
       ],
       [
@@ -90,8 +90,8 @@ export const publicPages = {
         photos.armsRaisedDrone,
       ],
       [
-        'C360 Projects',
-        'Programs run through our labs: Agribusiness & Food Systems (including Rural Farmer Support and self-sponsored Revel Roots fellowship travel to Uganda), C360 Media, Talent Mobility, Sports4Development, the Revolving Fund, and Smart Climate Awareness.',
+        'Projects',
+        'Where ideas become impact. Every idea born in a C360 Lab needs somewhere to grow. Our Projects are that ground — organisation-led community interventions where prototypes get tested, funded, and scaled into real change. From climate-smart farms to global workforce pipelines, this is C360 turning youth ideas into community solutions.',
         photos.culturalDrums,
       ],
     ],
@@ -99,7 +99,7 @@ export const publicPages = {
       ['C360 Labs', 'Join a lab near you.', '/labs'],
       ['C360 Career Engine', 'AI pathways + real mentors.', '/career'],
       ['Global Network', 'Search our partners.', '/network'],
-      ['C360 Projects', 'See what labs deliver.', '/projects'],
+      ['Projects', 'Where ideas become impact.', '/projects'],
     ],
     team: c360Team,
   },
@@ -131,47 +131,37 @@ export const publicPages = {
   '/career': {
     title: 'Career Engine',
     theme: 'blueprint',
-    eyebrow: 'Pillar 02 · Premium',
+    eyebrow: 'Pillar 02 · C360 Career Engine',
     description:
-      'Our paid web platform for in-depth career and personal development support. Members complete questionnaires so we can assess career needs, personal development needs, career plans, and SWOT — then tailor support through AI-trained agents, progress dashboards, discussion rooms, and pen-pal links.',
-    cta: ['Member Access', '/learn'],
+      'Your career pathway — mapped by AI, walked with a mentor.',
+    cta: ['Start Your Pathway', '/learn'],
     stats: [
-      ['Paid', 'Members Only'],
-      ['SWOT', 'Assessments'],
-      ['AI', 'Agents'],
-      ['Dashboard', 'Progress'],
-      ['Rooms', '& Pen Pals'],
+      ['3–5', 'Pathways'],
+      ['AI', 'Discovery'],
+      ['Real', 'Mentors'],
+      ['Skills', '& Portfolio'],
+      ['Guidance', 'That Acts'],
     ],
     sections: [
       [
-        'Career & development questionnaires',
-        'Members fill structured questionnaires covering career needs, personal development needs, career plans, and SWOT (Strengths, Weaknesses, Opportunities, Techniques) so support can be customized.',
+        'Guided discovery profile',
+        'The C360 Career Engine starts with a guided discovery profile that maps your strengths, interests, and Uganda’s real labour market into 3–5 personalised career pathways.',
         photoAt(12),
       ],
       [
-        'Tailored AI agent notifications',
-        'AI-trained agents send notifications suited to each member’s needs and stage — keeping guidance timely and personal.',
+        'A mentor on every pathway',
+        'But a recommendation isn’t a relationship — so every pathway connects you to a real person: a vetted mentor in Uganda, the UK, or Europe who has walked the path you’re considering.',
+        photos.mentorField,
+      ],
+      [
+        'AI + mentorship together',
+        'AI tells you what’s possible. Mentorship helps you actually get there. Together, they turn a career quiz into a career — with skill-building resources matched to your gaps, one-on-one sessions with working professionals, and a portfolio that grows every time you complete a step.',
         photoAt(13),
       ],
       [
-        'Age-appropriate growth dashboard',
-        'A career growth progress dashboard places members on pathways appropriate to their age and stage of development.',
+        'Guidance that doesn’t stop at advice',
+        'This is career guidance that doesn’t stop at advice. Every pathway comes with clear next steps — skills to build, mentor sessions to book, and milestones that grow a portfolio others can see. When you’re ready to go further, your lab, our Global Network, and C360 Projects are there to turn interest into real experience. Your progress stays visible, your pathway evolves as you learn, and the goal isn’t a list of options on paper — it’s forward motion toward a career you’re actively building.',
         photoAt(14),
-      ],
-      [
-        'Discussion rooms & pen pals',
-        'Members are placed in the right discussion rooms and connected to relevant pen pals aligned with their growth path.',
-        photoAt(15),
-      ],
-      [
-        'Linked from C360 Labs',
-        'Lab members can subscribe to the Career Engine for in-depth career support while continuing mentorship and idea development in their lab.',
-        photoAt(16),
-      ],
-      [
-        'Premium access',
-        'Engine capabilities are available to paid members. Create an account, complete onboarding assessments, and unlock the full career workspace.',
-        photoAt(17),
       ],
     ],
   },
@@ -201,28 +191,28 @@ export const publicPages = {
   },
 
   '/projects': {
-    title: 'C360 Projects',
+    title: 'Projects',
     theme: 'arena',
     sectionHeader: 'title',
-    eyebrow: 'Pillar 04',
+    eyebrow: 'Pillar 04 · Projects',
     description:
-      'Projects run by C360 Innovation Labs — from agribusiness and media to talent mobility, sports for development, revolving finance, and climate-smart farming.',
+      'Where ideas become impact. Every idea born in a C360 Lab needs somewhere to grow. Our Projects are that ground — organisation-led community interventions where prototypes get tested, funded, and scaled into real change. From climate-smart farms to global workforce pipelines, this is C360 turning youth ideas into community solutions.',
     cta: ['Explore Labs', '/labs'],
     stats: [
-      [`${c360Projects.length}`, 'Projects'],
-      ['Food', 'Systems'],
-      ['Media', '& Voice'],
-      ['Talent', 'Mobility'],
-      ['Climate', 'Aware'],
+      [`${c360Projects.length}`, 'Project', 'Tracks'],
+      ['Climate', 'Smart Farms'],
+      ['REVEL', 'Roots'],
+      ['Sport', '4Development'],
+      ['Fund', '& Media'],
     ],
     sections: projectSections,
     cards: [
-      ['Agribusiness', 'Farmers, Revel Roots & food systems.', '/projects'],
-      ['Talent Mobility', 'Mentored workforce deployment.', '/projects'],
-      ['Revolving Fund', 'Capital for lab start-ups.', '/projects'],
-      ['Labs', 'Where projects grow.', '/labs'],
+      ['Smart Climate Farming', 'Growing resilience, one farm at a time.', '/projects'],
+      ['REVEL Roots Uganda', 'Human, ecological value chains.', '/projects'],
+      ['Sports4Development', 'Unity, peace, and development.', '/projects'],
+      ['Community Revolving Fund', 'Backing ideas worth believing in.', '/projects'],
     ],
-    directory: { kind: 'projects', title: 'Projects', placeholder: 'Search projects by name…' },
+    directory: { kind: 'projects', title: 'Project tracks', placeholder: 'Search projects by name…' },
   },
 
   '/contact': {

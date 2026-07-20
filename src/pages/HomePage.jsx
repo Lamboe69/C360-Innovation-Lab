@@ -7,9 +7,9 @@ import './homePage.css';
 
 const marqueeItems = [
   'C360 Labs',
-  'Career Engine',
-  'Global Network',
-  'C360 Projects',
+  'C360 Career Engine',
+  'Projects',
+  'Our Partners',
   'Mentorship',
   'Revel Roots',
   'Talent Mobility',
@@ -25,31 +25,31 @@ const heroCarousel = [
     src: photos.ubuntuGroup,
     alt: 'Students in Ubuntu shirts at a C360 community gathering',
     title: 'C360 Labs',
-    line: 'Institutional and community labs for mentorship, ideas, and growth.',
+    line: 'Where ideas are built, tested, and prototyped.',
   },
   {
     src: photos.mentorField,
     alt: 'C360 mentor guiding students in an outdoor field session',
-    title: 'Career Engine',
-    line: 'Premium assessments, AI agents, and tailored career pathways.',
-  },
-  {
-    src: photos.armsRaisedDrone,
-    alt: 'Youth raising hands during a C360 community program',
-    title: 'Global Network',
-    line: 'Schools, mentors, industries, donors, and research allies.',
+    title: 'C360 Career Engine',
+    line: 'Where AI and mentors map your path.',
   },
   {
     src: photos.danceBlueAxes,
     alt: 'Youth cultural performance connected to C360 projects',
-    title: 'C360 Projects',
-    line: 'Food systems, media, talent, sports, finance, and climate action.',
+    title: 'Projects',
+    line: 'Where ideas become community impact.',
+  },
+  {
+    src: photos.armsRaisedDrone,
+    alt: 'Youth raising hands during a C360 community program',
+    title: 'Our Partners',
+    line: 'Where local ideas meet global opportunity.',
   },
   {
     src: photos.c360ShirtsWalk,
     alt: 'Community members wearing C360 Innovation Lab shirts',
     title: 'Four Pillars',
-    line: 'One ecosystem — labs, career support, network, and projects.',
+    line: 'Labs, career, projects, and partners — one ecosystem.',
   },
 ];
 
@@ -80,10 +80,10 @@ const clubs = [
 ];
 
 const cards = [
-  ['01 / LABS', photos.ubuntuGroup, 'C360 Labs', 'Institutional and community labs where people access mentorship, develop ideas, grow as individuals, and can subscribe to the Career Engine.', '/labs', 'Find a Lab'],
-  ['02 / CAREER', photos.mentorField, 'Career Engine', 'Premium questionnaires, SWOT assessments, AI agents, progress dashboards, discussion rooms, and pen-pal links for paid members.', '/career', 'View Engine'],
-  ['03 / NETWORK', photos.walkPoliceEscort, 'C360 Global Network', 'Searchable lists of schools, mentors, industries, businesses, companies, donors, universities, and research agencies.', '/network', 'Browse Network'],
-  ['04 / PROJECTS', photos.culturalDrums, 'C360 Projects', 'Agribusiness & Food Systems, Media, Talent Mobility, Sports4Development, Revolving Fund, and Smart Climate Awareness.', '/projects', 'See Projects'],
+  ['01 / LABS', photos.ubuntuGroup, 'C360 Labs', 'Where ideas are built, tested, and prototyped.', '/labs', 'Find a Lab'],
+  ['02 / CAREER', photos.mentorField, 'C360 Career Engine', 'Where AI and mentors map your path.', '/career', 'View Engine'],
+  ['03 / PROJECTS', photos.culturalDrums, 'Projects', 'Where ideas become community impact.', '/projects', 'See Projects'],
+  ['04 / PARTNERS', photos.walkPoliceEscort, 'Our Partners', 'Where local ideas meet global opportunity.', '/network', 'Browse Partners'],
 ];
 
 const stats = [
@@ -364,8 +364,8 @@ export default function HomePage() {
             <span>03</span>
             <em>Four Pillars</em>
           </div>
-          <h2 id="pillars-title">Labs. Career. Network. Projects.</h2>
-          <p>Four alternating bands — one ecosystem, four clear ways in.</p>
+          <h2 id="pillars-title">Labs. Career. Projects. Partners.</h2>
+          <p>Four pillars — one ecosystem, four clear ways in.</p>
         </header>
         <div className="pillar-cascade">
           {cards.map(([number, icon, title, blurb, path, label], index) => (
